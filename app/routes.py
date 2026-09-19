@@ -509,6 +509,7 @@ def buscar_banda_discogs():
 @login_required
 def ver_coleccion():
     # Obtener parámetros de la URL
+    q = request.args.get('q', default='', type=str).strip()
     formato_id = request.args.get('formato_id', type=int)
     genero_id = request.args.get('genero_id', type=int)
     sello_id = request.args.get('sello_id', type=int)
@@ -516,6 +517,16 @@ def ver_coleccion():
 
     # Base Query: Álbumes del usuario actual
     query = Album.query.join(Banda).filter(Album.usuario_id == current_user.id)
+
+    # Búsqueda por Texto (Afecta tanto al nombre de la Banda como al Título del Álbum)
+    if q:
+        termino = f"%{q}%"
+        query = query.filter(
+            db.or_(
+                Banda.nombre.ilike(termino),
+                Album.titulo.ilike(termino)
+            )
+        )
 
     # Filtro por Formato (incluye subformatos)
     if formato_id:
@@ -557,6 +568,7 @@ def ver_coleccion():
         sellos=sellos,
         paises=paises,
         filtros_acti={
+            'q': q,
             'formato_id': formato_id,
             'genero_id': genero_id,
             'sello_id': sello_id,
