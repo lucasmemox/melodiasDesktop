@@ -9,24 +9,25 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Descargar código del repositorio
+      uses: actions/checkout@v4
 
     - name: Configurar Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
 
-    - name: Instalar dependencias
+    - name: Instalar dependencias de Python
       run: |
         python -m pip install --upgrade pip
-        pip install flask flask_sqlalchemy flask_admin flask_login flask_migrate pywebview pyinstaller
+        pip install flask flask-sqlalchemy flask-admin flask-login flask-migrate pywebview pyinstaller
 
-    - name: Compilar ejecutable
+    - name: Compilar con PyInstaller
       run: |
         pyinstaller --noconfirm --onedir --windowed --add-data="app/templates;templates" --add-data="app/static;static" --add-data="app/seeds.json;app" --name="MelodiasLocal" desktop.py
 
-    - name: Subir artefacto
-      uses: actions/upload-artifact@v3
+    - name: Subir ejecutable comprimido
+      uses: actions/upload-artifact@v4
       with:
         name: MelodiasLocal-Windows
         path: dist/MelodiasLocal/
