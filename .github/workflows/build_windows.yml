@@ -24,7 +24,7 @@ jobs:
 
     - name: Compilar con PyInstaller
       run: |
-        pyinstaller --noconfirm --onedir --windowed --add-data="app/templates;templates" --add-data="app/static;static" --add-data="app/seeds.json;app" --name="MelodiasLocal" desktop.py
+        pyinstaller --noconfirm --onedir --windowed --add-data="app/templates;app/templates" --add-data="app/static;app/static" --add-data="app/seeds.json;app" --name="MelodiasLocal" desktop.py
 
     - name: Subir ejecutable comprimido
       uses: actions/upload-artifact@v4
