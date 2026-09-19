@@ -20,7 +20,7 @@ jobs:
     - name: Instalar dependencias de Python
       run: |
         python -m pip install --upgrade pip
-        pip install flask flask-sqlalchemy flask-admin flask-login flask-migrate pywebview pyinstaller
+        pip install -r requirements.txt pywebview pyinstaller
 
     - name: Compilar con PyInstaller
       run: |
