@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 import json
 import os
 import sys
-from flask import Flask, redirect, request, url_for
+from flask import Flask, redirect, request, url_for, send_from_directory
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_login import LoginManager, current_user, login_user
@@ -16,19 +16,19 @@ migrate = Migrate()
 
 
 def get_user_data_dir():
-  """Ruta persistente en AppData del usuario (sobrevive a reinstalaciones/actualizaciones)."""
-  app_data = os.path.join(
-      os.environ.get('APPDATA', os.path.expanduser('~')), 'MelodiasLocal'
-  )
-  os.makedirs(app_data, exist_ok=True)
-  return app_data
+    """Ruta persistente en AppData del usuario (sobrevive a reinstalaciones/actualizaciones)."""
+    app_data = os.path.join(
+        os.environ.get('APPDATA', os.path.expanduser('~')), 'MelodiasLocal'
+    )
+    os.makedirs(app_data, exist_ok=True)
+    return app_data
 
 
 def get_bundle_dir():
-  """Ruta temporal de PyInstaller o directorio actual en desarrollo."""
-  if getattr(sys, 'frozen', False):
-    return sys._MEIPASS
-  return os.path.abspath(os.path.dirname(__file__))
+    """Ruta temporal de PyInstaller o directorio actual en desarrollo."""
+    if getattr(sys, 'frozen', False):
+        return sys._MEIPASS
+    return os.path.abspath(os.path.dirname(__file__))
 
 
 def init_default_user():
@@ -68,7 +68,7 @@ def poblar_desde_json():
         json_path = os.path.join(bundle_dir, 'app', 'seeds.json')
 
     if not os.path.exists(json_path):
-        print(f"No se encontró el archivo seeds.json")
+        print("No se encontró el archivo seeds.json")
         return
 
     with open(json_path, 'r', encoding='utf-8') as f:
@@ -176,6 +176,31 @@ def create_app():
     @app.context_processor
     def inject_now():
         return {'now': lambda: datetime.now(timezone.utc)}
+
+    # Ruta con respaldo automático para servir portadas en Dev y Producción
+    @app.route('/uploads/covers/<path:filename>', endpoint='serve_cover_uploads')
+    @app.route('/static/uploads/covers/<path:filename>', endpoint='serve_cover_static')
+    def serve_cover(filename):
+        # Lista exhaustiva de rutas posibles en entorno local (Dev) y compilado (Desktop)
+        posibles_rutas = [
+            covers_path,  # AppData / ~/MelodiasLocal/uploads/covers
+            os.path.join(static_dir, 'uploads', 'covers'),
+            os.path.abspath(os.path.join(bundle_dir, '..', 'app', 'static', 'uploads', 'covers')),
+            os.path.abspath(os.path.join(bundle_dir, '..', 'static', 'uploads', 'covers')),
+            os.path.abspath(os.path.join(os.getcwd(), 'app', 'static', 'uploads', 'covers')),
+            os.path.abspath(os.path.join(os.getcwd(), 'static', 'uploads', 'covers')),
+        ]
+
+        for carpeta in posibles_rutas:
+            ruta_completa = os.path.join(carpeta, filename)
+            if os.path.exists(ruta_completa):
+                return send_from_directory(carpeta, filename)
+
+        print(f"[WARN] No se encontró '{filename}' en ninguna ruta:")
+        for r in posibles_rutas:
+            print(f"  - {r}")
+
+        return send_from_directory(covers_path, filename)
 
     from app.routes import main_bp
 

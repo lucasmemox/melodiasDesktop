@@ -1,16 +1,9 @@
 import os
 import threading
 import webview
-from flask import send_from_directory
 from app import create_app
 
 app = create_app()
-
-# RUTA PARA SERVIR LAS PORTADAS GUARDADAS EN APPDATA
-@app.route('/uploads/covers/<filename>')
-def custom_uploads(filename):
-    """Sirve las portadas directamente desde la carpeta persistente en AppData."""
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 class DesktopApi:
