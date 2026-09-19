@@ -1,0 +1,331 @@
+{% extends 'base.html' %}
+
+{% block title %}Géneros Musicales - Melodías{% endblock %}
+
+{% block content %}
+<style>
+    /* Titular Principal Metálico en Alto Contraste */
+    .metal-header-title {
+        color: #1a1b1e;
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        font-size: 2.2rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        text-shadow:
+            1px 1px 2px rgba(255, 255, 255, 0.8),
+            0px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Panel/Contenedor Principal */
+    .metal-panel-card {
+        background: linear-gradient(135deg, #242528 0%, #151618 50%, #0d0e0f 100%);
+        border: 1px solid #3d3e42;
+        border-radius: 10px;
+        box-shadow:
+            0 8px 20px rgba(0, 0, 0, 0.7),
+            inset 0 1px 1px rgba(255, 255, 255, 0.12),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Buscador Metálico */
+    .metal-input-group-text {
+        background-color: #0c0c0e !important;
+        border: 1px solid #3d3e42 !important;
+        color: #dc3545 !important;
+    }
+
+    .metal-input {
+        background-color: #0c0c0e !important;
+        color: #e0e0e0 !important;
+        border: 1px solid #3d3e42 !important;
+        font-size: 0.9rem;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .metal-input:focus {
+        border-color: #8b1d1d !important;
+        box-shadow: 0 0 0 0.25rem rgba(139, 29, 29, 0.3) !important;
+    }
+
+    /* Tabla Metálica */
+    .metal-table {
+        color: #e0e0e0;
+        margin-bottom: 0;
+    }
+
+    /* Cabecera Degradé Rojo/Borgoña Metálico (Formato Botón Nuevo Sello) */
+    .metal-table thead,
+    .metal-table thead tr {
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%) !important;
+        border-bottom: 1px solid #5a1212 !important;
+    }
+
+    .metal-table thead th {
+        background-color: transparent !important;
+        background: none !important;
+        color: #ffffff !important;
+        font-family: 'Arial Black', sans-serif;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 12px 16px;
+        border: none !important;
+        text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.9);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .metal-table td {
+        border-bottom: 1px solid #2a2c30;
+        padding: 12px 16px;
+        background-color: transparent;
+    }
+
+    .metal-table tbody tr {
+        transition: background-color 0.15s;
+    }
+
+    .metal-table tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Botones Estilo Rojo Metálico */
+    .metal-btn-red {
+        padding: 8px 18px;
+        border-radius: 6px;
+        border: 1px solid #5a1212;
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%);
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.8);
+        box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.6),
+            inset 0 1px 1px rgba(255, 255, 255, 0.25);
+        transition: filter 0.15s;
+    }
+
+    .metal-btn-red:hover {
+        filter: brightness(1.2);
+        color: #ffffff;
+    }
+
+    /* Botones de Acción Secundarios */
+    .metal-btn-action {
+        background: linear-gradient(180deg, #252629 0%, #151618 100%);
+        border: 1px solid #3d3e42;
+        color: #b0b3b8;
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        transition: all 0.2s;
+    }
+
+    .metal-btn-action:hover {
+        background: #2e3034;
+        color: #ffffff;
+        border-color: #55585f;
+    }
+
+    .metal-btn-action-danger {
+        background: linear-gradient(180deg, #3d1414 0%, #200a0a 100%);
+        border: 1px solid #6b1818;
+        color: #e69d9d;
+    }
+
+    .metal-btn-action-danger:hover {
+        background: #8b1d1d;
+        color: #ffffff;
+        border-color: #a82323;
+    }
+
+    /* Modales Estilo Metal Oscuro */
+    .metal-modal .modal-content {
+        background: linear-gradient(135deg, #2c2d30 0%, #18191b 50%, #101113 100%);
+        border: 1px solid #3d3e42;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+        color: #e0e0e0;
+    }
+
+    .metal-modal .modal-header {
+        background-color: #0c0c0e;
+        border-bottom: 1px solid #3d3e42;
+    }
+
+    .metal-modal .modal-footer {
+        border-top: 1px solid #2a2c30;
+    }
+
+    .metal-modal .form-label {
+        color: #c5beba;
+    }
+</style>
+
+<div class="container-fluid mt-2">
+    <!-- ENCABEZADO PRINCIPAL -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            <h2 class="metal-header-title mb-0 d-flex align-items-center gap-2">
+                <i class="bi bi-tags-fill text-danger fs-2"></i> Géneros Musicales
+            </h2>
+            <p class="small mb-0" style="color: #a0a4ab;">Clasificación de estilos y subgéneros de tu colección.</p>
+        </div>
+
+        <button type="button" class="metal-btn-red text-nowrap" data-bs-toggle="modal" data-bs-target="#modalNuevoGenero">
+            <i class="bi bi-plus-lg me-1"></i> Nuevo Género
+        </button>
+    </div>
+
+    <!-- PANEL Y TABLA DE GÉNEROS -->
+    <div class="metal-panel-card p-3">
+        <!-- BUSCADOR -->
+        <div class="row g-2 mb-3">
+            <div class="col-12">
+                <div class="input-group">
+                    <span class="input-group-text metal-input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" id="inputBuscar" class="form-control metal-input" placeholder="Buscar género por nombre o descripción...">
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            {% if generos %}
+                <div class="table-responsive">
+                    <table class="table metal-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="ps-3">Nombre</th>
+                                <th scope="col">Descripción</th>
+                                <th scope="col" class="text-end pe-3">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for g in generos %}
+                            <tr class="fila-genero">
+                                <td class="ps-3 fw-bold text-light columna-nombre">
+                                    <i class="bi bi-tag me-2 text-danger"></i>{{ g.nombre }}
+                                </td>
+                                <td class="columna-descripcion small" style="color: #a0a4ab;">
+                                    {{ g.descripcion or '—' }}
+                                </td>
+                                <td class="text-end pe-3">
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{{ url_for('main.editar_genero', id=g.id) }}" class="btn metal-btn-action" title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button type="button" class="btn metal-btn-action metal-btn-action-danger" title="Eliminar" data-bs-toggle="modal" data-bs-target="#modalEliminarGenero{{ g.id }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- MODAL ELIMINAR GÉNERO -->
+                                    <div class="modal fade metal-modal" id="modalEliminarGenero{{ g.id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered text-start">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title text-danger fw-bold d-flex align-items-center gap-2">
+                                                        <i class="bi bi-exclamation-triangle-fill"></i> Eliminar Género
+                                                    </h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    ¿Confirmás que querés eliminar el género <strong class="text-light">"{{ g.nombre }}"</strong>?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <form action="{{ url_for('main.eliminar_genero', id=g.id) }}" method="POST" class="d-inline">
+                                                        <button type="submit" class="metal-btn-red py-1 px-3" style="font-size: 0.8rem;">Confirmar Eliminación</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-tags fs-1" style="color: #55585f;"></i>
+                    <p class="mt-2 mb-3" style="color: #8a8d93;">Aún no registraste ningún género musical.</p>
+                    <button type="button" class="metal-btn-red" data-bs-toggle="modal" data-bs-target="#modalNuevoGenero">
+                        <i class="bi bi-plus-lg me-1"></i> Crear primer género
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- MODAL NUEVO GÉNERO -->
+<div class="modal fade metal-modal" id="modalNuevoGenero" tabindex="-1" aria-labelledby="modalNuevoGeneroLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold text-light d-flex align-items-center gap-2" id="modalNuevoGeneroLabel">
+                    <i class="bi bi-tag text-danger"></i> Nuevo Género Musical
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('main.listar_generos') }}" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        {{ form.nombre.label(class="form-label metal-form-label fw-bold") }}
+                        {{ form.nombre(class="form-control metal-input" + (" is-invalid" if form.nombre.errors else "")) }}
+                        {% for error in form.nombre.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.descripcion.label(class="form-label metal-form-label fw-bold") }}
+                        {{ form.descripcion(class="form-control metal-input" + (" is-invalid" if form.descripcion.errors else "")) }}
+                        {% for error in form.descripcion.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    {{ form.submit(class="metal-btn-red border-0") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const inputBuscar = document.getElementById('inputBuscar');
+    const filas = document.querySelectorAll('.fila-genero');
+
+    function filtrarTabla() {
+        const textoBusqueda = inputBuscar.value.toLowerCase().trim();
+
+        filas.forEach(fila => {
+            const celdaNombre = fila.querySelector('.columna-nombre');
+            const celdaDescripcion = fila.querySelector('.columna-descripcion');
+
+            const nombre = celdaNombre ? celdaNombre.textContent.toLowerCase() : '';
+            const descripcion = celdaDescripcion ? celdaDescripcion.textContent.toLowerCase() : '';
+
+            if (textoBusqueda === '' || nombre.includes(textoBusqueda) || descripcion.includes(textoBusqueda)) {
+                fila.style.display = '';
+            } else {
+                fila.style.display = 'none';
+            }
+        });
+    }
+
+    if (inputBuscar) {
+        inputBuscar.addEventListener('input', filtrarTabla);
+        inputBuscar.addEventListener('keyup', filtrarTabla);
+    }
+});
+</script>
+{% endblock %}

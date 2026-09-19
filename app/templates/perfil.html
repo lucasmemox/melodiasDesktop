@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Perfil de Usuario - Melodías{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-dark text-white py-3">
+                <h4 class="mb-0 fw-bold fs-5">
+                    <i class="bi bi-person-gear me-2"></i>Perfil de Usuario
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" enctype="multipart/form-data">
+
+                    <!-- VISTA PREVIA DEL LOGO DE LA MARCA/DISQUERÍA -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Logo de la Disquería / Marca</label>
+
+                        <!-- Caja de previsualización en fondo oscuro para apreciar transparencias -->
+                        <div class="mb-2 p-3 bg-dark rounded border border-secondary text-center d-flex align-items-center justify-content-center" style="min-height: 100px;">
+                            {% if current_user.url_avatar %}
+                                <img src="{{ url_for('static', filename=current_user.url_avatar) }}"
+                                     alt="Logo {{ current_user.nickname or current_user.username }}"
+                                     style="max-height: 80px; width: auto; object-fit: contain;">
+                            {% else %}
+                                <div class="text-white-50 text-center py-2">
+                                    <i class="bi bi-image fs-2 d-block mb-1"></i>
+                                    <span class="small">Sin logo cargado</span>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <input type="file" name="avatar" class="form-control form-control-sm" accept="image/png, image/webp, image/jpeg">
+                        <div class="form-text">Subí una imagen rectangular en formato PNG o WEBP con fondo transparente.</div>
+                    </div>
+
+                    <!-- VISTA PREVIA E INPUT IMAGEN DEL FOOTER -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Imagen del Banner / Pie de Página (Footer)</label>
+
+                        <!-- Previsualización en formato apaisado (Banner) -->
+                        <div class="mb-2 p-3 bg-dark rounded border border-secondary text-center d-flex align-items-center justify-content-center" style="min-height: 120px;">
+                            {% if current_user.url_footer %}
+                                <img src="{{ url_for('static', filename=current_user.url_footer) }}"
+                                     alt="Banner Footer {{ current_user.nickname or current_user.username }}"
+                                     class="img-fluid rounded" style="max-height: 100px; object-fit: contain;">
+                            {% else %}
+                                <div class="text-white-50 text-center py-2">
+                                    <i class="bi bi-layout-side-by-side fs-2 d-block mb-1"></i>
+                                    <span class="small">Sin imagen de footer cargada</span>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <input type="file" name="footer_img" class="form-control form-control-sm" accept="image/png, image/webp, image/jpeg">
+                        <div class="form-text">Imagen horizontal panorámica que se desplegará al pie de tu catálogo público.</div>
+                    </div>
+
+                    <!-- DATOS PERSONALES -->
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Usuario</label>
+                        <input type="text" class="form-control bg-light" value="{{ current_user.username }}" disabled>
+                        <div class="form-text">El nombre de usuario no se puede cambiar.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nickname / Nombre Comercial</label>
+                        <input type="text" name="nickname" class="form-control" value="{{ current_user.nickname or current_user.username }}" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Correo Electrónico</label>
+                        <input type="email" name="email" class="form-control" value="{{ current_user.email }}" required>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- SECCIÓN CAMBIO DE CONTRASEÑA -->
+                    <div class="mb-3">
+                        <h6 class="fw-bold text-danger mb-3">
+                            <i class="bi bi-shield-lock me-1"></i> Cambiar Contraseña (Opcional)
+                        </h6>
+                        <p class="text-muted small">Dejá estos campos en blanco si no querés modificar tu contraseña actual.</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Contraseña Actual</label>
+                        <input type="password" name="current_password" class="form-control" placeholder="••••••••">
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Nueva Contraseña</label>
+                            <input type="password" name="new_password" class="form-control" placeholder="••••••••">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Confirmar Nueva Contraseña</label>
+                            <input type="password" name="confirm_password" class="form-control" placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <!-- BOTONES DE ACCIÓN -->
+                    <div class="d-flex justify-content-between align-items-center pt-2">
+                        <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary px-4">Guardar Cambios</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

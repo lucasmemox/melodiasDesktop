@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Sello - Melodías{% endblock %}
+
+{% block content %}
+<style>
+    /* Panel/Tarjeta Metálica Principal */
+    .metal-panel-card {
+        background: linear-gradient(135deg, #242528 0%, #151618 50%, #0d0e0f 100%);
+        border: 1px solid #3d3e42;
+        border-radius: 10px;
+        box-shadow:
+            0 8px 20px rgba(0, 0, 0, 0.8),
+            inset 0 1px 1px rgba(255, 255, 255, 0.12),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.8);
+        overflow: hidden;
+    }
+
+    /* Cabecera Degradé Rojo/Borgoña Metálico (Estilo Botón Nuevo Sello / Cabecera Tabla) */
+    .metal-card-header {
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%) !important;
+        border-bottom: 1px solid #5a1212 !important;
+        box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.6),
+            inset 0 1px 1px rgba(255, 255, 255, 0.25);
+        padding: 14px 20px;
+    }
+
+    .metal-card-title {
+        color: #ffffff !important;
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        font-size: 1.3rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.9);
+    }
+
+    /* Campos de Formulario Estilo Metal Oscuro */
+    .metal-form-label {
+        color: #c5beba;
+        font-family: 'Arial Black', sans-serif;
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    .metal-input {
+        background-color: #0c0c0e !important;
+        color: #e0e0e0 !important;
+        border: 1px solid #3d3e42 !important;
+        font-size: 0.95rem;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .metal-input:focus {
+        border-color: #8b1d1d !important;
+        box-shadow: 0 0 0 0.25rem rgba(139, 29, 29, 0.3) !important;
+    }
+
+    /* Botones */
+    .metal-btn-red {
+        padding: 8px 20px;
+        border-radius: 6px;
+        border: 1px solid #5a1212;
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%);
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.8);
+        box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.6),
+            inset 0 1px 1px rgba(255, 255, 255, 0.25);
+        transition: filter 0.15s;
+    }
+
+    .metal-btn-red:hover {
+        filter: brightness(1.2);
+        color: #ffffff;
+    }
+
+    .metal-btn-secondary {
+        padding: 8px 18px;
+        border-radius: 6px;
+        background: linear-gradient(180deg, #252629 0%, #151618 100%);
+        border: 1px solid #3d3e42;
+        color: #b0b3b8;
+        font-weight: bold;
+        font-size: 0.85rem;
+        text-decoration: none;
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .metal-btn-secondary:hover {
+        background: #2e3034;
+        color: #ffffff;
+        border-color: #55585f;
+    }
+</style>
+
+<div class="row justify-content-center mt-3">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="metal-panel-card">
+            <!-- CABECERA ROJO/BORGOÑA METÁLICO -->
+            <div class="metal-card-header d-flex align-items-center justify-content-between">
+                <h5 class="metal-card-title mb-0 d-flex align-items-center gap-2">
+                    <i class="bi bi-pencil-square"></i> Editar Sello Discográfico
+                </h5>
+                <a href="{{ url_for('main.listar_sellos') }}" class="metal-btn-secondary py-1 px-3" style="font-size: 0.8rem;">
+                    <i class="bi bi-arrow-left me-1"></i> Volver
+                </a>
+            </div>
+
+            <!-- CUERPO DEL FORMULARIO -->
+            <div class="card-body p-4">
+                <form action="{{ url_for('main.editar_sello', id=sello.id) }}" method="POST">
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        {{ form.nombre.label(class="form-label metal-form-label") }}
+                        {{ form.nombre(class="form-control metal-input" + (" is-invalid" if form.nombre.errors else "")) }}
+                        {% for error in form.nombre.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form.pais_id.label(class="form-label metal-form-label") }}
+                        {{ form.pais_id(class="form-select metal-input" + (" is-invalid" if form.pais_id.errors else "")) }}
+                        {% for error in form.pais_id.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ url_for('main.listar_sellos') }}" class="metal-btn-secondary">Volver</a>
+                        {{ form.submit(class="metal-btn-red border-0", value="Guardar Cambios") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

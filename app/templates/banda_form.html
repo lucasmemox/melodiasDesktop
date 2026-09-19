@@ -1,0 +1,534 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if banda %}Editar {{ banda.nombre }}{% else %}Nueva Banda{% endif %} - Melodías{% endblock %}
+
+{% block content %}
+<style>
+    /* Tarjeta Metálica Principal */
+    .metal-card {
+        max-width: 680px;
+        margin: 30px auto;
+        padding: 30px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #2c2d30 0%, #18191b 50%, #101113 100%);
+        border: 1px solid #3d3e42;
+        box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.8),
+            inset 0 1px 1px rgba(255, 255, 255, 0.15),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Sub-tarjetas internas (Buscador y contenedores) */
+    .metal-subpanel {
+        background-color: #121315;
+        border: 1px solid #2a2c30;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Título Metálico */
+    .metal-title {
+        color: #c5beba;
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        font-size: 1.6rem;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        text-shadow:
+            0px 2px 3px rgba(0, 0, 0, 0.9),
+            0px -1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .metal-label {
+        color: #b0b3b8;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    /* Inputs y Selects */
+    .metal-input, .metal-select {
+        width: 100%;
+        padding: 10px 14px;
+        background-color: #121315;
+        border: 1px solid #333539;
+        border-radius: 6px;
+        color: #e0e0e0;
+        font-size: 0.9rem;
+        box-shadow:
+            inset 0 2px 4px rgba(0, 0, 0, 0.8),
+            0 1px 0 rgba(255, 255, 255, 0.05);
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .metal-input::placeholder {
+        color: #55585f !important;
+        opacity: 1 !important;
+    }
+
+    .metal-input:focus, .metal-select:focus {
+        border-color: #7a1d1d;
+        box-shadow:
+            inset 0 2px 4px rgba(0, 0, 0, 0.9),
+            0 0 6px rgba(168, 32, 32, 0.4);
+    }
+
+    /* Botón Rojo */
+    .metal-btn-red {
+        padding: 10px 20px;
+        border-radius: 6px;
+        border: 1px solid #5a1212;
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%);
+        color: #e6dad6;
+        font-weight: bold;
+        font-size: 0.95rem;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.8);
+        box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.6),
+            inset 0 1px 1px rgba(255, 255, 255, 0.25),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.4);
+        transition: filter 0.15s, transform 0.1s;
+    }
+
+    .metal-btn-red:hover {
+        filter: brightness(1.15);
+        color: #fff;
+    }
+
+    .metal-btn-red:active {
+        transform: translateY(1px);
+    }
+
+    /* Botón Secundario (Volver) */
+    .metal-btn-secondary {
+        padding: 10px 20px;
+        border-radius: 6px;
+        border: 1px solid #3d3e42;
+        background: linear-gradient(180deg, #252629 0%, #151618 100%);
+        color: #b0b3b8;
+        font-weight: bold;
+        font-size: 0.95rem;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.5),
+            inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .metal-btn-secondary:hover {
+        background: #2e3034;
+        color: #fff;
+    }
+
+    /* Contenedor scrolleable de géneros */
+    .generos-scroll-box {
+        max-height: 150px;
+        overflow-y: auto;
+        background-color: #0c0c0e;
+        border: 1px solid #28292c;
+        border-radius: 6px;
+        padding: 8px 12px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.9);
+    }
+
+    /* Custom Scrollbar para el panel de géneros */
+    .generos-scroll-box::-webkit-scrollbar {
+        width: 6px;
+    }
+    .generos-scroll-box::-webkit-scrollbar-track {
+        background: #121315;
+    }
+    .generos-scroll-box::-webkit-scrollbar-thumb {
+        background: #3a3c42;
+        border-radius: 3px;
+    }
+
+    /* Badges metálicos seleccionados */
+    .metal-badge {
+        background: linear-gradient(180deg, #1f2023 0%, #111214 100%);
+        color: #c5beba;
+        border: 1px solid #3d3e42;
+        font-size: 0.75rem;
+        padding: 3px 8px;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    /* Personalización de los Checkboxes */
+    .form-check-input {
+        background-color: #121315;
+        border-color: #3d3e42;
+    }
+    .form-check-input:checked {
+        background-color: #8b1d1d;
+        border-color: #580e0e;
+    }
+</style>
+
+<div class="metal-card">
+    <h2 class="metal-title d-flex align-items-center gap-2">
+        <i class="bi bi-people-fill text-danger"></i>
+        {% if banda %}Editar Banda: {{ banda.nombre }}{% else %}Agregar Nueva Banda{% endif %}
+    </h2>
+
+    <!-- BUSCADOR DISCOGS -->
+    <div class="metal-subpanel mb-4">
+        <label class="metal-label text-danger d-flex align-items-center gap-2">
+            <i class="bi bi-search"></i> Buscar Banda en Discogs
+        </label>
+        <div class="input-group">
+            <input type="text" id="discogsBandaQuery" class="metal-input"
+                value="{{ banda.nombre if banda else '' }}"
+                placeholder="Ej: Iron Maiden, Sodom, Kreator..." style="border-radius: 6px 0 0 6px;">
+            <button class="metal-btn-red" type="button" id="btnBuscarBandaDiscogs" style="border-radius: 0 6px 6px 0;">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+        </div>
+        <div class="form-text text-muted small mt-1" style="color: #8a8d93 !important;">
+            Consulta la base de datos de Discogs para autocompletar nombre, país, géneros y años.
+        </div>
+
+        <!-- Lista de resultados -->
+        <div id="discogsBandaResults" class="list-group mt-2 d-none shadow-lg"></div>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <!-- LOGO DE LA BANDA -->
+        <div class="mb-4 text-center">
+            <label class="metal-label text-start">Logo / Imagen de la Banda</label>
+            {% if banda and banda.logo %}
+                <img src="{{ url_for('static', filename='uploads/covers/' + banda.logo) }}" alt="Logo {{ banda.nombre }}" class="img-thumbnail bg-dark border-secondary mb-2" style="max-height: 120px;">
+            {% endif %}
+            <input type="file" name="logo" class="metal-input" accept="image/*">
+            <div class="form-text text-start small mt-1" style="color: #8a8d93 !important;">Formatos aceptados: PNG, JPG, WEBP.</div>
+        </div>
+
+        <!-- Campo oculto URL Discogs -->
+        <input type="hidden" name="logo_discogs_url" id="inputLogoDiscogsUrl" value="">
+
+        <!-- NOMBRE -->
+        <div class="mb-3">
+            <label class="metal-label">Nombre de la Banda *</label>
+            <input type="text" id="inputNombreBanda" name="nombre" class="metal-input" value="{{ banda.nombre if banda else '' }}" required autocomplete="off">
+        </div>
+
+        <!-- PAÍS Y GÉNEROS -->
+        <div class="row g-3 mb-3">
+            <!-- Seleccionar País -->
+            <div class="col-md-6">
+                <label class="metal-label">País</label>
+                <select id="selectPais" name="pais_id" class="metal-select">
+                    <option value="" class="bg-dark text-white">-- Seleccionar --</option>
+                    {% for p in paises %}
+                        <option value="{{ p.id }}" class="bg-dark text-white" {% if banda and banda.pais_id == p.id %}selected{% endif %}>
+                            {{ p.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Lista de Checkboxes de Géneros -->
+            <div class="col-md-6">
+                <label class="metal-label">Géneros / Estilos</label>
+
+                <!-- Campo de búsqueda en vivo -->
+                <input type="text" id="generoSearch" class="metal-input mb-2" placeholder="Buscar género..." style="padding: 6px 10px; font-size: 0.85rem;">
+
+                <!-- Área de badges seleccionados -->
+                <div id="selectedGenresBadges" class="mb-2 d-flex flex-wrap gap-1"></div>
+
+                <!-- Contenedor scrolleable con los checkboxes -->
+                <div id="generosContainer" class="generos-scroll-box">
+                    {% for genero in generos %}
+                            <div class="form-check genero-item my-1">
+                                <input class="form-check-input genero-checkbox" type="checkbox" name="generos" value="{{ genero.id }}" id="genero_{{ genero.id }}"
+                                    {% if banda and genero in banda.generos %}checked{% endif %}>
+                                <label class="form-check-label small text-light" for="genero_{{ genero.id }}">{{ genero.nombre }}</label>
+                            </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- AÑOS Y ESTADO -->
+        <div class="row g-3 mb-3">
+            <div class="col-md-4">
+                <label class="metal-label">Año Formación</label>
+                <input type="number" id="inputFormacion" name="formacion" class="metal-input" value="{{ banda.formacion if banda else '' }}" placeholder="1997">
+            </div>
+            <div class="col-md-4">
+                <label class="metal-label">Año Disolución</label>
+                <input type="number" id="inputDisolucion" name="disolucion" class="metal-input" value="{{ banda.disolucion if banda else '' }}" placeholder="Vacío si está activa">
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" name="activo" id="activoCheck" {% if not banda or banda.activo %}checked{% endif %}>
+                    <label class="form-check-label fw-bold text-light small" for="activoCheck">Banda Activa</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTONES DE ACCIÓN -->
+        <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top border-secondary">
+            <a href="{% if banda %}{{ url_for('main.detalle_banda', id=banda.id) }}{% else %}{{ url_for('main.index') }}{% endif %}" class="metal-btn-secondary">
+                Volver
+            </a>
+            <button type="submit" class="metal-btn-red">
+                <i class="bi bi-check-lg me-1"></i> Guardar Banda
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // --- 1. LÓGICA DE GÉNEROS Y BADGES ---
+  const searchInput = document.getElementById('generoSearch');
+  const items = document.querySelectorAll('.genero-item');
+  const checkboxes = document.querySelectorAll('.genero-checkbox');
+  const badgesContainer = document.getElementById('selectedGenresBadges');
+
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase().trim();
+      items.forEach(item => {
+        const labelText = item.querySelector('.form-check-label').textContent.toLowerCase();
+        if (labelText.includes(term)) {
+          item.classList.remove('d-none');
+        } else {
+          item.classList.add('d-none');
+        }
+      });
+    });
+  }
+
+  function updateBadges() {
+    if (!badgesContainer) return;
+    badgesContainer.innerHTML = '';
+
+    checkboxes.forEach(cb => {
+      if (cb.checked) {
+        const labelText = cb.nextElementSibling.textContent.trim();
+        const badge = document.createElement('span');
+        badge.className = 'metal-badge';
+        badge.innerHTML = `${labelText} <button type="button" class="btn-close btn-close-white ms-1" style="font-size: 0.4rem;" aria-label="Quitar"></button>`;
+
+        badge.querySelector('button').addEventListener('click', () => {
+          cb.checked = false;
+          updateBadges();
+        });
+
+        badgesContainer.appendChild(badge);
+      }
+    });
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateBadges));
+  updateBadges();
+
+  // --- 2. INTEGRACIÓN DISCOGS ARTISTAS ---
+  const inputBandaQuery = document.getElementById('discogsBandaQuery');
+  const btnBuscarBanda = document.getElementById('btnBuscarBandaDiscogs');
+  const resultsBandaContainer = document.getElementById('discogsBandaResults');
+
+  if (inputBandaQuery && btnBuscarBanda) {
+    inputBandaQuery.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        btnBuscarBanda.click();
+      }
+    });
+
+    btnBuscarBanda.addEventListener('click', function() {
+      const query = inputBandaQuery.value.trim();
+      if (query.length < 2) return;
+
+      resultsBandaContainer.innerHTML = '<div class="list-group-item bg-dark text-white border-secondary small"><i class="bi bi-arrow-repeat spin me-2"></i>Buscando artista en Discogs...</div>';
+      resultsBandaContainer.classList.remove('d-none');
+
+      fetch(`/api/discogs/buscar_banda?q=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(data => {
+          resultsBandaContainer.innerHTML = '';
+          if (!data || data.length === 0 || data.error) {
+            resultsBandaContainer.innerHTML = '<div class="list-group-item bg-dark text-white border-secondary small">No se encontraron bandas coincidentes.</div>';
+            return;
+          }
+
+          data.forEach(item => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'list-group-item list-group-item-action bg-dark text-white border-secondary d-flex align-items-center justify-content-between p-2 gap-2';
+
+            const nombreOriginal = item.nombre_original || item.nombre || '';
+            const matchSufijo = nombreOriginal.match(/\s*(\(\d+\))$/);
+            const sufijoDiscogs = matchSufijo ? matchSufijo[1] : '';
+            const nombreLimpio = nombreOriginal.replace(/\s*\(\d+\)$/, '').trim();
+
+            const imgTag = item.portada
+                ? `<img src="${item.portada}" width="48" height="48" class="rounded object-fit-cover flex-shrink-0 border border-secondary">`
+                : `<div class="bg-secondary rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px;"><i class="bi bi-people text-white-50"></i></div>`;
+
+            btn.innerHTML = `
+                <div class="d-flex align-items-center gap-2 overflow-hidden text-start">
+                    ${imgTag}
+                    <div class="overflow-hidden">
+                        <div class="d-flex align-items-center gap-2">
+                            <strong class="text-truncate">${nombreLimpio}</strong>
+                            ${sufijoDiscogs ? `<span class="badge bg-secondary text-light small">${sufijoDiscogs}</span>` : ''}
+                        </div>
+                        <div class="small text-white-50 text-truncate" style="font-size: 0.75rem;">
+                            ${item.perfil_corto || 'Sin biografía disponible'}
+                        </div>
+                    </div>
+                </div>
+                <i class="bi bi-chevron-right text-muted small ms-2"></i>
+            `;
+
+            // AL HACER CLIC: SE CONSULTA EL DETALLE COMPLETO DEL ARTISTA
+            btn.onclick = () => {
+                btn.innerHTML = `<div class="small text-warning"><i class="bi bi-arrow-repeat spin me-2"></i>Obteniendo datos de la banda...</div>`;
+
+                fetch(`/api/discogs/banda/${item.id}`)
+                    .then(res => res.json())
+                    .then(detalle => {
+                        if (!detalle || detalle.error) return;
+
+                        // 1. Asignar Nombre limpio
+                        document.getElementById('inputNombreBanda').value = detalle.nombre_limpio || nombreLimpio;
+
+                        // 2. Asignar País (con el pais_id resuelto por la API de detalle)
+                        const selectPais = document.getElementById('selectPais');
+                        if (selectPais && detalle.pais_id !== null && detalle.pais_id !== undefined) {
+                            selectPais.value = String(detalle.pais_id);
+                        }
+
+                        // 3. Imagen de Discogs
+                        const portadaFinal = detalle.portada || item.portada;
+                        const inputLogoUrl = document.getElementById('inputLogoDiscogsUrl');
+                        if (inputLogoUrl && portadaFinal) {
+                            inputLogoUrl.value = portadaFinal;
+
+                            let imgPreview = document.querySelector('.mb-4.text-center img');
+                            if (!imgPreview) {
+                                imgPreview = document.createElement('img');
+                                imgPreview.className = 'img-thumbnail bg-dark border-secondary mb-2';
+                                imgPreview.style.maxHeight = '120px';
+                                document.querySelector('.mb-4.text-center').prepend(imgPreview);
+                            }
+                            imgPreview.src = portadaFinal;
+                        }
+
+                        // Texto de biografía completa para procesar año y géneros
+                        const perfilTexto = detalle.perfil || '';
+
+                        // 4. Extracción de año de formación
+                        if (perfilTexto) {
+                            const matchAno = perfilTexto.match(/\b(19\d{2}|20\d{2})\b/);
+                            if (matchAno && matchAno[1]) {
+                                const inputFormacion = document.getElementById('inputFormacion');
+                                if (inputFormacion && !inputFormacion.value) {
+                                    inputFormacion.value = matchAno[1];
+                                }
+                            }
+                        }
+
+                        // 5. MATCHEO DE GÉNEROS
+                        checkboxes.forEach(cb => cb.checked = false);
+
+                        if (perfilTexto) {
+                            const perfilLower = perfilTexto.toLowerCase();
+
+                            const reglasGeneros = [
+                                { regex: /\bmelodic death\b/, generos: ['Melodic Death Metal'] },
+                                { regex: /\btechnical death\b/, generos: ['Technical Death Metal'] },
+                                { regex: /\bbrutal death\b/, generos: ['Brutal Death Metal'] },
+                                { regex: /\batmospheric black\b/, generos: ['Atmospheric Black Metal'] },
+                                { regex: /\bsymphonic black\b/, generos: ['Symphonic Black Metal'] },
+                                { regex: /\bmelodic black\b/, generos: ['Melodic Black Metal'] },
+                                { regex: /\bdeath doom\b|\bdeath\/doom\b/, generos: ['Death-Doom', 'Death/Doom Metal'] },
+                                { regex: /\bblackened death\b/, generos: ['Blackened Death Metal'] },
+                                { regex: /\bblackened thrash\b/, generos: ['Blackened Thrash Metal'] },
+                                { regex: /\bcrossover\b/, generos: ['Crossover Thrash'] },
+                                { regex: /\bpower\b/, generos: ['Power Metal'] },
+                                { regex: /\bprog(ressive)?\b/, generos: ['Progressive Metal', 'Progressive', 'Progressive Rock'] },
+                                { regex: /\bsymphon(ic)?\b/, generos: ['Symphonic Metal'] },
+                                { regex: /\bheavy\b/, generos: ['Heavy Metal'] },
+                                { regex: /\bthrash\b/, generos: ['Thrash Metal'] },
+                                { regex: /\bdeath\b/, generos: ['Death Metal'] },
+                                { regex: /\bblack\b/, generos: ['Black Metal'] },
+                                { regex: /\bdoom\b/, generos: ['Doom Metal'] },
+                                { regex: /\bspeed\b/, generos: ['Speed Metal'] },
+                                { regex: /\bgothic\b|\bgoth\b/, generos: ['Gothic Metal'] },
+                                { regex: /\bgroove\b/, generos: ['Groove Metal'] },
+                                { regex: /\bindustrial\b/, generos: ['Industrial Metal'] },
+                                { regex: /\bsludge\b/, generos: ['Sludge Metal'] },
+                                { regex: /\bstoner\b/, generos: ['Stoner Metal'] },
+                                { regex: /\bfolk\b/, generos: ['Folk Metal'] },
+                                { regex: /\bpagan\b/, generos: ['Pagan Metal'] },
+                                { regex: /\bviking\b/, generos: ['Viking Metal'] },
+                                { regex: /\bglam\b/, generos: ['Glam Metal'] },
+                                { regex: /\bnu\b/, generos: ['Nu Metal'] },
+                                { regex: /\balternative\b/, generos: ['Alternative Metal'] },
+                                { regex: /\bgrind(core)?\b/, generos: ['Grindcore'] },
+                                { regex: /\bmetalcore\b/, generos: ['Metalcore'] },
+                                { regex: /\bdeathcore\b/, generos: ['Deathcore'] },
+                                { regex: /\bhard rock\b/, generos: ['Hard Rock'] },
+                                { regex: /\bhardcore\b/, generos: ['Hardcore Punk'] }
+                            ];
+
+                            const generosEncontrados = new Set();
+
+                            reglasGeneros.forEach(regla => {
+                                if (regla.regex.test(perfilLower)) {
+                                    regla.generos.forEach(g => generosEncontrados.add(g.toLowerCase()));
+                                }
+                            });
+
+                            checkboxes.forEach(cb => {
+                                const labelNode = cb.nextElementSibling;
+                                if (labelNode) {
+                                    const generoTextoDOM = labelNode.textContent.replace(/\s+/g, ' ').trim().toLowerCase();
+                                    if (generosEncontrados.has(generoTextoDOM) || (generoTextoDOM.length > 3 && perfilLower.includes(generoTextoDOM))) {
+                                        cb.checked = true;
+                                    }
+                                }
+                            });
+                        }
+
+                        // 6. Actualizar badges visuales
+                        updateBadges();
+
+                        // Ocultar la lista de resultados de la búsqueda
+                        resultsBandaContainer.classList.add('d-none');
+                    })
+                    .catch(err => {
+                        console.error('Error al obtener detalle:', err);
+                        resultsBandaContainer.classList.add('d-none');
+                    });
+            };
+
+            resultsBandaContainer.appendChild(btn);
+          });
+        })
+        .catch(() => {
+          resultsBandaContainer.innerHTML = '<div class="list-group-item bg-dark text-danger border-secondary small">Error de conexión con la API.</div>';
+        });
+    });
+  }
+});
+</script>
+{% endblock %}

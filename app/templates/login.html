@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión - Melodías{% endblock %}
+
+{% block content %}
+<style>
+    /* Contenedor principal de la tarjeta metálica */
+    .metal-card {
+        max-width: 380px;
+        margin: 60px auto;
+        padding: 35px 30px;
+        border-radius: 12px;
+        /* Efecto de metal cepillado oscuro */
+        background: linear-gradient(135deg, #2c2d30 0%, #18191b 50%, #101113 100%);
+        border: 1px solid #3d3e42;
+        box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.8),
+            inset 0 1px 1px rgba(255, 255, 255, 0.15),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.8);
+        text-align: center;
+    }
+
+    /* Título estilo metálico en relieve */
+    .metal-title {
+        color: #c5beba;
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        font-size: 1.8rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        line-height: 1.1;
+        margin-bottom: 25px;
+        text-shadow:
+            0px 2px 3px rgba(0, 0, 0, 0.9),
+            0px -1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Inputs estilo bajorrelieve/hundido */
+    .metal-input {
+        width: 100%;
+        padding: 12px 15px;
+        margin-bottom: 18px;
+        background-color: #121315;
+        border: 1px solid #333539;
+        border-radius: 8px;
+        color: #e0e0e0;
+        font-size: 0.95rem;
+        box-shadow:
+            inset 0 2px 5px rgba(0, 0, 0, 0.8),
+            0 1px 0 rgba(255, 255, 255, 0.05);
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .metal-input::placeholder {
+        color: #61646b !important;
+        opacity: 1 !important;
+    }
+
+    .metal-input:focus {
+        border-color: #7a1d1d;
+        box-shadow:
+            inset 0 2px 5px rgba(0, 0, 0, 0.9),
+            0 0 6px rgba(168, 32, 32, 0.4);
+    }
+
+    /* Botón Rojo Texturizado */
+    .metal-btn {
+        width: 100%;
+        padding: 12px;
+        margin-top: 8px;
+        border-radius: 8px;
+        border: 1px solid #5a1212;
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%);
+        color: #e6dad6;
+        font-weight: bold;
+        font-size: 1.05rem;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.8);
+        box-shadow:
+            0 4px 10px rgba(0, 0, 0, 0.6),
+            inset 0 1px 1px rgba(255, 255, 255, 0.25),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.4);
+        transition: filter 0.15s, transform 0.1s;
+    }
+
+    .metal-btn:hover {
+        filter: brightness(1.15);
+    }
+
+    .metal-btn:active {
+        transform: translateY(1px);
+        box-shadow:
+            0 2px 5px rgba(0, 0, 0, 0.8),
+            inset 0 2px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Alertas de error */
+    .metal-alert {
+        background: rgba(120, 20, 20, 0.4);
+        border: 1px solid #781414;
+        color: #ff9e9e;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        margin-bottom: 18px;
+        text-align: left;
+    }
+</style>
+
+<div class="metal-card">
+    <h2 class="metal-title">Heavy Metal<br>Catalogo de Discos</h2>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="metal-alert">
+          {% for message in messages %}
+            <p class="mb-0">{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <div>
+            <input type="text" name="username" class="metal-input" placeholder="Username" required autocomplete="off">
+        </div>
+        <div>
+            <input type="password" name="password" class="metal-input" placeholder="Password" required>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="remember" name="remember" checked>
+            <label class="form-check-label text-light small" for="remember">
+                Recordarme en este equipo
+            </label>
+        </div>
+        <button type="submit" class="metal-btn">Login</button>
+    </form>
+</div>
+{% endblock %}

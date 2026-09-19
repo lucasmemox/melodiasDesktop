@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+
+{% block title %}Formatos - Melodías{% endblock %}
+
+{% block content %}
+<style>
+    /* Titular Principal Metálico */
+    .metal-header-title {
+        color: #1a1b1e;
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        font-size: 2.2rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        text-shadow:
+            1px 1px 2px rgba(255, 255, 255, 0.8),
+            0px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Panel/Contenedor Principal */
+    .metal-panel-card {
+        background: linear-gradient(135deg, #242528 0%, #151618 50%, #0d0e0f 100%);
+        border: 1px solid #3d3e42;
+        border-radius: 10px;
+        box-shadow:
+            0 8px 20px rgba(0, 0, 0, 0.7),
+            inset 0 1px 1px rgba(255, 255, 255, 0.12),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.8);
+        overflow: hidden;
+    }
+
+    /* Tabla Metálica */
+    .metal-table {
+        color: #e0e0e0;
+        margin-bottom: 0;
+    }
+
+    /* Cabecera Degradé Rojo/Borgoña Metálico */
+    .metal-table thead,
+    .metal-table thead tr {
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%) !important;
+        border-bottom: 1px solid #5a1212 !important;
+    }
+
+    .metal-table thead th {
+        background-color: transparent !important;
+        background: none !important;
+        color: #ffffff !important;
+        font-family: 'Arial Black', sans-serif;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 12px 16px;
+        border: none !important;
+        text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.9);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .metal-table td {
+        border-bottom: 1px solid #2a2c30;
+        padding: 12px 16px;
+        background-color: transparent;
+    }
+
+    .metal-table tbody tr {
+        transition: background-color 0.15s;
+    }
+
+    .metal-table tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Badges / Etiquetas Estilizadas */
+    .metal-badge-main {
+        background: linear-gradient(180deg, #3a1111 0%, #1f0808 100%);
+        border: 1px solid #721c24;
+        color: #f8d7da;
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        letter-spacing: 0.5px;
+    }
+
+    .metal-badge-sub {
+        background: #252629;
+        border: 1px solid #3d3e42;
+        color: #b0b3b8;
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        letter-spacing: 0.5px;
+    }
+
+    /* Botones Estilo Rojo Metálico */
+    .metal-btn-red {
+        padding: 8px 18px;
+        border-radius: 6px;
+        border: 1px solid #5a1212;
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%);
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.8);
+        box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.6),
+            inset 0 1px 1px rgba(255, 255, 255, 0.25);
+        transition: filter 0.15s;
+    }
+
+    .metal-btn-red:hover {
+        filter: brightness(1.2);
+        color: #ffffff;
+    }
+
+    /* Botones de Acción Secundarios */
+    .metal-btn-action {
+        background: linear-gradient(180deg, #252629 0%, #151618 100%);
+        border: 1px solid #3d3e42;
+        color: #b0b3b8;
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        transition: all 0.2s;
+    }
+
+    .metal-btn-action:hover {
+        background: #2e3034;
+        color: #ffffff;
+        border-color: #55585f;
+    }
+
+    .metal-btn-action-danger {
+        background: linear-gradient(180deg, #3d1414 0%, #200a0a 100%);
+        border: 1px solid #6b1818;
+        color: #e69d9d;
+    }
+
+    .metal-btn-action-danger:hover {
+        background: #8b1d1d;
+        color: #ffffff;
+        border-color: #a82323;
+    }
+
+    /* Modales Estilo Metal Oscuro */
+    .metal-modal .modal-content {
+        background: linear-gradient(135deg, #2c2d30 0%, #18191b 50%, #101113 100%);
+        border: 1px solid #3d3e42;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+        color: #e0e0e0;
+    }
+
+    .metal-modal .modal-header {
+        background-color: #0c0c0e;
+        border-bottom: 1px solid #3d3e42;
+    }
+
+    .metal-modal .modal-footer {
+        border-top: 1px solid #2a2c30;
+    }
+
+    .metal-modal .form-label {
+        color: #c5beba;
+    }
+
+    /* Controles de Formulario Metálicos */
+    .metal-input, .metal-select {
+        background-color: #0c0c0e !important;
+        color: #e0e0e0 !important;
+        border: 1px solid #3d3e42 !important;
+        font-size: 0.9rem;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .metal-input:focus, .metal-select:focus {
+        border-color: #8b1d1d !important;
+        box-shadow: 0 0 0 0.25rem rgba(139, 29, 29, 0.3) !important;
+    }
+</style>
+
+<div class="container-fluid mt-2">
+    <!-- ENCABEZADO PRINCIPAL -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            <h2 class="metal-header-title mb-0 d-flex align-items-center gap-2">
+                <i class="bi bi-disc-fill text-danger fs-2"></i> Gestión de Formatos
+            </h2>
+            <p class="small mb-0" style="color: #585a5f;">Administrá los formatos principales y sus variantes (CD, Vinilo, Cassette, etc.).</p>
+        </div>
+
+        <button type="button" class="metal-btn-red text-nowrap" data-bs-toggle="modal" data-bs-target="#modalNuevoFormato">
+            <i class="bi bi-plus-lg me-1"></i> Nuevo Formato
+        </button>
+    </div>
+
+    <!-- TABLA DE FORMATOS -->
+    <div class="metal-panel-card">
+        <div class="card-body p-0">
+            {% if formatos %}
+                <div class="table-responsive">
+                    <table class="table metal-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="ps-3">ID</th>
+                                <th scope="col">Nombre del Formato</th>
+                                <th scope="col">Categoría Padre</th>
+                                <th scope="col" class="text-end pe-3">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for f in formatos %}
+                            <tr>
+                                <td class="ps-3 small" style="color: #a0a4ab;">#{{ f.id }}</td>
+                                <td class="fw-bold">
+                                    {% if not f.padre_id %}
+                                        <span class="text-danger"><i class="bi bi-folder-fill me-2"></i>{{ f.nombre|upper }}</span>
+                                    {% else %}
+                                        <span class="ps-3" style="color: #d0d4dc;"><i class="bi bi-arrow-return-right me-2" style="color: #8a8d93;"></i>{{ f.nombre }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if f.padre %}
+                                        <span class="badge metal-badge-sub">{{ f.padre.nombre|upper }}</span>
+                                    {% else %}
+                                        <span class="badge metal-badge-main">PRINCIPAL</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end pe-3">
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{{ url_for('main.editar_formato', id=f.id) }}" class="btn metal-btn-action" title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button type="button" class="btn metal-btn-action metal-btn-action-danger" title="Eliminar" data-bs-toggle="modal" data-bs-target="#modalEliminarF{{ f.id }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- MODAL ELIMINAR -->
+                                    <div class="modal fade metal-modal" id="modalEliminarF{{ f.id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered text-start">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title text-danger fw-bold d-flex align-items-center gap-2">
+                                                        <i class="bi bi-exclamation-triangle-fill"></i> Eliminar Formato
+                                                    </h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    ¿Confirmás que querés eliminar el formato <strong class="text-light">"{{ f.nombre }}"</strong>?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <form action="{{ url_for('main.eliminar_formato', id=f.id) }}" method="POST" class="d-inline">
+                                                        <button type="submit" class="metal-btn-red py-1 px-3" style="font-size: 0.8rem;">Confirmar Eliminación</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-disc fs-1" style="color: #55585f;"></i>
+                    <p class="mt-2 mb-3" style="color: #8a8d93;">No hay formatos registrados.</p>
+                    <button type="button" class="metal-btn-red" data-bs-toggle="modal" data-bs-target="#modalNuevoFormato">
+                        <i class="bi bi-plus-lg me-1"></i> Crear primer formato
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CREAR FORMATO -->
+<div class="modal fade metal-modal" id="modalNuevoFormato" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold text-light d-flex align-items-center gap-2">
+                    <i class="bi bi-disc text-danger"></i> Nuevo Formato
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('main.listar_formatos') }}" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        {{ form.nombre.label(class="form-label metal-form-label fw-bold") }}
+                        {{ form.nombre(class="form-control metal-input") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.padre_id.label(class="form-label metal-form-label fw-bold") }}
+                        {{ form.padre_id(class="form-select metal-select") }}
+                        <div class="form-text mt-1" style="color: #8a8d93; font-size: 0.8rem;">
+                            Si es una categoría principal (ej. VINILO), dejalo como "Formato Principal".
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    {{ form.submit(class="metal-btn-red border-0") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

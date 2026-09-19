@@ -1,0 +1,528 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if album %}Editar {{ album.titulo }}{% else %}Nuevo Álbum{% endif %} - Melodías{% endblock %}
+
+{% block content %}
+<style>
+    /* Tarjeta Metálica Principal */
+    .metal-card {
+        max-width: 680px;
+        margin: 30px auto;
+        padding: 30px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #2c2d30 0%, #18191b 50%, #101113 100%);
+        border: 1px solid #3d3e42;
+        box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.8),
+            inset 0 1px 1px rgba(255, 255, 255, 0.15),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Sub-paneles internos */
+    .metal-subpanel {
+        background-color: #121315;
+        border: 1px solid #2a2c30;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Título Metálico */
+    .metal-title {
+        color: #c5beba;
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        font-size: 1.6rem;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        text-shadow:
+            0px 2px 3px rgba(0, 0, 0, 0.9),
+            0px -1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .metal-label {
+        color: #b0b3b8;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    /* Inputs, Selects y Textareas */
+    .metal-input, .metal-select, .metal-textarea {
+        width: 100%;
+        padding: 10px 14px;
+        background-color: #121315;
+        border: 1px solid #333539;
+        border-radius: 6px;
+        color: #e0e0e0;
+        font-size: 0.9rem;
+        box-shadow:
+            inset 0 2px 4px rgba(0, 0, 0, 0.8),
+            0 1px 0 rgba(255, 255, 255, 0.05);
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .metal-input::placeholder, .metal-textarea::placeholder {
+        color: #55585f !important;
+        opacity: 1 !important;
+    }
+
+    .metal-input:focus, .metal-select:focus, .metal-textarea:focus {
+        border-color: #7a1d1d;
+        box-shadow:
+            inset 0 2px 4px rgba(0, 0, 0, 0.9),
+            0 0 6px rgba(168, 32, 32, 0.4);
+    }
+
+    /* Botón Rojo Principal */
+    .metal-btn-red {
+        padding: 10px 20px;
+        border-radius: 6px;
+        border: 1px solid #5a1212;
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%);
+        color: #e6dad6;
+        font-weight: bold;
+        font-size: 0.95rem;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.8);
+        box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.6),
+            inset 0 1px 1px rgba(255, 255, 255, 0.25),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.4);
+        transition: filter 0.15s, transform 0.1s;
+    }
+
+    .metal-btn-red:hover {
+        filter: brightness(1.15);
+        color: #fff;
+    }
+
+    .metal-btn-red:active {
+        transform: translateY(1px);
+    }
+
+    /* Botón Secundario (Volver) */
+    .metal-btn-secondary {
+        padding: 10px 20px;
+        border-radius: 6px;
+        border: 1px solid #3d3e42;
+        background: linear-gradient(180deg, #252629 0%, #151618 100%);
+        color: #b0b3b8;
+        font-weight: bold;
+        font-size: 0.95rem;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.5),
+            inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .metal-btn-secondary:hover {
+        background: #2e3034;
+        color: #fff;
+    }
+
+    /* Custom Switch & Checkboxes Metálicos */
+    .form-check-input {
+        background-color: #121315;
+        border-color: #3d3e42;
+    }
+
+    .form-check-input:checked {
+        background-color: #8b1d1d;
+        border-color: #580e0e;
+    }
+
+    /* Selector de Formatos Principales (Radios como Botones Metálicos) */
+    .btn-check:checked + .metal-btn-outline {
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%);
+        border-color: #7a1d1d;
+        color: #fff;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
+    }
+
+    .metal-btn-outline {
+        background: #18191c;
+        border: 1px solid #3d3e42;
+        color: #b0b3b8;
+        font-weight: bold;
+        padding: 8px 12px;
+        transition: all 0.2s;
+    }
+
+    .metal-btn-outline:hover {
+        background: #222428;
+        color: #e0e0e0;
+    }
+</style>
+
+<div class="metal-card">
+    <h2 class="metal-title d-flex align-items-center gap-2">
+        <i class="bi bi-disc text-danger"></i>
+        {% if album %}Editar Álbum: {{ album.titulo }}{% else %}Agregar Álbum a {{ banda.nombre }}{% endif %}
+    </h2>
+
+    <!-- BUSCADOR DISCOGS -->
+    <div class="metal-subpanel mb-4">
+        <label class="metal-label text-danger d-flex align-items-center gap-2">
+            <i class="bi bi-barcode-scan"></i> Buscar por Código de Barras o Nombre
+        </label>
+        <div class="input-group">
+            <input type="text" id="discogsQuery" class="metal-input"
+                value="{{ banda.nombre if banda else '' }} "
+                placeholder="Escanear código de barras o ej: Sodom M-16" style="border-radius: 6px 0 0 6px;">
+            <button class="metal-btn-red" type="button" id="btnBuscarDiscogs" style="border-radius: 0 6px 6px 0;">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+        </div>
+        <div class="form-text small mt-1" style="color: #8a8d93 !important;">
+            Podés usar un lector de código de barras USB/Bluetooth o tipear el código de la caja del CD/Vinilo.
+        </div>
+
+        <!-- Lista de resultados -->
+        <div id="discogsResults" class="list-group mt-2 d-none shadow-lg"></div>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <!-- TÍTULO -->
+        <div class="mb-3">
+            <label class="metal-label">Título del Álbum *</label>
+            <input type="text" id="inputTitulo" name="titulo" class="metal-input" value="{{ album.titulo if album else '' }}" required autocomplete="off">
+        </div>
+
+        <!-- CAMPO PORTADA DEL ÁLBUM -->
+        <div class="mb-3">
+            <label class="metal-label">Portada del Álbum</label>
+
+            <!-- Input oculto para enviar la URL externa de Discogs -->
+            <input type="hidden" id="inputUrlPortadaRemota" name="url_portada_remota" value="">
+
+            <!-- Previsualización de la portada seleccionada desde Discogs -->
+            <div id="previewPortadaDiscogs" class="mb-2 d-none">
+                <div class="metal-subpanel d-inline-flex flex-row align-items-center gap-3">
+                    <img id="imgPortadaDiscogs" src="" class="rounded border border-secondary" style="width: 80px; height: 80px; object-fit: cover;">
+                    <div>
+                        <span class="badge bg-success mb-1"><i class="bi bi-check-circle me-1"></i>Portada de Discogs seleccionada</span>
+                        <p class="small text-muted mb-0" style="color: #8a8d93 !important;">Se asociará al guardar este álbum.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carga manual de archivo local -->
+            <input type="file" name="portada" class="metal-input" accept="image/*">
+
+            {% if album and album.url_portada %}
+                <div class="mt-2 d-flex align-items-center gap-3">
+                    <img src="{{ album.url_portada if album.url_portada.startswith('http') else url_for('static', filename=album.url_portada) }}"
+                        alt="Portada actual" class="img-thumbnail bg-dark border-secondary" style="width: 70px; height: 70px; object-fit: cover;">
+                    <span class="small" style="color: #8a8d93 !important;">Portada actual</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- AÑO Y SELLO -->
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label class="metal-label">Año de Lanzamiento</label>
+                <input type="number" id="inputAno" name="lanzamiento" class="metal-input" value="{{ album.lanzamiento if album else '' }}" placeholder="1991">
+            </div>
+
+            <!-- SELLO DISCOGRÁFICO -->
+            <div class="col-md-6">
+                <label class="metal-label">Sello Discográfico</label>
+                <select id="selectSello" name="sello_id" class="metal-select">
+                    <option value="" class="bg-dark text-white">-- Seleccionar Sello --</option>
+                    {% for sello in sellos %}
+                        <option value="{{ sello.id }}" class="bg-dark text-white" {% if album and album.sello_id == sello.id %}selected{% endif %}>
+                            {{ sello.nombre }} {% if sello.pais_origen %}({{ sello.pais_origen }}){% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- UBICACIÓN FÍSICA -->
+        <div class="mb-3">
+            <label class="metal-label">Ubicación Física</label>
+            <select name="ubicacion_id" class="metal-select">
+                <option value="" class="bg-dark text-white">-- Sin ubicación asignada --</option>
+                {% for u in ubicaciones %}
+                    <option value="{{ u.id }}" class="bg-dark text-white" {% if album and album.ubicacion_id == u.id %}selected{% endif %}>
+                        {{ u.mueble }} - Estante {{ u.estante }}{% if u.descripcion %} ({{ u.descripcion }}){% endif %}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- DISPONIBILIDAD EN COLECCIÓN -->
+        <div class="mb-3">
+            <div class="form-check form-switch metal-subpanel d-flex align-items-center gap-2 p-3 ms-0">
+                <input class="form-check-input ms-0 me-2" type="checkbox" role="switch" id="disponible" name="disponible" value="1"
+                {% if album is none or album.disponible %}checked{% endif %} style="width: 2.2em; height: 1.2em;">
+                <div>
+                    <label class="form-check-label fw-bold text-light small d-block" for="disponible">
+                        <i class="bi bi-box-seam text-danger me-1"></i> Disco disponible en mi colección
+                    </label>
+                    <div class="form-text small mt-0" style="color: #8a8d93 !important;">
+                        Destildá esta opción si el disco fue vendido, intercambiado o prestado.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SELECCIÓN DE FORMATO DINÁMICO (PADRE E HIJOS) -->
+        <div class="mb-4">
+            <label class="metal-label">Formato Principal *</label>
+
+            <!-- 1. Botones para seleccionar el Formato Padre -->
+            <div class="btn-group w-100 mb-3" role="group" aria-label="Formatos principales">
+                {% for f in formatos %}
+                    <input type="radio" class="btn-check radio-formato-padre" name="formato_padre" id="padre_{{ f.id }}" value="{{ f.id }}" autocomplete="off"
+                    {% if album and album.formatos and album.formatos[0].padre_id == f.id %}checked{% endif %}>
+                    <label class="btn metal-btn-outline" for="padre_{{ f.id }}">{{ f.nombre }}</label>
+                {% endfor %}
+            </div>
+
+            <!-- 2. Contenedor de Subformatos (se despliega dinámicamente) -->
+            <div id="contenedorSubformatos" class="metal-subpanel d-none">
+                <label class="metal-label text-danger mb-2">Seleccionar Tipo / Edición Específica *</label>
+
+                {% for f in formatos %}
+                    <div class="subformatos-grupo d-none" id="grupo_padre_{{ f.id }}">
+                        <div class="row g-2">
+                            {% for sub in f.subformatos %}
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input input-subformato" type="radio" name="formato_id" value="{{ sub.id }}" id="sub_{{ sub.id }}"
+                                        {% if album and album.formatos and album.formatos[0].id == sub.id %}checked{% endif %}>
+                                        <label class="form-check-label small text-light" for="sub_{{ sub.id }}">
+                                            {{ sub.nombre }}
+                                        </label>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- NOTAS / DETALLE -->
+        <div class="mb-4">
+            <label for="inputNotas" class="metal-label">
+                <i class="bi bi-journal-text me-1 text-danger"></i> Notas / Detalle de la Edición
+            </label>
+            <textarea id="inputNotas" name="notas" class="metal-textarea" rows="3"
+                placeholder="Ej: Edición limitada firmada por la banda, vinilo color rojo, incluye póster, tirada de 500 copias...">{{ album.notas if album and album.notas else '' }}</textarea>
+            <div class="form-text small mt-1" style="color: #8a8d93 !important;">
+                Anotá detalles de la copia: estado, autógrafos, extras, número de serie o recuerdos.
+            </div>
+        </div>
+
+        <!-- BOTONES DE ACCIÓN -->
+        <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top border-secondary">
+            <a href="{{ url_for('main.detalle_banda', id=banda.id) if banda else url_for('main.index') }}" class="metal-btn-secondary">
+                Volver
+            </a>
+            <button type="submit" class="metal-btn-red">
+                <i class="bi bi-check-lg me-1"></i> Guardar Disco
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<!-- SCRIPT DE INTERACCIÓN -->
+<script>
+// 1. LÓGICA DE MOSTRAR SUBFORMATOS DINÁMICOS
+const radiosPadre = document.querySelectorAll('.radio-formato-padre');
+const contenedorSubformatos = document.getElementById('contenedorSubformatos');
+const gruposSubformatos = document.querySelectorAll('.subformatos-grupo');
+
+function actualizarSubformatos(padreId) {
+    if (!padreId) return;
+
+    // Mostrar el contenedor principal
+    contenedorSubformatos.classList.remove('d-none');
+
+    // Ocultar todos los grupos
+    gruposSubformatos.forEach(grupo => grupo.classList.add('d-none'));
+
+    // Mostrar el grupo seleccionado
+    const grupoSeleccionado = document.getElementById(`grupo_padre_${padreId}`);
+    if (grupoSeleccionado) {
+        grupoSeleccionado.classList.remove('d-none');
+    }
+}
+
+// Escuchar cambios de selección en los botones principales
+radiosPadre.forEach(radio => {
+    radio.addEventListener('change', function() {
+        actualizarSubformatos(this.value);
+
+        // Desmarcar subformatos del grupo anterior para evitar envíos inconsistentes
+        const inputsSub = contenedorSubformatos.querySelectorAll('.input-subformato');
+        inputsSub.forEach(input => {
+            if (!input.closest('.subformatos-grupo').classList.contains('d-none')) {
+                // Dejar sin marcar para que obligue a elegir
+            } else {
+                input.checked = false;
+            }
+        });
+    });
+});
+
+// Al cargar la página (Modo Edición): Si ya hay un padre seleccionado, desplegar sus subformatos
+document.addEventListener('DOMContentLoaded', () => {
+    const padreChecked = document.querySelector('.radio-formato-padre:checked');
+    if (padreChecked) {
+        actualizarSubformatos(padreChecked.value);
+    }
+});
+
+// 2. SCRIPT DISCOGS
+const inputQuery = document.getElementById('discogsQuery');
+const btnBuscar = document.getElementById('btnBuscarDiscogs');
+
+inputQuery.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        btnBuscar.click();
+    }
+});
+
+btnBuscar.addEventListener('click', function() {
+    const query = inputQuery.value.trim();
+    const resultsContainer = document.getElementById('discogsResults');
+
+    if (query.length < 3) return;
+
+    resultsContainer.innerHTML = '<div class="list-group-item bg-dark text-white border-secondary small"><i class="bi bi-arrow-repeat spin me-2"></i>Consultando a Discogs...</div>';
+    resultsContainer.classList.remove('d-none');
+
+    fetch(`/api/discogs/buscar?q=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(data => {
+            resultsContainer.innerHTML = '';
+            if (!data || data.length === 0 || data.error) {
+                resultsContainer.innerHTML = '<div class="list-group-item bg-dark text-white border-secondary small">No se encontraron ediciones coincidentes.</div>';
+                return;
+            }
+
+            data.forEach(item => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'list-group-item list-group-item-action bg-dark text-white border-secondary d-flex justify-content-between align-items-center p-2';
+
+                let tituloLimpio = item.titulo;
+                if (tituloLimpio.includes(' - ')) {
+                    tituloLimpio = tituloLimpio.split(' - ').slice(1).join(' - ');
+                }
+
+                btn.innerHTML = `
+                    <div class="text-start">
+                        <strong class="d-block text-truncate" style="max-width: 280px;">${tituloLimpio}</strong>
+                        <div class="small text-muted">
+                            Año: ${item.ano || 'N/A'} | Sello: ${item.sello || 'N/A'} ${item.catno ? `(${item.catno})` : ''}
+                        </div>
+                    </div>
+                    ${item.portada ? `<img src="${item.portada}" width="40" height="40" class="rounded object-fit-cover ms-2">` : ''}
+                `;
+
+                btn.onclick = () => {
+                        // 1. Título
+                        document.getElementById('inputTitulo').value = tituloLimpio;
+
+                        // 2. Año
+                        if (item.ano) {
+                            document.getElementById('inputAno').value = item.ano;
+                        }
+
+                        // 3. Portada desde Discogs
+                        if (item.portada) {
+                            document.getElementById('inputUrlPortadaRemota').value = item.portada;
+                            document.getElementById('imgPortadaDiscogs').src = item.portada;
+                            document.getElementById('previewPortadaDiscogs').classList.remove('d-none');
+                        }
+
+                        // 4. Igualación flexible de Sello Discográfico
+                        if (item.sello) {
+                            const selectSello = document.getElementById('selectSello');
+                            const selloBuscado = item.sello.replace(/\s*\(\d+\)$/, '').trim().toLowerCase();
+
+                            let encontrado = false;
+
+                            for (let option of selectSello.options) {
+                                if (!option.value) continue;
+                                const optionText = option.text.toLowerCase();
+
+                                if (optionText.includes(selloBuscado) || selloBuscado.includes(optionText)) {
+                                    option.selected = true;
+                                    encontrado = true;
+                                    break;
+                                }
+                            }
+
+                            if (!encontrado) {
+                                const selloSinSufijo = selloBuscado.replace(/\b(records|recordings|music|productions|inc|ltd|media)\b/gi, '').trim();
+                                if (selloSinSufijo.length > 2) {
+                                    for (let option of selectSello.options) {
+                                        if (!option.value) continue;
+                                        const optionText = option.text.toLowerCase();
+                                        if (optionText.includes(selloSinSufijo)) {
+                                            option.selected = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // 5. Autoselección del Formato Principal (CD, Vinilo, Cassette)
+                        if (item.formatos && item.formatos.length > 0) {
+                            const formatosTexto = item.formatos.join(' ').toLowerCase();
+
+                            radiosPadre.forEach(radio => {
+                                const label = document.querySelector(`label[for="${radio.id}"]`);
+                                if (label) {
+                                    const nombreFormatoLocal = label.textContent.trim().toLowerCase();
+
+                                    let coincide = false;
+                                    if (formatosTexto.includes('vinyl') && (nombreFormatoLocal.includes('vinilo') || nombreFormatoLocal.includes('vinyl') || nombreFormatoLocal.includes('lp'))) {
+                                        coincide = true;
+                                    } else if (formatosTexto.includes('cd') && nombreFormatoLocal.includes('cd')) {
+                                        coincide = true;
+                                    } else if (formatosTexto.includes('cassette') && (nombreFormatoLocal.includes('cassette') || nombreFormatoLocal.includes('casete') || nombreFormatoLocal.includes('k7'))) {
+                                        coincide = true;
+                                    } else if (formatosTexto.includes(nombreFormatoLocal)) {
+                                        coincide = true;
+                                    }
+
+                                    if (coincide) {
+                                        radio.checked = true;
+                                        actualizarSubformatos(radio.value);
+                                    }
+                                }
+                            });
+                        }
+
+                        // Ocultar resultados
+                        resultsContainer.classList.add('d-none');
+                    };
+
+                resultsContainer.appendChild(btn);
+            });
+        })
+        .catch(() => {
+            resultsContainer.innerHTML = '<div class="list-group-item bg-dark text-danger border-secondary small">Error de conexión con la API.</div>';
+        });
+});
+</script>
+{% endblock %}

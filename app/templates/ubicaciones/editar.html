@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Ubicación - Melodías{% endblock %}
+
+{% block content %}
+<style>
+    /* Titular Principal Metálico */
+    .metal-header-title {
+        color: #1a1b1e;
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        font-size: 2rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        text-shadow:
+            1px 1px 2px rgba(255, 255, 255, 0.8),
+            0px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Panel/Contenedor Principal Metálico */
+    .metal-panel-card {
+        background: linear-gradient(135deg, #242528 0%, #151618 50%, #0d0e0f 100%);
+        border: 1px solid #3d3e42;
+        border-radius: 10px;
+        box-shadow:
+            0 8px 20px rgba(0, 0, 0, 0.7),
+            inset 0 1px 1px rgba(255, 255, 255, 0.12),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.8);
+        overflow: hidden;
+    }
+
+    /* Cabecera del Card */
+    .metal-card-header {
+        background: linear-gradient(180deg, #18191b 0%, #0c0c0e 100%);
+        border-bottom: 1px solid #3d3e42;
+        padding: 16px 20px;
+    }
+
+    /* Botón Rojo Metálico */
+    .metal-btn-red {
+        padding: 8px 20px;
+        border-radius: 6px;
+        border: 1px solid #5a1212;
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%);
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.8);
+        box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.6),
+            inset 0 1px 1px rgba(255, 255, 255, 0.25);
+        transition: filter 0.15s;
+    }
+
+    .metal-btn-red:hover {
+        filter: brightness(1.2);
+        color: #ffffff;
+    }
+
+    /* Botón Secundario / Acción */
+    .metal-btn-action {
+        background: linear-gradient(180deg, #252629 0%, #151618 100%);
+        border: 1px solid #3d3e42;
+        color: #b0b3b8;
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+
+    .metal-btn-action:hover {
+        background: #2e3034;
+        color: #ffffff;
+        border-color: #55585f;
+    }
+
+    /* Form Dynamic Label & Inputs */
+    .metal-form-label {
+        color: #c5beba;
+        font-size: 0.9rem;
+    }
+
+    .metal-input {
+        background-color: #0c0c0e !important;
+        color: #e0e0e0 !important;
+        border: 1px solid #3d3e42 !important;
+        font-size: 0.9rem;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .metal-input:focus {
+        border-color: #8b1d1d !important;
+        box-shadow: 0 0 0 0.25rem rgba(139, 29, 29, 0.3) !important;
+    }
+
+    /* COLOR DE PLACEHOLDER VISIBLE */
+    .metal-input::placeholder {
+        color: #72757e !important;
+        opacity: 1 !important;
+    }
+    .metal-input::-webkit-input-placeholder {
+        color: #72757e !important;
+    }
+    .metal-input:-ms-input-placeholder {
+        color: #72757e !important;
+    }
+</style>
+
+<div class="row justify-content-center mt-2">
+    <div class="col-12 col-md-8 col-lg-6">
+
+        <!-- BOTÓN VOLVER -->
+        <a href="{{ url_for('main.listar_ubicaciones') }}" class="btn metal-btn-action btn-sm mb-3">
+            <i class="bi bi-arrow-left me-1"></i> Volver a Ubicaciones
+        </a>
+
+        <!-- CARD DE EDICIÓN -->
+        <div class="metal-panel-card">
+            <div class="metal-card-header">
+                <h5 class="mb-0 text-light fw-bold d-flex align-items-center gap-2">
+                    <i class="bi bi-pencil-square text-danger fs-5"></i> Editar Ubicación: <span class="text-danger">{{ ubicacion.mueble }} - {{ ubicacion.estante }}</span>
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <form action="{{ url_for('main.editar_ubicacion', id=ubicacion.id) }}" method="POST">
+                    {{ form.hidden_tag() }}
+
+                    <!-- MUEBLE / ESTANTERÍA -->
+                    <div class="mb-3">
+                        {{ form.mueble.label(class="form-label metal-form-label fw-bold") }}
+                        {{ form.mueble(class="form-control metal-input" + (" is-invalid" if form.mueble.errors else "")) }}
+                        {% for error in form.mueble.errors %}
+                            <div class="invalid-feedback d-block text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- ESTANTE / NIVEL -->
+                    <div class="mb-3">
+                        {{ form.estante.label(class="form-label metal-form-label fw-bold") }}
+                        {{ form.estante(class="form-control metal-input" + (" is-invalid" if form.estante.errors else "")) }}
+                        {% for error in form.estante.errors %}
+                            <div class="invalid-feedback d-block text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- DESCRIPCIÓN / NOTAS -->
+                    <div class="mb-4">
+                        {{ form.descripcion.label(class="form-label metal-form-label fw-bold") }}
+                        {{ form.descripcion(class="form-control metal-input" + (" is-invalid" if form.descripcion.errors else "")) }}
+                        {% for error in form.descripcion.errors %}
+                            <div class="invalid-feedback d-block text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- BOTONES DE ACCIÓN -->
+                    <div class="d-flex justify-content-end align-items-center gap-2 pt-2 border-top border-dark">
+                        <a href="{{ url_for('main.listar_ubicaciones') }}" class="btn metal-btn-action px-3 py-1">Volver</a>
+                        {{ form.submit(class="metal-btn-red border-0", value="Guardar Cambios") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+# Entorno virtual y caché de Python
+.venv/
+venv/
+ENV/
+__pycache__/
+*.py[cod]
+
+# Compilación y ejecutables
+dist/
+build/
+*.spec
+
+# Base de datos local
+*.db
+*.sqlite3
+
+# Archivos de configuración del editor y SO
+.vscode/
+.idea/
+.DS_Store

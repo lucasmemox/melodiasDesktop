@@ -1,0 +1,32 @@
+name: Compilar para Windows
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install flask flask_sqlalchemy flask_admin flask_login flask_migrate pywebview pyinstaller
+
+    - name: Compilar ejecutable
+      run: |
+        pyinstaller --noconfirm --onedir --windowed --add-data="app/templates;templates" --add-data="app/static;static" --add-data="app/seeds.json;app" --name="MelodiasLocal" desktop.py
+
+    - name: Subir artefacto
+      uses: actions/upload-artifact@v3
+      with:
+        name: MelodiasLocal-Windows
+        path: dist/MelodiasLocal/

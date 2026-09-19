@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Melodias - Catálogo{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f8f9fa;
+        }
+        main {
+            flex: 1;
+        }
+        .band-card {
+            transition: transform 0.2s, shadow 0.2s;
+        }
+        .band-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+        /* Botón Flotante de WhatsApp estilo imagen */
+    .btn-whatsapp-flotante {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        bottom: 25px;
+        left: 25px;
+        background-color: #25d366;
+        color: #FFF;
+        border-radius: 50px;
+        text-align: center;
+        font-size: 32px;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-whatsapp-flotante:hover {
+        background-color: #20ba5a;
+        color: #FFF;
+        transform: scale(1.1);
+    }
+    </style>
+</head>
+<body>
+
+   <!-- CABECERA CENTRADA CON LOGO DESTACADO -->
+    <header class="navbar navbar-dark bg-dark sticky-top shadow-sm px-3 position-relative" style="min-height: 75px;">
+        <div class="container-fluid p-0 d-flex justify-content-between align-items-center">
+
+            <!-- 1. EXTREMO IZQUIERDO: Menú Hamburguesa -->
+            <div class="d-flex align-items-center" style="z-index: 2;">
+                {% if current_user.is_authenticated %}
+                    <button class="btn btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
+                        <i class="bi bi-list fs-5"></i>
+                    </button>
+                {% endif %}
+            </div>
+
+            <!-- 2. CENTRO ABSOLUTO: Logo prominente o Título -->
+            <div class="position-absolute start-50 translate-middle-x text-center" style="z-index: 1;">
+                <a class="navbar-brand m-0 p-0 d-flex align-items-center justify-content-center text-decoration-none"
+                href="{% if usuario_dueno %}{{ url_for('main.coleccion_publica', username=usuario_dueno.username) }}{% else %}{{ url_for('main.index') }}{% endif %}">
+
+                    {% if usuario_dueno and usuario_dueno.url_avatar %}
+                        <!-- LOGO DE DUEÑO PÚBLICO (GRANDE Y CENTRADO) -->
+                        <img src="{{ url_for('static', filename=usuario_dueno.url_avatar) }}"
+                            alt="{{ usuario_dueno.nickname or usuario_dueno.username }}"
+                            style="max-height: 70px; width: auto; object-fit: contain;"
+                            class="py-1">
+
+                    {% elif current_user.is_authenticated and current_user.url_avatar %}
+                        <!-- LOGO DE USUARIO LOGUEADO (GRANDE Y CENTRADO) -->
+                        <img src="{{ url_for('static', filename=current_user.url_avatar) }}"
+                            alt="{{ current_user.nickname or current_user.username }}"
+                            style="max-height: 70px; width: auto; object-fit: contain;"
+                            class="py-1">
+
+                    {% else %}
+                        <!-- FALLBACK: Texto e ícono si no hay logo subido -->
+                        <div class="d-flex align-items-center gap-2 fw-bold text-white fs-5">
+                            <i class="bi bi-disc text-danger fs-3"></i>
+                            <span>
+                                {% if usuario_dueno %}
+                                    Catálogo de {{ usuario_dueno.nickname or usuario_dueno.username }}
+                                {% elif current_user.is_authenticated %}
+                                    {{ current_user.nickname or current_user.username }} - Catálogo
+                                {% else %}
+                                    Melodías
+                                {% endif %}
+                            </span>
+                        </div>
+                    {% endif %}
+                </a>
+            </div>
+
+            <!-- 3. EXTREMO DERECHO: Perfil / Sesión -->
+            <div class="d-flex align-items-center gap-3 text-light" style="z-index: 2;">
+                {% if current_user.is_authenticated %}
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="headerDropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-4 me-1 text-danger"></i>
+                            <span class="d-none d-md-inline small me-1">
+                                {{ current_user.nickname or current_user.username }}
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end text-small shadow" aria-labelledby="headerDropdownUser">
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('main.perfil') }}">
+                                    <i class="bi bi-person-gear me-2"></i> Mi Perfil
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="{{ url_for('main.logout') }}">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <a href="{{ url_for('main.login') }}" class="btn btn-sm btn-outline-light">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión
+                    </a>
+                {% endif %}
+            </div>
+
+        </div>
+    </header>
+
+    <!-- MENÚ LATERAL DESPLAZABLE (Offcanvas Sidebar) -->
+    <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+        <div class="offcanvas-header border-bottom border-secondary">
+            <h5 class="offcanvas-title d-flex align-items-center gap-2" id="sidebarMenuLabel">
+                <i class="bi bi-vinyl text-danger"></i> Menú de Gestión
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column justify-content-between">
+            <div>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="{{ url_for('main.index') }}" class="nav-link text-white active">
+                            <i class="bi bi-house-door me-2"></i> Mi Catálogo
+                        </a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <hr class="border-secondary">
+                    <li class="text-uppercase text-muted small px-3 mb-2">Mi Colección</li>
+                    <li>
+                        <a href="{{ url_for('main.ver_coleccion') }}" class="nav-link text-white-50">
+                            <i class="bi bi-collection-play me-2"></i> Mi Colección
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('main.listar_ubicaciones') }}" class="nav-link text-white-50">
+                            <i class="bi bi-geo-alt me-2"></i> Mis Ubicaciones
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('main.listar_sellos') }}" class="nav-link text-white-50">
+                            <i class="bi bi-record-btn me-2"></i> Sellos Discográficos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('main.listar_generos') }}" class="nav-link text-white-50">
+                            <i class="bi bi-tags me-2"></i> Géneros Musicales
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('main.listar_formatos') }}" class="nav-link text-white-50">
+                            <i class="bi bi-disc me-2"></i> Formatos Fisicos
+                        </a>
+                    </li>
+                    <!-- EXPORTAR COLECCIÓN -->
+                    <li>
+                        <a href="#"
+                        onclick="descargarColeccionCSV('{{ url_for('main.exportar_csv') }}'); return false;"
+                        class="nav-link text-white-50">
+                            <i class="bi bi-file-earmark-excel me-2"></i> Exportar Colección (CSV)
+                        </a>
+                    </li>
+
+                    {% endif %}
+                </ul>
+
+                <!-- DASHBOARD DE ESTADÍSTICAS -->
+                {% if current_user.is_authenticated and stats %}
+                <div class="mt-4 pt-3 border-top border-secondary">
+                    <h6 class="text-uppercase text-muted small fw-bold mb-3 px-1">
+                        <i class="bi bi-bar-chart-line me-1"></i> Estadísticas
+                    </h6>
+
+                    <!-- TOTALES DE DISCOS Y BANDAS -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <div class="bg-secondary bg-opacity-25 rounded p-2 text-center">
+                                <div class="fs-3 fw-bold text-white">{{ stats.total_discos }}</div>
+                                <div class="small text-white-50" style="font-size: 0.75rem;">Discos</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-secondary bg-opacity-25 rounded p-2 text-center">
+                                <div class="fs-3 fw-bold text-white">{{ stats.total_bandas }}</div>
+                                <div class="small text-white-50" style="font-size: 0.75rem;">Bandas</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DISTRIBUCIÓN POR FORMATO -->
+                    {% if stats.formatos %}
+                    <div class="mb-3 px-1">
+                        <div class="small fw-bold text-white-50 mb-2">Por Formato</div>
+                        {% for item in stats.formatos %}
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between small text-white-50 mb-1">
+                                <span>{{ item.nombre }}</span>
+                                <span>{{ item.porcentaje }}% ({{ item.cantidad }})</span>
+                            </div>
+                            <div class="progress" style="height: 6px; background-color: rgba(255,255,255,0.1);">
+                                <div class="progress-bar bg-info" role="progressbar"
+                                     style="width: {{ item.porcentaje }}%;"
+                                     aria-valuenow="{{ item.porcentaje }}" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- TOP BANDAS -->
+                    {% if stats.top_bandas %}
+                    <div class="px-1">
+                        <div class="small fw-bold text-white-50 mb-2">Top Bandas</div>
+                        <ul class="list-group list-group-flush bg-transparent">
+                            {% for banda, count in stats.top_bandas %}
+                            <li class="list-group-item bg-transparent text-white-50 border-0 p-0 mb-1 d-flex justify-content-between align-items-center small">
+                                <span class="text-truncate" style="max-width: 170px;">{{ banda }}</span>
+                                <span class="badge bg-secondary rounded-pill">{{ count }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container py-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+<!-- PIE DE PÁGINA DINÁMICO -->
+{% set user_footer = usuario_dueno if usuario_dueno else current_user %}
+
+<footer class="bg-dark text-light pt-4 pb-3 mt-auto border-top border-secondary">
+    <div class="container">
+        <div class="row gy-4 align-items-center">
+
+            <!-- COLUMNA IZQUIERDA: Descripción, Email y Dirección -->
+            <div class="col-12 col-md-4 text-center text-md-start">
+                <h6 class="fw-bold text-white mb-2">
+                    {{ user_footer.nickname if user_footer and user_footer.nickname else (user_footer.username if user_footer else 'Melodías') }}
+                </h6>
+
+                {% if user_footer and user_footer.descripcion %}
+                    <p class="small text-white-50 mb-1">
+                        {{ user_footer.descripcion }}
+                    </p>
+                {% endif %}
+
+            </div>
+
+            <!-- COLUMNA CENTRAL: Imagen de Footer o Avatar (Muestra una u otra dentro de la fila, o nada) -->
+            <div class="col-12 col-md-4 text-center">
+                {% if user_footer and user_footer.url_footer %}
+                    <img src="{{ url_for('static', filename=user_footer.url_footer) }}"
+                         alt="Banner {{ user_footer.nickname or user_footer.username }}"
+                         class="img-fluid rounded"
+                         style="max-height: 90px; width: auto; object-fit: contain;">
+                {% elif user_footer and user_footer.url_avatar %}
+                    <img src="{{ url_for('static', filename=user_footer.url_avatar) }}"
+                         alt="Logo {{ user_footer.nickname or user_footer.username }}"
+                         class="img-fluid"
+                         style="max-height: 80px; width: auto; object-fit: contain;">
+                {% endif %}
+            </div>
+
+            <!-- COLUMNA DERECHA: Redes Sociales -->
+            <div class="col-12 col-md-4 text-center text-md-end">
+                <h6 class="fw-bold text-white mb-2">Desarrollado por Memox</h6>
+            </div>
+
+        </div>
+
+        <hr class="border-secondary my-3">
+
+        <!-- RENGLÓN FINAL DE COPYRIGHT -->
+        <div class="row">
+            <div class="col text-center">
+                <p class="mb-0 small text-white-50">
+                  Copyright &copy; {{ now().year }}
+                  <strong>{{ user_footer.nickname if user_footer and user_footer.nickname else (user_footer.username if user_footer else 'Melodías') }}</strong>.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- BOTÓN FLOTANTE DE WHATSAPP -->
+{% if user_footer and user_footer.telefono %}
+    <a href="https://wa.me/{{ user_footer.telefono|replace('+', '')|replace(' ', '')|replace('-', '') }}"
+       target="_blank"
+       class="btn-whatsapp-flotante"
+       title="Contactar por WhatsApp">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+{% endif %}
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+    function descargarColeccionCSV(url) {
+    const nombreArchivo = 'mi_coleccion.csv';
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al generar el archivo de colección');
+            }
+            return response.text();
+        })
+        .then(textoCsv => {
+            // Si corre en la ventana nativa de PyWebView (Escritorio)
+            if (window.pywebview && window.pywebview.api) {
+                window.pywebview.api.guardar_archivo(textoCsv, nombreArchivo);
+            } else {
+                // Fallback para navegador web estándar (Chrome, Firefox, etc.)
+                const blob = new Blob([textoCsv], { type: 'text/csv;charset=utf-8;' });
+                const blobUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = nombreArchivo;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(blobUrl);
+                a.remove();
+            }
+        })
+        .catch(err => {
+            alert('No se pudo exportar la colección: ' + err.message);
+        });
+}
+</script>
+</body>
+</html>

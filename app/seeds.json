@@ -1,0 +1,2031 @@
+{
+  "pais": [
+    {
+      "id": 1,
+      "nombre": "Estados Unidos",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 2,
+      "nombre": "Canadá",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 3,
+      "nombre": "Puerto Rico",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 4,
+      "nombre": "República Dominicana",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 5,
+      "nombre": "Jamaica",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 6,
+      "nombre": "Rusia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 7,
+      "nombre": "Egipto",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 8,
+      "nombre": "Sudáfrica",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 9,
+      "nombre": "Grecia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 10,
+      "nombre": "Holanda",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 11,
+      "nombre": "Bélgica",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 12,
+      "nombre": "Francia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 13,
+      "nombre": "España",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 14,
+      "nombre": "Hungría",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 15,
+      "nombre": "Italia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 16,
+      "nombre": "Rumania",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 17,
+      "nombre": "Suiza",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 18,
+      "nombre": "Austria",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 19,
+      "nombre": "Reino Unido",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 20,
+      "nombre": "Dinarmarca",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 21,
+      "nombre": "Suecia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 22,
+      "nombre": "Noruega",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 23,
+      "nombre": "Polonia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 24,
+      "nombre": "Alemania",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 25,
+      "nombre": "Perú",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 26,
+      "nombre": "México",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 27,
+      "nombre": "Cuba",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 28,
+      "nombre": "Argentina",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 29,
+      "nombre": "Brasil",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 30,
+      "nombre": "Chile",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 31,
+      "nombre": "Colombia",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 32,
+      "nombre": "Venezuela",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 33,
+      "nombre": "Malasia",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 34,
+      "nombre": "Australia",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 35,
+      "nombre": "Indonesia",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 36,
+      "nombre": "Filipinas",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 37,
+      "nombre": "Nueva Zelanda",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 38,
+      "nombre": "Singapur",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 39,
+      "nombre": "Tailandia",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 40,
+      "nombre": "Kazajstán",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 41,
+      "nombre": "Japón",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 42,
+      "nombre": "Corea del Sur",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 43,
+      "nombre": "Vietnam",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 44,
+      "nombre": "China",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 45,
+      "nombre": "Turquía",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 46,
+      "nombre": "India",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 47,
+      "nombre": "Pakistán",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 48,
+      "nombre": "Afganistán",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 49,
+      "nombre": "Sri Lanka",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 50,
+      "nombre": "Myanmar (ex Birmania)",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 51,
+      "nombre": "Irán",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 52,
+      "nombre": "Marruecos",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 53,
+      "nombre": "Argelia",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 54,
+      "nombre": "Túnez",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 55,
+      "nombre": "Libia",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 56,
+      "nombre": "Gambia",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 57,
+      "nombre": "Senegal",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 58,
+      "nombre": "Mauritania",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 59,
+      "nombre": "Malí",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 60,
+      "nombre": "Guinea",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 61,
+      "nombre": "Costa de Marfil",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 62,
+      "nombre": "Burkina Faso",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 63,
+      "nombre": "Níger",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 64,
+      "nombre": "Togo",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 65,
+      "nombre": "Benin",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 66,
+      "nombre": "Mauricio",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 67,
+      "nombre": "Liberia",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 68,
+      "nombre": "Sierra Leona",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 69,
+      "nombre": "Ghana",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 70,
+      "nombre": "Nigeria",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 71,
+      "nombre": "Chad",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 72,
+      "nombre": "República Centroafricana",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 73,
+      "nombre": "Camerún",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 74,
+      "nombre": "Cabo Verde",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 75,
+      "nombre": "Santo Tomé y Príncipe",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 76,
+      "nombre": "Guinea Ecuatorial",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 77,
+      "nombre": "Gabón",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 78,
+      "nombre": "Congo",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 79,
+      "nombre": "República Democrática del Congo",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 80,
+      "nombre": "Angola",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 81,
+      "nombre": "Guinea-Bissau",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 82,
+      "nombre": "Seychelles",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 83,
+      "nombre": "Sudán",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 84,
+      "nombre": "Ruanda",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 85,
+      "nombre": "Etiopía",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 86,
+      "nombre": "Somalia",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 87,
+      "nombre": "Djibouti",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 88,
+      "nombre": "Kenia",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 89,
+      "nombre": "Tanzania",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 90,
+      "nombre": "Uganda",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 91,
+      "nombre": "Burundi",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 92,
+      "nombre": "Mozambique",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 93,
+      "nombre": "Zambia",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 94,
+      "nombre": "Madagascar",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 95,
+      "nombre": "Reunión",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 96,
+      "nombre": "Zimbabwe",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 97,
+      "nombre": "Namibia",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 98,
+      "nombre": "Malawi",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 99,
+      "nombre": "Lesotho",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 100,
+      "nombre": "Botswana",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 101,
+      "nombre": "Swazilandia",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 102,
+      "nombre": "Comoras",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 103,
+      "nombre": "Sudán del Sur",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 104,
+      "nombre": "Santa Helena",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 105,
+      "nombre": "Eritrea",
+      "continente": "AF",
+      "codigo_iso": null
+    },
+    {
+      "id": 106,
+      "nombre": "Portugal",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 107,
+      "nombre": "Luxemburgo",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 108,
+      "nombre": "Irlanda",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 109,
+      "nombre": "Islandia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 110,
+      "nombre": "Albania",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 111,
+      "nombre": "Malta",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 112,
+      "nombre": "Chipre",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 113,
+      "nombre": "Finlandia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 114,
+      "nombre": "Bulgaria",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 115,
+      "nombre": "Lituania",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 116,
+      "nombre": "Letonia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 117,
+      "nombre": "Estonia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 118,
+      "nombre": "Moldova",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 119,
+      "nombre": "Armenia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 120,
+      "nombre": "Bielorrusia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 121,
+      "nombre": "Andorra",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 122,
+      "nombre": "Mónaco",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 123,
+      "nombre": "San Marino",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 124,
+      "nombre": "Ciudad del Vatanico",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 125,
+      "nombre": "Ucrania",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 126,
+      "nombre": "Serbia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 127,
+      "nombre": "Montenegro",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 128,
+      "nombre": "Croacia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 129,
+      "nombre": "Eslovenia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 130,
+      "nombre": "Bosnia y Herzegovina",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 131,
+      "nombre": "Macedonia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 132,
+      "nombre": "República Checa",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 133,
+      "nombre": "Eslovaquia",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 134,
+      "nombre": "Liechtenstein",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 135,
+      "nombre": "Belice",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 136,
+      "nombre": "Guatemala",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 137,
+      "nombre": "El Salvador",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 138,
+      "nombre": "Honduras",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 139,
+      "nombre": "Nicaragua",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 140,
+      "nombre": "Costa Rica",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 141,
+      "nombre": "Panamá",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 142,
+      "nombre": "Haití",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 143,
+      "nombre": "Bolivia",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 144,
+      "nombre": "Guyana",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 145,
+      "nombre": "Ecuador",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 146,
+      "nombre": "Guayana Francesa",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 147,
+      "nombre": "Paraguay",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 148,
+      "nombre": "Martinica",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 149,
+      "nombre": "Surinam",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 150,
+      "nombre": "Uruguay",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 151,
+      "nombre": "Antillas Holandesas",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 152,
+      "nombre": "Timor Oriental",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 153,
+      "nombre": "Isla Norfolk",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 154,
+      "nombre": "Brunei",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 155,
+      "nombre": "Nauru",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 156,
+      "nombre": "Papua Nueva Guinea",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 157,
+      "nombre": "Tonga",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 158,
+      "nombre": "Islas Salomón",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 159,
+      "nombre": "Vanuatu",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 160,
+      "nombre": "Fidji",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 161,
+      "nombre": "Palau",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 162,
+      "nombre": "Samoa Occidental",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 163,
+      "nombre": "Kiribati",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 164,
+      "nombre": "Nueva Caledonia",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 165,
+      "nombre": "Tuvalu",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 166,
+      "nombre": "Polinesia Francesa",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 167,
+      "nombre": "Tokelau",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 168,
+      "nombre": "Estados Federados de Micronesia",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 169,
+      "nombre": "Islas Marshall",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 170,
+      "nombre": "Corea del Norte",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 171,
+      "nombre": "Macao",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 172,
+      "nombre": "Camboya",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 173,
+      "nombre": "Laos",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 174,
+      "nombre": "Trinidad y Tobago",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 175,
+      "nombre": "Bangladesh",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 176,
+      "nombre": "Taiwan",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 177,
+      "nombre": "Maldivas",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 178,
+      "nombre": "Líbano",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 179,
+      "nombre": "Jordania",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 180,
+      "nombre": "Siria",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 181,
+      "nombre": "Irak",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 182,
+      "nombre": "Kuwait",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 183,
+      "nombre": "Arabia Saudita",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 184,
+      "nombre": "Yemen R.A.",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 185,
+      "nombre": "Omán",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 186,
+      "nombre": "Emiratos Arabes Unidos",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 187,
+      "nombre": "Israel",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 188,
+      "nombre": "Bahrein",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 189,
+      "nombre": "Qatar",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 190,
+      "nombre": "Bhután",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 191,
+      "nombre": "Mongolia",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 192,
+      "nombre": "Nepal",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 193,
+      "nombre": "Tadjikistán",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 194,
+      "nombre": "Turkmenistán",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 195,
+      "nombre": "Azerbaiyán",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 196,
+      "nombre": "Georgia",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 197,
+      "nombre": "Kirguistán",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 198,
+      "nombre": "Uzbekistán",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 199,
+      "nombre": "Bahamas",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 200,
+      "nombre": "Barbados",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 201,
+      "nombre": "Antigua y Barbuda",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 202,
+      "nombre": "Granada",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 203,
+      "nombre": "Santa Lucía",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 204,
+      "nombre": "Dominica",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 205,
+      "nombre": "San Vicente y Granadinas",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 206,
+      "nombre": "San Cristóbal y Nevis",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 207,
+      "nombre": "Oceania SIN Definir",
+      "continente": "OC",
+      "codigo_iso": null
+    },
+    {
+      "id": 208,
+      "nombre": "Europa SIN Definir",
+      "continente": "EU",
+      "codigo_iso": null
+    },
+    {
+      "id": 209,
+      "nombre": "Asia SIN Definir",
+      "continente": "AS",
+      "codigo_iso": null
+    },
+    {
+      "id": 210,
+      "nombre": "America SIN Definir",
+      "continente": "AM",
+      "codigo_iso": null
+    },
+    {
+      "id": 211,
+      "nombre": "Africa SIN Definir",
+      "continente": "AF",
+      "codigo_iso": null
+    }
+  ],
+  "formato": [
+    {
+      "id": 1,
+      "nombre": "CD",
+      "padre_id": null
+    },
+    {
+      "id": 2,
+      "nombre": "VINILO",
+      "padre_id": null
+    },
+    {
+      "id": 3,
+      "nombre": "CASSETTE",
+      "padre_id": null
+    },
+    {
+      "id": 4,
+      "nombre": "DVD / BLU-RAY",
+      "padre_id": null
+    },
+    {
+      "id": 5,
+      "nombre": "BOX SET",
+      "padre_id": null
+    },
+    {
+      "id": 6,
+      "nombre": "Caja Acrílica",
+      "padre_id": 1
+    },
+    {
+      "id": 7,
+      "nombre": "Digipak",
+      "padre_id": 1
+    },
+    {
+      "id": 8,
+      "nombre": "Digibook / Mediabook",
+      "padre_id": 1
+    },
+    {
+      "id": 9,
+      "nombre": "CD Single / EP",
+      "padre_id": 1
+    },
+    {
+      "id": 10,
+      "nombre": "2xCD (Doble)",
+      "padre_id": 1
+    },
+    {
+      "id": 11,
+      "nombre": "Paper Sleeve / Slipcase",
+      "padre_id": 1
+    },
+    {
+      "id": 12,
+      "nombre": "12\" LP",
+      "padre_id": 2
+    },
+    {
+      "id": 13,
+      "nombre": "12\" 2xLP (Doble)",
+      "padre_id": 2
+    },
+    {
+      "id": 14,
+      "nombre": "7\" Single",
+      "padre_id": 2
+    },
+    {
+      "id": 15,
+      "nombre": "10\" EP",
+      "padre_id": 2
+    },
+    {
+      "id": 16,
+      "nombre": "Picture Disc",
+      "padre_id": 2
+    },
+    {
+      "id": 17,
+      "nombre": "Gatefold LP",
+      "padre_id": 2
+    },
+    {
+      "id": 18,
+      "nombre": "Edición Comercial (K7)",
+      "padre_id": 3
+    },
+    {
+      "id": 19,
+      "nombre": "Demo / Maqueta",
+      "padre_id": 3
+    },
+    {
+      "id": 20,
+      "nombre": "2xCassette (Doble)",
+      "padre_id": 3
+    },
+    {
+      "id": 21,
+      "nombre": "OBI",
+      "padre_id": 1
+    },
+    {
+      "id": 22,
+      "nombre": "Postal",
+      "padre_id": 1
+    }
+  ],
+  "genero": [
+    {
+      "id": 1,
+      "nombre": "Alternative Metal",
+      "descripcion": null
+    },
+    {
+      "id": 2,
+      "nombre": "Atmospheric Black Metal",
+      "descripcion": null
+    },
+    {
+      "id": 3,
+      "nombre": "Atmospheric Doom Metal",
+      "descripcion": null
+    },
+    {
+      "id": 4,
+      "nombre": "Avant-Garde Metal",
+      "descripcion": null
+    },
+    {
+      "id": 5,
+      "nombre": "Black Metal",
+      "descripcion": null
+    },
+    {
+      "id": 6,
+      "nombre": "Blackened Crust",
+      "descripcion": null
+    },
+    {
+      "id": 7,
+      "nombre": "Blackened Death Metal",
+      "descripcion": null
+    },
+    {
+      "id": 8,
+      "nombre": "Blackened Doom Metal",
+      "descripcion": null
+    },
+    {
+      "id": 9,
+      "nombre": "Blackened Grindcore",
+      "descripcion": null
+    },
+    {
+      "id": 10,
+      "nombre": "Blackened Thrash Metal",
+      "descripcion": null
+    },
+    {
+      "id": 11,
+      "nombre": "Brutal Death Metal",
+      "descripcion": null
+    },
+    {
+      "id": 12,
+      "nombre": "Celtic Metal",
+      "descripcion": null
+    },
+    {
+      "id": 13,
+      "nombre": "Crossover Thrash",
+      "descripcion": null
+    },
+    {
+      "id": 14,
+      "nombre": "Crust Punk",
+      "descripcion": null
+    },
+    {
+      "id": 15,
+      "nombre": "Cybergrind",
+      "descripcion": null
+    },
+    {
+      "id": 16,
+      "nombre": "Death Metal",
+      "descripcion": null
+    },
+    {
+      "id": 17,
+      "nombre": "Death-Doom",
+      "descripcion": null
+    },
+    {
+      "id": 18,
+      "nombre": "Death/Doom Metal",
+      "descripcion": null
+    },
+    {
+      "id": 19,
+      "nombre": "Deathcore",
+      "descripcion": null
+    },
+    {
+      "id": 20,
+      "nombre": "Depressive Suicidal Black Metal (DSBM)",
+      "descripcion": null
+    },
+    {
+      "id": 21,
+      "nombre": "Desert Rock",
+      "descripcion": null
+    },
+    {
+      "id": 22,
+      "nombre": "Djent",
+      "descripcion": null
+    },
+    {
+      "id": 23,
+      "nombre": "Doom Metal",
+      "descripcion": null
+    },
+    {
+      "id": 24,
+      "nombre": "Doom/Drone",
+      "descripcion": null
+    },
+    {
+      "id": 25,
+      "nombre": "Drone Doom",
+      "descripcion": null
+    },
+    {
+      "id": 26,
+      "nombre": "Drone Metal",
+      "descripcion": null
+    },
+    {
+      "id": 27,
+      "nombre": "Folk Doom",
+      "descripcion": null
+    },
+    {
+      "id": 28,
+      "nombre": "Folk Metal",
+      "descripcion": null
+    },
+    {
+      "id": 29,
+      "nombre": "Funeral Doom",
+      "descripcion": null
+    },
+    {
+      "id": 30,
+      "nombre": "Glam Metal",
+      "descripcion": null
+    },
+    {
+      "id": 31,
+      "nombre": "Goregrind",
+      "descripcion": null
+    },
+    {
+      "id": 32,
+      "nombre": "Gothic Doom Metal.",
+      "descripcion": null
+    },
+    {
+      "id": 33,
+      "nombre": "Gothic Metal",
+      "descripcion": null
+    },
+    {
+      "id": 34,
+      "nombre": "Grindcore",
+      "descripcion": null
+    },
+    {
+      "id": 35,
+      "nombre": "Groove Metal",
+      "descripcion": null
+    },
+    {
+      "id": 36,
+      "nombre": "Groove/Death Metal",
+      "descripcion": null
+    },
+    {
+      "id": 37,
+      "nombre": "Groove/Thrash Metal",
+      "descripcion": null
+    },
+    {
+      "id": 38,
+      "nombre": "Hardcore Punk",
+      "descripcion": null
+    },
+    {
+      "id": 39,
+      "nombre": "Heavy Metal",
+      "descripcion": null
+    },
+    {
+      "id": 40,
+      "nombre": "Industrial Death Metal",
+      "descripcion": null
+    },
+    {
+      "id": 41,
+      "nombre": "Industrial Metal",
+      "descripcion": null
+    },
+    {
+      "id": 42,
+      "nombre": "Mathcore",
+      "descripcion": null
+    },
+    {
+      "id": 43,
+      "nombre": "Medieval Metal",
+      "descripcion": null
+    },
+    {
+      "id": 44,
+      "nombre": "Melodic Black Metal",
+      "descripcion": null
+    },
+    {
+      "id": 45,
+      "nombre": "Melodic Death Metal",
+      "descripcion": null
+    },
+    {
+      "id": 46,
+      "nombre": "Melodic Groove Metal",
+      "descripcion": null
+    },
+    {
+      "id": 47,
+      "nombre": "Metalcore",
+      "descripcion": null
+    },
+    {
+      "id": 48,
+      "nombre": "Neoclassical Metal",
+      "descripcion": null
+    },
+    {
+      "id": 49,
+      "nombre": "Nintendocore",
+      "descripcion": null
+    },
+    {
+      "id": 50,
+      "nombre": "Nu Metal",
+      "descripcion": null
+    },
+    {
+      "id": 51,
+      "nombre": "NWOBHM (New Wave of British Heavy Metal)",
+      "descripcion": null
+    },
+    {
+      "id": 52,
+      "nombre": "Oriental Metal",
+      "descripcion": null
+    },
+    {
+      "id": 53,
+      "nombre": "Pagan Black Metal",
+      "descripcion": null
+    },
+    {
+      "id": 54,
+      "nombre": "Pagan Metal",
+      "descripcion": null
+    },
+    {
+      "id": 55,
+      "nombre": "Pirate Metal",
+      "descripcion": null
+    },
+    {
+      "id": 56,
+      "nombre": "Pornogrind",
+      "descripcion": null
+    },
+    {
+      "id": 57,
+      "nombre": "Post-Black Metal",
+      "descripcion": null
+    },
+    {
+      "id": 58,
+      "nombre": "Post-Grunge Metal",
+      "descripcion": null
+    },
+    {
+      "id": 59,
+      "nombre": "Post-Metal",
+      "descripcion": null
+    },
+    {
+      "id": 60,
+      "nombre": "Post-Thrash Metal",
+      "descripcion": null
+    },
+    {
+      "id": 61,
+      "nombre": "Power Metal",
+      "descripcion": null
+    },
+    {
+      "id": 62,
+      "nombre": "Power/Thrash Metal",
+      "descripcion": null
+    },
+    {
+      "id": 63,
+      "nombre": "Progressive Death Metal",
+      "descripcion": null
+    },
+    {
+      "id": 64,
+      "nombre": "Progressive Groove Metal",
+      "descripcion": null
+    },
+    {
+      "id": 65,
+      "nombre": "Progressive Metal",
+      "descripcion": null
+    },
+    {
+      "id": 66,
+      "nombre": "Progressive Metalcore",
+      "descripcion": null
+    },
+    {
+      "id": 67,
+      "nombre": "Progressive Thrash Metal",
+      "descripcion": null
+    },
+    {
+      "id": 68,
+      "nombre": "Rap Metal",
+      "descripcion": null
+    },
+    {
+      "id": 69,
+      "nombre": "Slamming Brutal Death Metal",
+      "descripcion": null
+    },
+    {
+      "id": 70,
+      "nombre": "Sludge Metal",
+      "descripcion": null
+    },
+    {
+      "id": 71,
+      "nombre": "Southern Metal",
+      "descripcion": null
+    },
+    {
+      "id": 72,
+      "nombre": "Speed Metal",
+      "descripcion": null
+    },
+    {
+      "id": 73,
+      "nombre": "Speed/Power Metal",
+      "descripcion": null
+    },
+    {
+      "id": 74,
+      "nombre": "Stoner Metal",
+      "descripcion": null
+    },
+    {
+      "id": 75,
+      "nombre": "Symphonic Black Metal",
+      "descripcion": null
+    },
+    {
+      "id": 76,
+      "nombre": "Symphonic Death Metal",
+      "descripcion": null
+    },
+    {
+      "id": 77,
+      "nombre": "Symphonic Metal",
+      "descripcion": null
+    },
+    {
+      "id": 78,
+      "nombre": "Symphonic Power Metal",
+      "descripcion": null
+    },
+    {
+      "id": 79,
+      "nombre": "Technical Death Metal",
+      "descripcion": null
+    },
+    {
+      "id": 80,
+      "nombre": "Technical Sludge Metal",
+      "descripcion": null
+    },
+    {
+      "id": 81,
+      "nombre": "Technical Thrash Metal",
+      "descripcion": null
+    },
+    {
+      "id": 82,
+      "nombre": "Thrash Metal",
+      "descripcion": null
+    },
+    {
+      "id": 83,
+      "nombre": "Viking Metal",
+      "descripcion": null
+    },
+    {
+      "id": 84,
+      "nombre": "Thrash/Death Metal",
+      "descripcion": null
+    },
+    {
+      "id": 85,
+      "nombre": "Progressive",
+      "descripcion": ""
+    },
+    {
+      "id": 86,
+      "nombre": "Hard Rock",
+      "descripcion": null
+    },
+    {
+      "id": 87,
+      "nombre": "Progressive Rock",
+      "descripcion": null
+    },
+    {
+      "id": 88,
+      "nombre": "Technical Speed/Thrash Metal",
+      "descripcion": null
+    },
+    {
+      "id": 89,
+      "nombre": "Punk Rock",
+      "descripcion": null
+    },
+    {
+      "id": 90,
+      "nombre": "A Cappella",
+      "descripcion": null
+    }
+  ],
+  "sello_discografico": [
+    {
+      "id": 1,
+      "nombre": "Nuclear Blast",
+      "pais_id": 24
+    },
+    {
+      "id": 2,
+      "nombre": "Metal Blade Records",
+      "pais_id": 1
+    },
+    {
+      "id": 3,
+      "nombre": "Century Media Records",
+      "pais_id": 24
+    },
+    {
+      "id": 4,
+      "nombre": "Relapse Records",
+      "pais_id": 1
+    },
+    {
+      "id": 5,
+      "nombre": "Roadrunner Records",
+      "pais_id": 1
+    },
+    {
+      "id": 6,
+      "nombre": "Earache Records",
+      "pais_id": 19
+    },
+    {
+      "id": 7,
+      "nombre": "Napalm Records",
+      "pais_id": 18
+    },
+    {
+      "id": 8,
+      "nombre": "Peaceville Records",
+      "pais_id": 19
+    },
+    {
+      "id": 9,
+      "nombre": "Season of Mist",
+      "pais_id": 12
+    },
+    {
+      "id": 10,
+      "nombre": "Spinefarm Records",
+      "pais_id": 113
+    },
+    {
+      "id": 11,
+      "nombre": "Osmose Productions",
+      "pais_id": 12
+    },
+    {
+      "id": 12,
+      "nombre": "Agonia Records",
+      "pais_id": 23
+    },
+    {
+      "id": 13,
+      "nombre": "Debemur Morti Productions",
+      "pais_id": 12
+    },
+    {
+      "id": 14,
+      "nombre": "Profound Lore Records",
+      "pais_id": 2
+    },
+    {
+      "id": 15,
+      "nombre": "Eisenwald",
+      "pais_id": 24
+    },
+    {
+      "id": 16,
+      "nombre": "Militia Guard Records",
+      "pais_id": 28
+    },
+    {
+      "id": 17,
+      "nombre": "Icarus Music",
+      "pais_id": 28
+    },
+    {
+      "id": 18,
+      "nombre": "Poison Records",
+      "pais_id": 28
+    },
+    {
+      "id": 19,
+      "nombre": "Cuervo Records",
+      "pais_id": 28
+    },
+    {
+      "id": 20,
+      "nombre": "Pacheco Records",
+      "pais_id": 28
+    },
+    {
+      "id": 21,
+      "nombre": "Disembodied Records",
+      "pais_id": 28
+    },
+    {
+      "id": 22,
+      "nombre": "Metal Command Records",
+      "pais_id": 28
+    },
+    {
+      "id": 23,
+      "nombre": "2M Producciones",
+      "pais_id": 28
+    },
+    {
+      "id": 24,
+      "nombre": "Cogumelo Records",
+      "pais_id": 29
+    },
+    {
+      "id": 25,
+      "nombre": "Underworld Records",
+      "pais_id": 30
+    },
+    {
+      "id": 26,
+      "nombre": "DBN",
+      "pais_id": 28
+    },
+    {
+      "id": 27,
+      "nombre": "Independiente",
+      "pais_id": 28
+    },
+    {
+      "id": 28,
+      "nombre": "Universal Music",
+      "pais_id": 28
+    },
+    {
+      "id": 29,
+      "nombre": "Metalalcoholizacion Records",
+      "pais_id": 28
+    },
+    {
+      "id": 30,
+      "nombre": "Steel Sword Rec",
+      "pais_id": 29
+    },
+    {
+      "id": 31,
+      "nombre": "We Bite! Discos",
+      "pais_id": 28
+    },
+    {
+      "id": 32,
+      "nombre": "Marquee Records",
+      "pais_id": 29
+    },
+    {
+      "id": 33,
+      "nombre": "Cartucho Records",
+      "pais_id": 28
+    },
+    {
+      "id": 34,
+      "nombre": "Metal Army",
+      "pais_id": 29
+    },
+    {
+      "id": 35,
+      "nombre": "Valhall Music",
+      "pais_id": 29
+    },
+    {
+      "id": 36,
+      "nombre": "Maniac Force Records",
+      "pais_id": 29
+    },
+    {
+      "id": 37,
+      "nombre": "Megaforce Records",
+      "pais_id": 1
+    },
+    {
+      "id": 38,
+      "nombre": "High Roller Records",
+      "pais_id": 24
+    },
+    {
+      "id": 39,
+      "nombre": "Brazilian Ritual Records",
+      "pais_id": 29
+    }
+  ]
+}

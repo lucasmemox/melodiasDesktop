@@ -1,0 +1,382 @@
+{% extends 'base.html' %}
+
+{% block title %}Bandas - Melodías{% endblock %}
+
+{% block content %}
+<style>
+    /* Estilos del Encabezado y Buscador */
+    .metal-header-title {
+        color: #c5beba;
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        font-size: 2rem;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        text-shadow:
+            0px 2px 3px rgba(0, 0, 0, 0.9),
+            0px -1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .metal-search-container {
+        background-color: #121315;
+        border: 1px solid #3d3e42;
+        border-radius: 6px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .metal-search-input {
+        background-color: transparent !important;
+        border: none !important;
+        color: #e0e0e0 !important;
+        font-size: 0.9rem;
+        box-shadow: none !important;
+    }
+
+    .metal-search-input::placeholder {
+        color: #55585f !important;
+    }
+
+    /* Tarjetas Metálicas del Catálogo */
+    .metal-card {
+        background: linear-gradient(135deg, #2c2d30 0%, #18191b 50%, #101113 100%);
+        border: 1px solid #3d3e42;
+        border-radius: 10px;
+        box-shadow:
+            0 8px 20px rgba(0, 0, 0, 0.7),
+            inset 0 1px 1px rgba(255, 255, 255, 0.12),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.8);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .metal-card:hover {
+        transform: translateY(-3px);
+        box-shadow:
+            0 12px 25px rgba(0, 0, 0, 0.85),
+            inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    }
+
+    /* Contenedor del Logo de Banda */
+    .metal-logo-box {
+        background-color: #0c0c0e;
+        border: 1px solid #2a2c30;
+        border-radius: 6px;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Badges */
+    .metal-badge {
+        background: linear-gradient(180deg, #1f2023 0%, #111214 100%);
+        color: #b0b3b8;
+        border: 1px solid #3d3e42;
+        font-size: 0.75rem;
+        padding: 3px 8px;
+        border-radius: 4px;
+        display: inline-block;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    /* Botones Estilo Acero y Rojo */
+    .metal-btn-red {
+        padding: 6px 14px;
+        border-radius: 6px;
+        border: 1px solid #5a1212;
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%);
+        color: #e6dad6;
+        font-weight: bold;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.8);
+        box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.6),
+            inset 0 1px 1px rgba(255, 255, 255, 0.25);
+        transition: filter 0.15s;
+    }
+
+    .metal-btn-red:hover {
+        filter: brightness(1.2);
+        color: #fff;
+    }
+
+    .metal-btn-secondary {
+        padding: 6px 14px;
+        border-radius: 6px;
+        border: 1px solid #3d3e42;
+        background: linear-gradient(180deg, #252629 0%, #151618 100%);
+        color: #b0b3b8;
+        font-weight: bold;
+        font-size: 0.85rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.5),
+            inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .metal-btn-secondary:hover {
+        background: #2e3034;
+        color: #fff;
+    }
+
+    /* Paginación Metálica */
+    .metal-pagination .page-link {
+        background-color: #121315;
+        border-color: #2e3034;
+        color: #b0b3b8;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .metal-pagination .page-item.active .page-link {
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%);
+        border-color: #7a1d1d;
+        color: #fff;
+        font-weight: bold;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    }
+
+    .metal-pagination .page-item.disabled .page-link {
+        background-color: #0a0b0c;
+        border-color: #1d1e21;
+        color: #44474e;
+    }
+
+    .metal-pagination .page-link:hover:not(.active) {
+        background-color: #1c1d21;
+        color: #fff;
+        border-color: #3d3e42;
+    }
+</style>
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+    <h2 class="metal-header-title mb-0 d-flex align-items-center gap-2">
+        <i class="bi bi-people-fill text-danger"></i> Catálogo de Bandas
+    </h2>
+
+    <div class="d-flex align-items-center gap-2">
+        <!-- BUSCADOR DINÁMICO VIA API -->
+        <div class="input-group metal-search-container" style="min-width: 280px;">
+            <span class="input-group-text bg-transparent border-0 pe-1">
+                <i class="bi bi-search" style="color: #6c7078;"></i>
+            </span>
+            <input type="text" id="liveSearchInput" class="form-control metal-search-input ps-2" placeholder="Buscar en mis bandas..." autocomplete="off">
+            <button class="btn btn-sm text-secondary border-0 d-none me-1" type="button" id="clearSearchBtn">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('main.nueva_banda') }}" class="metal-btn-red text-nowrap">
+                <i class="bi bi-plus-lg me-1"></i> Nueva Banda
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- GRID DE BANDAS -->
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="bandsGrid">
+    {% for banda in bandas.items %}
+    <div class="col band-card-wrapper">
+        <div class="card h-100 metal-card">
+            <div class="card-body d-flex flex-column p-3">
+
+                <!-- LOGO Y NOMBRE -->
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    {% if banda.logo %}
+                    <div class="metal-logo-box p-1 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 65px; height: 65px;">
+                        <img src="{{ url_for('static', filename='uploads/covers/' + banda.logo) }}"
+                            alt="Logo {{ banda.nombre }}"
+                            class="img-fluid"
+                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                    </div>
+                    {% else %}
+                        <div class="metal-logo-box d-flex align-items-center justify-content-center flex-shrink-0" style="width: 65px; height: 65px;">
+                            <i class="bi bi-music-note fs-3 text-secondary"></i>
+                        </div>
+                    {% endif %}
+                    <div class="overflow-hidden">
+                        <h5 class="card-title mb-0 fw-bold text-light text-truncate" style="font-size: 1.1rem;">{{ banda.nombre }}</h5>
+                        {% if banda.pais %}
+                            <span class="metal-badge mt-1">{{ banda.pais.nombre }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- DATOS DE LA BANDA -->
+                <p class="card-text small mb-1" style="color: #a0a4ab;">
+                    <strong class="text-light">Estilo:</strong> {{ banda.generos|map(attribute='nombre')|join(' / ') if banda.generos else 'No especificado' }}
+                </p>
+                <p class="card-text small mb-3" style="color: #a0a4ab;">
+                    <strong class="text-light">Años:</strong> {{ banda.formacion or '?' }} - {{ banda.disolucion or ('Activo' if banda.activo else 'Disuelta') }}
+                </p>
+
+                <!-- SECCIÓN ÁLBUMES -->
+                <div class="mt-auto border-top border-secondary pt-2 style-border">
+                    <p class="small fw-bold text-danger mb-1 d-flex align-items-center gap-1">
+                        <i class="bi bi-disc"></i> Álbumes ({{ banda.albumes|length }}):
+                    </p>
+                    {% if banda.albumes %}
+                        <ul class="list-unstyled mb-3 small" style="color: #b0b3b8;">
+                            {% for album in banda.albumes[:3] %}
+                                <li class="text-truncate">
+                                    <i class="bi bi-dot text-danger"></i> {{ album.titulo }} ({{ album.lanzamiento or 'S/A' }})
+                                </li>
+                            {% endfor %}
+                            {% if banda.albumes|length > 3 %}
+                                <li class="fst-italic mt-1" style="color: #6c7078; font-size: 0.8rem;">y {{ banda.albumes|length - 3 }} más...</li>
+                            {% endif %}
+                        </ul>
+                    {% else %}
+                        <p class="small fst-italic mb-3" style="color: #6c7078;">Sin discos registrados</p>
+                    {% endif %}
+
+                    <!-- ACCIONES -->
+                    <div class="d-flex justify-content-between align-items-center pt-1">
+                        <a href="{{ url_for('main.detalle_banda', id=banda.id) }}" class="metal-btn-red">
+                            <i class="bi bi-eye me-1"></i> Ver Discos
+                        </a>
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('main.editar_banda', id=banda.id) }}" class="metal-btn-secondary">
+                                <i class="bi bi-pencil me-1"></i> Editar
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- SIN RESULTADOS -->
+<div id="noResultsMsg" class="text-center py-5 d-none">
+    <i class="bi bi-search fs-1" style="color: #55585f;"></i>
+    <p class="mt-2" style="color: #8a8d93;">No se encontraron bandas que coincidan con la búsqueda.</p>
+</div>
+
+<!-- PAGINACIÓN TRADICIONAL -->
+{% if bandas.pages > 1 %}
+<nav class="mt-5" id="paginationWrapper" aria-label="Navegación de páginas">
+    <ul class="pagination metal-pagination justify-content-center">
+        <li class="page-item {% if not bandas.has_prev %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for('main.index', page=bandas.prev_num) }}">Anterior</a>
+        </li>
+        {% for p in bandas.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+            {% if p %}
+                <li class="page-item {% if p == bandas.page %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for('main.index', page=p) }}">{{ p }}</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">…</span></li>
+            {% endif %}
+        {% endfor %}
+        <li class="page-item {% if not bandas.has_next %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for('main.index', page=bandas.next_num) }}">Siguiente</a>
+        </li>
+    </ul>
+</nav>
+{% endif %}
+
+<!-- JAVASCRIPT FETCH EN TIEMPO REAL -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('liveSearchInput');
+    const clearBtn = document.getElementById('clearSearchBtn');
+    const bandsGrid = document.getElementById('bandsGrid');
+    const noResultsMsg = document.getElementById('noResultsMsg');
+    const paginationWrapper = document.getElementById('paginationWrapper');
+
+    let debounceTimer;
+
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+
+        clearTimeout(debounceTimer);
+
+        if (query.length > 0) {
+            clearBtn.classList.remove('d-none');
+            if (paginationWrapper) paginationWrapper.classList.add('d-none');
+        } else {
+            clearBtn.classList.add('d-none');
+            if (paginationWrapper) paginationWrapper.classList.remove('d-none');
+        }
+
+        debounceTimer = setTimeout(() => {
+            fetch(`/api/bandas/buscar?q=${encodeURIComponent(query)}`)
+                .then(res => res.json())
+                .then(data => renderBands(data.bandas))
+                .catch(err => console.error('Error al buscar bandas:', err));
+        }, 300);
+    });
+
+    clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input'));
+        searchInput.focus();
+    });
+
+    function renderBands(bandas) {
+        bandsGrid.innerHTML = '';
+
+        if (bandas.length === 0) {
+            noResultsMsg.classList.remove('d-none');
+            return;
+        }
+
+        noResultsMsg.classList.add('d-none');
+
+        const isAuthenticated = {% if current_user.is_authenticated %}true{% else %}false{% endif %};
+
+        bandas.forEach(b => {
+            const logoHtml = b.logo
+                ? `<div class="metal-logo-box p-1 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 65px; height: 65px;"><img src="${b.logo}" alt="Logo ${b.nombre}" class="img-fluid" style="max-height: 100%; max-width: 100%; object-fit: contain;"></div>`
+                : `<div class="metal-logo-box d-flex align-items-center justify-content-center flex-shrink-0" style="width: 65px; height: 65px;"><i class="bi bi-music-note fs-3 text-secondary"></i></div>`;
+
+            const paisBadge = b.pais ? `<span class="metal-badge mt-1">${b.pais}</span>` : '';
+
+            let albumesListHtml = '<p class="small fst-italic mb-3" style="color: #6c7078;">Sin discos registrados</p>';
+            if (b.albumes.length > 0) {
+                let itemsHtml = b.albumes.map(a => `<li class="text-truncate"><i class="bi bi-dot text-danger"></i> ${a.titulo} (${a.lanzamiento})</li>`).join('');
+                let masHtml = b.albumes_count > 3 ? `<li class="fst-italic mt-1" style="color: #6c7078; font-size: 0.8rem;">y ${b.albumes_count - 3} más...</li>` : '';
+                albumesListHtml = `<ul class="list-unstyled mb-3 small" style="color: #b0b3b8;">${itemsHtml}${masHtml}</ul>`;
+            }
+
+            const editBtnHtml = isAuthenticated
+                ? `<a href="${b.edit_url}" class="metal-btn-secondary"><i class="bi bi-pencil me-1"></i> Editar</a>`
+                : '';
+
+            const cardCol = document.createElement('div');
+            cardCol.className = 'col band-card-wrapper';
+            cardCol.innerHTML = `
+                <div class="card h-100 metal-card">
+                    <div class="card-body d-flex flex-column p-3">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            ${logoHtml}
+                            <div class="overflow-hidden">
+                                <h5 class="card-title mb-0 fw-bold text-light text-truncate" style="font-size: 1.1rem;">${b.nombre}</h5>
+                                ${paisBadge}
+                            </div>
+                        </div>
+                        <p class="card-text small mb-1" style="color: #a0a4ab;"><strong class="text-light">Estilo:</strong> ${b.genero}</p>
+                        <p class="card-text small mb-3" style="color: #a0a4ab;"><strong class="text-light">Años:</strong> ${b.formacion} - ${b.disolucion}</p>
+                        <div class="mt-auto border-top border-secondary pt-2">
+                            <p class="small fw-bold text-danger mb-1 d-flex align-items-center gap-1"><i class="bi bi-disc"></i> Álbumes (${b.albumes_count}):</p>
+                            ${albumesListHtml}
+                            <div class="d-flex justify-content-between align-items-center pt-1">
+                                <a href="${b.detalle_url}" class="metal-btn-red"><i class="bi bi-eye me-1"></i> Ver Discos</a>
+                                ${editBtnHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            bandsGrid.appendChild(cardCol);
+        });
+    }
+});
+</script>
+{% endblock %}
