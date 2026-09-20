@@ -22,10 +22,9 @@
         font-size: 1.6rem;
         letter-spacing: 1.5px;
         text-transform: uppercase;
-        /* Sombra profunda + relieve superior tipo grabado en metal */
         text-shadow:
-        1px 1px 2px rgba(255, 255, 255, 0.8),
-        0px 2px 4px rgba(0, 0, 0, 0.5);
+            1px 1px 2px rgba(255, 255, 255, 0.8),
+            0px 2px 4px rgba(0, 0, 0, 0.5);
     }
 
     .metal-count-badge {
@@ -161,10 +160,22 @@
             <div class="col-md-3 text-center mb-3 mb-md-0">
                 {% if banda.logo %}
                     <div class="metal-media-box p-2 d-inline-block">
-                        <img src="{{ url_for('static', filename='uploads/covers/' + banda.logo) }}"
-                            alt="Logo {{ banda.nombre }}"
-                            class="img-fluid"
-                            style="max-height: 120px; max-width: 100%; object-fit: contain;">
+                        {% if banda.logo.startswith('http://') or banda.logo.startswith('https://') %}
+                            <img src="{{ banda.logo }}"
+                                alt="Logo {{ banda.nombre }}"
+                                class="img-fluid"
+                                style="max-height: 120px; max-width: 100%; object-fit: contain;">
+                        {% elif banda.logo.startswith('uploads/') or banda.logo.startswith('static/') %}
+                            <img src="{{ url_for('static', filename=banda.logo.replace('static/', '')) }}"
+                                alt="Logo {{ banda.nombre }}"
+                                class="img-fluid"
+                                style="max-height: 120px; max-width: 100%; object-fit: contain;">
+                        {% else %}
+                            <img src="{{ url_for('serve_cover_uploads', filename=banda.logo) }}"
+                                alt="Logo {{ banda.nombre }}"
+                                class="img-fluid"
+                                style="max-height: 120px; max-width: 100%; object-fit: contain;">
+                        {% endif %}
                     </div>
                 {% else %}
                     <div class="metal-media-box d-flex align-items-center justify-content-center mx-auto" style="width: 130px; height: 130px;">
@@ -238,10 +249,22 @@
             <!-- CONTENEDOR DE LA PORTADA -->
             <div class="ratio ratio-1x1 metal-media-box border-0 rounded-0 p-2">
                 {% if album.url_portada %}
-                    <img src="{{ url_for('static', filename=album.url_portada) }}"
-                         class="card-img-top w-100 h-100"
-                         style="object-fit: contain;"
-                         alt="{{ album.titulo }}">
+                    {% if album.url_portada.startswith('http://') or album.url_portada.startswith('https://') %}
+                        <img src="{{ album.url_portada }}"
+                             class="card-img-top w-100 h-100"
+                             style="object-fit: contain;"
+                             alt="{{ album.titulo }}">
+                    {% elif album.url_portada.startswith('uploads/') or album.url_portada.startswith('static/') %}
+                        <img src="{{ url_for('static', filename=album.url_portada.replace('static/', '')) }}"
+                             class="card-img-top w-100 h-100"
+                             style="object-fit: contain;"
+                             alt="{{ album.titulo }}">
+                    {% else %}
+                        <img src="{{ url_for('serve_cover_uploads', filename=album.url_portada) }}"
+                             class="card-img-top w-100 h-100"
+                             style="object-fit: contain;"
+                             alt="{{ album.titulo }}">
+                    {% endif %}
                 {% else %}
                     <div class="d-flex align-items-center justify-content-center text-secondary h-100">
                         <i class="bi bi-disc fs-1"></i>
@@ -260,7 +283,10 @@
                         {% if album.ubicacion %}
                             <span class="metal-badge ms-1" style="font-size: 0.75rem;">
                                 <i class="bi bi-geo-alt-fill text-danger me-1"></i>
-                                {{ album.ubicacion.mueble }} - Estante {{ album.ubicacion.estante }}
+                                {{ album.ubicacion.mueble if album.ubicacion.mueble is defined else album.ubicacion.nombre if album.ubicacion.nombre is defined else album.ubicacion }}
+                                {% if album.ubicacion.estante is defined and album.ubicacion.estante %}
+                                    - Estante {{ album.ubicacion.estante }}
+                                {% endif %}
                             </span>
                         {% else %}
                             <span class="text-muted">No especificada</span>
