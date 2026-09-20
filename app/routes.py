@@ -5,7 +5,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
 from app.models import Usuario, Banda, Pais, Album, Formato, Genero, SelloDiscografico, Ubicacion, Pais
 from app import db
-import io, csv, os, time, requests, qrcode, uuid
+import io, csv, os, time, requests,  uuid
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload, selectinload
 from app.utils import guardar_logo_banda, guardar_portada_album

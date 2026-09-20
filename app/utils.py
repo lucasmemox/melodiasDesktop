@@ -7,6 +7,7 @@ from app.models import Pais
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp', 'gif'}
 
+
 def extension_permitida(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -45,11 +46,12 @@ def guardar_logo_banda(file_storage=None, discogs_url=None):
     if img is None:
         return None
 
-    # 4. Procesamiento común con Pillow (Conversión a WebP, Resize y Guardado)
+    # 4. Guardado directo en AppData
     try:
-        nombre_unico = f"banda_{uuid.uuid4().hex[:8]}.webp"
+        nombre_unico = f"logo_{uuid.uuid4().hex[:8]}.webp"
 
-        upload_path = os.path.join(current_app.root_path, 'static', 'uploads', 'covers')
+        # USA LA CARPETA APPDATA DEFINIDA EN APP.CONFIG
+        upload_path = current_app.config['UPLOAD_FOLDER']
         os.makedirs(upload_path, exist_ok=True)
         full_path = os.path.join(upload_path, nombre_unico)
 
@@ -65,8 +67,9 @@ def guardar_logo_banda(file_storage=None, discogs_url=None):
 
         return nombre_unico
     except Exception as e:
-        print(f"Error al optimizar y guardar la imagen: {e}")
+        print(f"Error al optimizar y guardar el logo: {e}")
         return None
+
 
 def guardar_portada_album(file_obj=None, url_remota=None):
     img = None
@@ -84,7 +87,7 @@ def guardar_portada_album(file_obj=None, url_remota=None):
     if img is None and url_remota:
         try:
             headers = {
-                'User-Agent': current_app.config.get('DISCOGS_USER_AGENT', 'MelodiasMetalCatalog/1.0')
+                'User-Agent': current_app.config.get('DISCOGS_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)')
             }
             res = requests.get(url_remota, headers=headers, timeout=10)
             if res.status_code == 200:
@@ -96,20 +99,27 @@ def guardar_portada_album(file_obj=None, url_remota=None):
     if img is None:
         return None
 
-    # 3. Procesar y optimizar con Pillow (Aplica para ambas fuentes)
-    nombre_archivo = f"cover_{uuid.uuid4().hex}.webp"
-    folder = os.path.join(current_app.static_folder, 'uploads', 'covers')
-    os.makedirs(folder, exist_ok=True)
-    path = os.path.join(folder, nombre_archivo)
+    # 3. Guardado directo en AppData
+    try:
+        nombre_archivo = f"cover_{uuid.uuid4().hex[:8]}.webp"
 
-    # Convertir a RGB si viene en otro formato (ej: PNG RGBA o Paleta) para guardar en WEBP
-    if img.mode in ("RGBA", "P"):
-        img = img.convert("RGB")
+        # USA LA CARPETA APPDATA DEFINIDA EN APP.CONFIG
+        folder = current_app.config['UPLOAD_FOLDER']
+        os.makedirs(folder, exist_ok=True)
+        path = os.path.join(folder, nombre_archivo)
 
-    img.thumbnail((800, 800))
-    img.save(path, 'WEBP', quality=85)
+        # Convertir a RGB si viene en otro formato (ej: PNG RGBA o Paleta) para guardar en WEBP
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
 
-    return f"uploads/covers/{nombre_archivo}"
+        img.thumbnail((800, 800), Image.Resampling.LANCZOS)
+        img.save(path, 'WEBP', quality=85, optimize=True)
+
+        # Retorna SÓLO el nombre del archivo (ej: "cover_a1b2c3d4.webp")
+        return nombre_archivo
+    except Exception as e:
+        current_app.logger.error(f"Error al guardar la portada: {e}")
+        return None
 
 PAISES_DISCOGS_MAP = {
     # Norteamérica y Caribe
