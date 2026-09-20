@@ -1,8 +1,11 @@
 import os
+import sys
+import time
 import threading
 import webview
 from app import create_app
 
+# Inicializar la aplicación Flask
 app = create_app()
 
 
@@ -22,9 +25,13 @@ class DesktopApi:
 
         if resultado:
             ruta_guardado = resultado if isinstance(resultado, str) else resultado[0]
-            with open(ruta_guardado, 'w', encoding='utf-8-sig') as f:
-                f.write(contenido)
-            return True
+            try:
+                with open(ruta_guardado, 'w', encoding='utf-8-sig') as f:
+                    f.write(contenido)
+                return True
+            except Exception as e:
+                print(f"Error al guardar archivo: {e}")
+                return False
         return False
 
 
@@ -35,10 +42,13 @@ def start_flask():
 
 if __name__ == '__main__':
     # 1. Iniciar servidor Flask en hilo secundario
-    t = threading.Thread(target=start_flask, daemon=True)
-    t.start()
+    flask_thread = threading.Thread(target=start_flask, daemon=True)
+    flask_thread.start()
 
-    # 2. Instanciar API nativa para PyWebView
+    # Pequeño margen para asegurar que el socket local responda antes de abrir la ventana
+    time.sleep(0.8)
+
+    # 2. Instanciar API nativa para comunicación JavaScript <-> Python
     api = DesktopApi()
 
     # 3. Lanzar la ventana nativa de escritorio
