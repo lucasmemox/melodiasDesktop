@@ -9,26 +9,26 @@ build:
 runs-on: windows-latest
 
   steps:
-  - name: Descargar código del repositorio
-    uses: actions/checkout@v4
+    - name: Descargar código del repositorio
+      uses: actions/checkout@v4
 
-  - name: Configurar Python
-    uses: actions/setup-python@v5
-    with:
-      python-version: '3.11'
+    - name: Configurar Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
 
-  - name: Instalar dependencias de Python
-    run: |
-      python -m pip install --upgrade pip
-      if (Test-Path requirements.txt) { pip install -r requirements.txt }
-      pip install pywebview pyinstaller
+    - name: Instalar dependencias de Python
+      run: |
+        python -m pip install --upgrade pip
+        if (Test-Path requirements.txt) { pip install -r requirements.txt }
+        pip install pywebview pyinstaller
 
-  - name: Compilar con PyInstaller
-    run: |
-      pyinstaller --noconfirm --onedir --windowed --add-data="app/templates;app/templates" --add-data="app/static;app/static" --add-data="app/seeds.json;app" --name="MelodiasLocal" desktop.py
+    - name: Compilar con PyInstaller
+      run: |
+        pyinstaller --noconfirm --onedir --windowed --add-data="app/templates;app/templates" --add-data="app/static;app/static" --add-data="app/seeds.json;app" --name="MelodiasLocal" desktop.py
 
-  - name: Subir ejecutable comprimido
-    uses: actions/upload-artifact@v4
-    with:
-      name: MelodiasLocal-Windows
-      path: dist/MelodiasLocal/
+    - name: Subir ejecutable comprimido
+      uses: actions/upload-artifact@v4
+      with:
+        name: MelodiasLocal-Windows
+        path: dist/MelodiasLocal/
