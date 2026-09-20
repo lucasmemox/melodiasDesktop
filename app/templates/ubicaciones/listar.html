@@ -1,445 +1,462 @@
-{% extends 'base.html' %}
+    {% extends 'base.html' %}
 
-{% block title %}Ubicaciones - Melodías{% endblock %}
+    {% block title %}Ubicaciones - Melodías{% endblock %}
 
-{% block content %}
-<style>
-    /* Titular Principal Metálico */
-    .metal-header-title {
-        color: #1a1b1e;
-        font-family: 'Impact', 'Arial Black', sans-serif;
-        font-size: 2.2rem;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        text-shadow:
-            1px 1px 2px rgba(255, 255, 255, 0.8),
-            0px 2px 4px rgba(0, 0, 0, 0.5);
-    }
+    {% block content %}
+    <style>
+        /* Titular Principal Metálico */
+        .metal-header-title {
+            color: #1a1b1e;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-shadow:
+                1px 1px 2px rgba(255, 255, 255, 0.8),
+                0px 2px 4px rgba(0, 0, 0, 0.5);
+        }
 
-    /* Panel/Contenedor Principal */
-    .metal-panel-card {
-        background: linear-gradient(135deg, #242528 0%, #151618 50%, #0d0e0f 100%);
-        border: 1px solid #3d3e42;
-        border-radius: 10px;
-        box-shadow:
-            0 8px 20px rgba(0, 0, 0, 0.7),
-            inset 0 1px 1px rgba(255, 255, 255, 0.12),
-            inset 0 -1px 2px rgba(0, 0, 0, 0.8);
-        overflow: hidden;
-    }
+        /* Panel/Contenedor Principal */
+        .metal-panel-card {
+            background: linear-gradient(135deg, #242528 0%, #151618 50%, #0d0e0f 100%);
+            border: 1px solid #3d3e42;
+            border-radius: 10px;
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.7),
+                inset 0 1px 1px rgba(255, 255, 255, 0.12),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+        }
 
-    /* Tabla Metálica */
-    .metal-table {
-        color: #e0e0e0;
-        margin-bottom: 0;
-    }
+        /* Tabla Metálica */
+        .metal-table {
+            color: #e0e0e0;
+            margin-bottom: 0;
+        }
 
-    /* Cabecera Degradé Rojo/Borgoña Metálico */
-    .metal-table thead,
-    .metal-table thead tr {
-        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%) !important;
-        border-bottom: 1px solid #5a1212 !important;
-    }
+        /* Cabecera Degradé Rojo/Borgoña Metálico */
+        .metal-table thead,
+        .metal-table thead tr {
+            background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%) !important;
+            border-bottom: 1px solid #5a1212 !important;
+        }
 
-    .metal-table thead th {
-        background-color: transparent !important;
-        background: none !important;
-        color: #ffffff !important;
-        font-family: 'Arial Black', sans-serif;
-        font-size: 0.8rem;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        padding: 12px 16px;
-        border: none !important;
-        text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.9);
-        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
-    }
+        .metal-table thead th {
+            background-color: transparent !important;
+            background: none !important;
+            color: #ffffff !important;
+            font-family: 'Arial Black', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 12px 16px;
+            border: none !important;
+            text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.9);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
+        }
 
-    .metal-table td {
-        border-bottom: 1px solid #2a2c30;
-        padding: 12px 16px;
-        background-color: transparent;
-    }
+        .metal-table td {
+            border-bottom: 1px solid #2a2c30;
+            padding: 12px 16px;
+            background-color: transparent;
+        }
 
-    .metal-table tbody tr {
-        transition: background-color 0.15s;
-    }
+        .metal-table tbody tr {
+            transition: background-color 0.15s;
+        }
 
-    .metal-table tbody tr:hover {
-        background-color: rgba(255, 255, 255, 0.03);
-    }
+        .metal-table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
 
-    /* Badges / Etiquetas Estilizadas */
-    .metal-badge-sub {
-        background: #252629;
-        border: 1px solid #3d3e42;
-        color: #b0b3b8;
-        font-size: 0.75rem;
-        padding: 4px 8px;
-        letter-spacing: 0.5px;
-    }
+        /* Badges / Etiquetas Estilizadas */
+        .metal-badge-sub {
+            background: #252629;
+            border: 1px solid #3d3e42;
+            color: #b0b3b8;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            letter-spacing: 0.5px;
+        }
 
-    /* Botones Estilo Rojo Metálico */
-    .metal-btn-red {
-        padding: 8px 18px;
-        border-radius: 6px;
-        border: 1px solid #5a1212;
-        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%);
-        color: #ffffff;
-        font-weight: bold;
-        font-size: 0.85rem;
-        letter-spacing: 0.5px;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.8);
-        box-shadow:
-            0 4px 8px rgba(0, 0, 0, 0.6),
-            inset 0 1px 1px rgba(255, 255, 255, 0.25);
-        transition: filter 0.15s;
-    }
+        /* Botones Estilo Rojo Metálico */
+        .metal-btn-red {
+            padding: 8px 18px;
+            border-radius: 6px;
+            border: 1px solid #5a1212;
+            background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%);
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.8);
+            box-shadow:
+                0 4px 8px rgba(0, 0, 0, 0.6),
+                inset 0 1px 1px rgba(255, 255, 255, 0.25);
+            transition: filter 0.15s;
+        }
 
-    .metal-btn-red:hover {
-        filter: brightness(1.2);
-        color: #ffffff;
-    }
+        .metal-btn-red:hover {
+            filter: brightness(1.2);
+            color: #ffffff;
+        }
 
-    /* Botones de Acción Secundarios */
-    .metal-btn-action {
-        background: linear-gradient(180deg, #252629 0%, #151618 100%);
-        border: 1px solid #3d3e42;
-        color: #b0b3b8;
-        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
-        transition: all 0.2s;
-        text-decoration: none;
-    }
+        /* Botones de Acción Secundarios */
+        .metal-btn-action {
+            background: linear-gradient(180deg, #252629 0%, #151618 100%);
+            border: 1px solid #3d3e42;
+            color: #b0b3b8;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            transition: all 0.2s;
+            text-decoration: none;
+        }
 
-    .metal-btn-action:hover {
-        background: #2e3034;
-        color: #ffffff;
-        border-color: #55585f;
-    }
+        .metal-btn-action:hover {
+            background: #2e3034;
+            color: #ffffff;
+            border-color: #55585f;
+        }
 
-    .metal-btn-action-success {
-        background: linear-gradient(180deg, #14381e 0%, #0a1f11 100%);
-        border: 1px solid #1f5e33;
-        color: #a3e6b9;
-    }
+        .metal-btn-action-success {
+            background: linear-gradient(180deg, #14381e 0%, #0a1f11 100%);
+            border: 1px solid #1f5e33;
+            color: #a3e6b9;
+        }
 
-    .metal-btn-action-success:hover {
-        background: #1e5931;
-        color: #ffffff;
-        border-color: #2ba355;
-    }
+        .metal-btn-action-success:hover {
+            background: #1e5931;
+            color: #ffffff;
+            border-color: #2ba355;
+        }
 
-    .metal-btn-action-danger {
-        background: linear-gradient(180deg, #3d1414 0%, #200a0a 100%);
-        border: 1px solid #6b1818;
-        color: #e69d9d;
-    }
+        .metal-btn-action-danger {
+            background: linear-gradient(180deg, #3d1414 0%, #200a0a 100%);
+            border: 1px solid #6b1818;
+            color: #e69d9d;
+        }
 
-    .metal-btn-action-danger:hover {
-        background: #8b1d1d;
-        color: #ffffff;
-        border-color: #a82323;
-    }
+        .metal-btn-action-danger:hover {
+            background: #8b1d1d;
+            color: #ffffff;
+            border-color: #a82323;
+        }
 
-    /* Modales Estilo Metal Oscuro */
-    .metal-modal .modal-content {
-        background: linear-gradient(135deg, #2c2d30 0%, #18191b 50%, #101113 100%);
-        border: 1px solid #3d3e42;
-        border-radius: 10px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
-        color: #e0e0e0;
-    }
+        /* Modales Estilo Metal Oscuro */
+        .metal-modal .modal-content {
+            background: linear-gradient(135deg, #2c2d30 0%, #18191b 50%, #101113 100%);
+            border: 1px solid #3d3e42;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+            color: #e0e0e0;
+        }
 
-    .metal-modal .modal-header {
-        background-color: #0c0c0e;
-        border-bottom: 1px solid #3d3e42;
-    }
+        .metal-modal .modal-header {
+            background-color: #0c0c0e;
+            border-bottom: 1px solid #3d3e42;
+        }
 
-    .metal-modal .modal-footer {
-        border-top: 1px solid #2a2c30;
-    }
+        .metal-modal .modal-footer {
+            border-top: 1px solid #2a2c30;
+        }
 
-    .metal-modal .form-label {
-        color: #c5beba;
-    }
+        .metal-modal .form-label {
+            color: #c5beba;
+        }
 
-    /* Controles de Formulario Metálicos */
-    .metal-input, .metal-select {
-        background-color: #0c0c0e !important;
-        color: #e0e0e0 !important;
-        border: 1px solid #3d3e42 !important;
-        font-size: 0.9rem;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
-    }
+        /* Controles de Formulario Metálicos */
+        .metal-input, .metal-select {
+            background-color: #0c0c0e !important;
+            color: #e0e0e0 !important;
+            border: 1px solid #3d3e42 !important;
+            font-size: 0.9rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
 
-    .metal-input:focus, .metal-select:focus {
-        border-color: #8b1d1d !important;
-        box-shadow: 0 0 0 0.25rem rgba(139, 29, 29, 0.3) !important;
-    }
+        .metal-input:focus, .metal-select:focus {
+            border-color: #8b1d1d !important;
+            box-shadow: 0 0 0 0.25rem rgba(139, 29, 29, 0.3) !important;
+        }
 
-    /* Estilo de Sublista Desplegable (Discos Almacenados) */
-    .metal-collapse-container {
-        background-color: #0d0e10 !important;
-        border-bottom: 1px solid #3d3e42;
-        box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.8);
-    }
+        /* Estilo de Sublista Desplegable (Discos Almacenados) */
+        .metal-collapse-container {
+            background-color: #0d0e10 !important;
+            border-bottom: 1px solid #3d3e42;
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.8);
+        }
 
-    .metal-list-group-item {
-        background-color: #161719 !important;
-        border-color: #282a2e !important;
-        color: #e0e0e0;
-    }
-</style>
+        .metal-list-group-item {
+            background-color: #161719 !important;
+            border-color: #282a2e !important;
+            color: #e0e0e0;
+        }
+    </style>
 
-<div class="container-fluid mt-2">
-    <!-- ENCABEZADO PRINCIPAL -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
-        <div>
-            <h2 class="metal-header-title mb-0 d-flex align-items-center gap-2">
-                <i class="bi bi-geo-alt-fill text-danger fs-2"></i> Mis Ubicaciones
-            </h2>
-            <p class="small mb-0" style="color: #a0a4ab;">Administrá los muebles, estantes y cajones donde guardás tu colección.</p>
+    <div class="container-fluid mt-2">
+        <!-- ENCABEZADO PRINCIPAL CON BOTONES DE ACCIÓN GLOBAL -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+            <div>
+                <h2 class="metal-header-title mb-0 d-flex align-items-center gap-2">
+                    <i class="bi bi-geo-alt-fill text-danger fs-2"></i> Mis Ubicaciones
+                </h2>
+                <p class="small mb-0" style="color: #a0a4ab;">Administrá los muebles, estantes y cajones donde guardás tu colección.</p>
+            </div>
+
+            <div class="d-flex gap-2">
+                <!-- BOTÓN ACCESO A MOVER DISCOS (GENERAL) -->
+                <a href="{{ url_for('main.mover_discos_ubicacion') }}" class="btn metal-btn-action text-nowrap d-flex align-items-center gap-1">
+                    <i class="bi bi-arrows-move text-warning fs-6"></i> Mover Discos
+                </a>
+
+                <!-- BOTÓN CREAR NUEVA UBICACIÓN -->
+                <button type="button" class="metal-btn-red text-nowrap" data-bs-toggle="modal" data-bs-target="#modalNuevaUbicacion">
+                    <i class="bi bi-plus-lg me-1"></i> Nueva Ubicación
+                </button>
+            </div>
         </div>
 
-        <button type="button" class="metal-btn-red text-nowrap" data-bs-toggle="modal" data-bs-target="#modalNuevaUbicacion">
-            <i class="bi bi-plus-lg me-1"></i> Nueva Ubicación
-        </button>
-    </div>
-
-    <!-- TABLA DE UBICACIONES -->
-    <div class="metal-panel-card">
-        <div class="card-body p-0">
-            {% if ubicaciones %}
-                <div class="table-responsive">
-                    <table class="table metal-table align-middle">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="ps-3">Mueble / Estantería</th>
-                                <th scope="col">Estante / Nivel</th>
-                                <th scope="col">Descripción / Notas</th>
-                                <th scope="col" class="text-center">Discos</th>
-                                <th scope="col" class="text-end pe-3">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for u in ubicaciones %}
-                            {% set total_discos = u.albumes.count() if u.albumes.count is defined else u.albumes|length %}
-                            <tr>
-                                <td class="ps-3 fw-bold text-light">
-                                    <i class="bi bi-archive me-2 text-danger"></i>{{ u.mueble }}
-                                </td>
-                                <td>
-                                    <span class="badge metal-badge-sub">{{ u.estante }}</span>
-                                </td>
-                                <td class="small" style="color: #a0a4ab;">
-                                    {{ u.descripcion or '—' }}
-                                </td>
-                                <td class="text-center">
-                                    {% if total_discos > 0 %}
-                                        <button class="btn btn-sm metal-btn-action rounded-pill px-3"
-                                                type="button"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#collapseDiscos{{ u.id }}"
-                                                aria-expanded="false"
-                                                aria-controls="collapseDiscos{{ u.id }}"
-                                                title="Ver contenido">
-                                            <i class="bi bi-disc me-1 text-warning"></i>{{ total_discos }}
-                                            <i class="bi bi-chevron-down ms-1 small"></i>
-                                        </button>
-                                    {% else %}
-                                        <span class="badge rounded-pill bg-dark border border-secondary text-muted">
-                                            <i class="bi bi-disc me-1"></i>0
-                                        </span>
-                                    {% endif %}
-                                </td>
-                                <td class="text-end pe-3">
-                                    <div class="btn-group btn-group-sm">
+        <!-- TABLA DE UBICACIONES -->
+        <div class="metal-panel-card">
+            <div class="card-body p-0">
+                {% if ubicaciones %}
+                    <div class="table-responsive">
+                        <table class="table metal-table align-middle">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="ps-3">Mueble / Estantería</th>
+                                    <th scope="col">Estante / Nivel</th>
+                                    <th scope="col">Descripción / Notas</th>
+                                    <th scope="col" class="text-center">Discos</th>
+                                    <th scope="col" class="text-end pe-3">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for u in ubicaciones %}
+                                {% set total_discos = u.albumes.count() if u.albumes.count is defined else u.albumes|length %}
+                                <tr>
+                                    <td class="ps-3 fw-bold text-light">
+                                        <i class="bi bi-archive me-2 text-danger"></i>{{ u.mueble }}
+                                    </td>
+                                    <td>
+                                        <span class="badge metal-badge-sub">{{ u.estante }}</span>
+                                    </td>
+                                    <td class="small" style="color: #a0a4ab;">
+                                        {{ u.descripcion or '—' }}
+                                    </td>
+                                    <td class="text-center">
                                         {% if total_discos > 0 %}
-                                            <button class="btn metal-btn-action"
+                                            <button class="btn btn-sm metal-btn-action rounded-pill px-3"
                                                     type="button"
                                                     data-bs-toggle="collapse"
                                                     data-bs-target="#collapseDiscos{{ u.id }}"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapseDiscos{{ u.id }}"
                                                     title="Ver contenido">
-                                                <i class="bi bi-eye"></i> Ver
+                                                <i class="bi bi-disc me-1 text-warning"></i>{{ total_discos }}
+                                                <i class="bi bi-chevron-down ms-1 small"></i>
                                             </button>
-                                            <!-- BOTÓN DE EXPORTAR -->
-                                            <button type="button"
-                                                    onclick="descargarCSV('{{ url_for('main.exportar_ubicacion', id=u.id) }}', 'discos_{{ u.mueble }}_{{ u.estante }}.csv')"
-                                                    class="btn metal-btn-action metal-btn-action-success"
-                                                    title="Exportar discos">
-                                                <i class="bi bi-file-earmark-spreadsheet"></i>
-                                            </button>
+                                        {% else %}
+                                            <span class="badge rounded-pill bg-dark border border-secondary text-muted">
+                                                <i class="bi bi-disc me-1"></i>0
+                                            </span>
                                         {% endif %}
+                                    </td>
+                                    <td class="text-end pe-3">
+                                        <div class="btn-group btn-group-sm">
+                                            {% if total_discos > 0 %}
+                                                <button class="btn metal-btn-action"
+                                                        type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#collapseDiscos{{ u.id }}"
+                                                        title="Ver contenido">
+                                                    <i class="bi bi-eye"></i> Ver
+                                                </button>
+                                                <!-- BOTÓN DIRECTO MOVER DISCOS DE ESTA UBICACIÓN ESPECÍFICA -->
+                                                <a href="{{ url_for('main.mover_discos_ubicacion', origen_id=u.id) }}"
+                                                class="btn metal-btn-action"
+                                                title="Mover discos de este estante">
+                                                    <i class="bi bi-arrows-move text-warning"></i>
+                                                </a>
+                                                <!-- BOTÓN DE EXPORTAR -->
+                                                <button type="button"
+                                                        onclick="descargarCSV('{{ url_for('main.exportar_ubicacion', id=u.id) }}', 'discos_{{ u.mueble }}_{{ u.estante }}.csv')"
+                                                        class="btn metal-btn-action metal-btn-action-success"
+                                                        title="Exportar discos">
+                                                    <i class="bi bi-file-earmark-spreadsheet"></i>
+                                                </button>
+                                            {% endif %}
 
-                                        <a href="{{ url_for('main.editar_ubicacion', id=u.id) }}" class="btn metal-btn-action" title="Editar">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button type="button" class="btn metal-btn-action metal-btn-action-danger" title="Eliminar" data-bs-toggle="modal" data-bs-target="#modalEliminar{{ u.id }}">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </div>
-
-                                    <!-- MODAL DE CONFIRMACIÓN DE ELIMINACIÓN -->
-                                    <div class="modal fade metal-modal" id="modalEliminar{{ u.id }}" tabindex="-1" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered text-start">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title text-danger fw-bold d-flex align-items-center gap-2">
-                                                        <i class="bi bi-exclamation-triangle-fill"></i> Eliminar Ubicación
-                                                    </h5>
-                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    ¿Confirmás que querés eliminar la ubicación <strong class="text-light">"{{ u.mueble }} - {{ u.estante }}"</strong>?
-                                                    {% if total_discos > 0 %}
-                                                        <div class="alert alert-warning text-dark border-0 mt-3 mb-0 small fw-bold">
-                                                            <i class="bi bi-exclamation-circle me-1"></i> Esta ubicación contiene <strong>{{ total_discos }}</strong> disco(s). No se podrá borrar hasta reubicarlos.
-                                                        </div>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <form action="{{ url_for('main.eliminar_ubicacion', id=u.id) }}" method="POST" class="d-inline">
-                                                        <button type="submit" class="metal-btn-red py-1 px-3" style="font-size: 0.8rem;" {% if total_discos > 0 %}disabled style="opacity:0.5; cursor:not-allowed;"{% endif %}>
-                                                            Confirmar Eliminación
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
+                                            <a href="{{ url_for('main.editar_ubicacion', id=u.id) }}" class="btn metal-btn-action" title="Editar">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <button type="button" class="btn metal-btn-action metal-btn-action-danger" title="Eliminar" data-bs-toggle="modal" data-bs-target="#modalEliminar{{ u.id }}">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
 
-                            <!-- FILA DESPLEGABLE CON EL LISTADO DE ÁLBUMES -->
-                            {% if total_discos > 0 %}
-                            <tr class="p-0 border-0">
-                                <td colspan="5" class="p-0 border-0">
-                                    <div class="collapse metal-collapse-container p-3" id="collapseDiscos{{ u.id }}">
-                                        <div class="d-flex align-items-center justify-content-between mb-2">
-                                            <h6 class="fw-bold mb-0 text-light small">
-                                                <i class="bi bi-collection me-1 text-danger"></i> Discos almacenados en <span class="text-danger">{{ u.mueble }}</span> ({{ u.estante }}):
-                                            </h6>
-                                        </div>
-                                        <div class="list-group list-group-flush rounded border border-dark">
-                                            {% for album in u.albumes %}
-                                            <div class="list-group-item metal-list-group-item d-flex justify-content-between align-items-center py-2 px-3">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <i class="bi bi-disc text-danger fs-5"></i>
-                                                    <div>
-                                                        <strong class="text-light d-block leading-tight">{{ album.titulo }}</strong>
-                                                        <span class="small" style="color: #a0a4ab;">{{ album.banda.nombre if album.banda else 'Varios Artistas' }}</span>
+                                        <!-- MODAL DE CONFIRMACIÓN DE ELIMINACIÓN -->
+                                        <div class="modal fade metal-modal" id="modalEliminar{{ u.id }}" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered text-start">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title text-danger fw-bold d-flex align-items-center gap-2">
+                                                            <i class="bi bi-exclamation-triangle-fill"></i> Eliminar Ubicación
+                                                        </h5>
+                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        ¿Confirmás que querés eliminar la ubicación <strong class="text-light">"{{ u.mueble }} - {{ u.estante }}"</strong>?
+                                                        {% if total_discos > 0 %}
+                                                            <div class="alert alert-warning text-dark border-0 mt-3 mb-0 small fw-bold">
+                                                                <i class="bi bi-exclamation-circle me-1"></i> Esta ubicación contiene <strong>{{ total_discos }}</strong> disco(s). No se podrá borrar hasta reubicarlos.
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                        <form action="{{ url_for('main.eliminar_ubicacion', id=u.id) }}" method="POST" class="d-inline">
+                                                            <button type="submit" class="metal-btn-red py-1 px-3" style="font-size: 0.8rem;" {% if total_discos > 0 %}disabled style="opacity:0.5; cursor:not-allowed;"{% endif %}>
+                                                                Confirmar Eliminación
+                                                            </button>
+                                                        </form>
                                                     </div>
                                                 </div>
-                                                <div class="d-flex align-items-center gap-2">
-                                                    {% if album.formatos and album.formatos[0] %}
-                                                        <span class="badge metal-badge-sub">{{ album.formatos[0].nombre|upper }}</span>
-                                                    {% endif %}
-                                                    <a href="{{ url_for('main.editar_album', id=album.id) }}" class="btn btn-sm metal-btn-action p-1 px-2" title="Editar disco">
-                                                        <i class="bi bi-pencil-fill" style="font-size: 0.75rem;"></i>
-                                                    </a>
-                                                </div>
                                             </div>
-                                            {% endfor %}
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endif %}
+                                    </td>
+                                </tr>
 
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <div class="text-center py-5">
-                    <i class="bi bi-geo-alt fs-1" style="color: #55585f;"></i>
-                    <p class="mt-2 mb-3" style="color: #8a8d93;">Aún no registraste ninguna ubicación física.</p>
-                    <button type="button" class="metal-btn-red" data-bs-toggle="modal" data-bs-target="#modalNuevaUbicacion">
-                        <i class="bi bi-plus-lg me-1"></i> Crear primera ubicación
-                    </button>
-                </div>
-            {% endif %}
-        </div>
-    </div>
-</div>
+                                <!-- FILA DESPLEGABLE CON EL LISTADO DE ÁLBUMES -->
+                                {% if total_discos > 0 %}
+                                <tr class="p-0 border-0">
+                                    <td colspan="5" class="p-0 border-0">
+                                        <div class="collapse metal-collapse-container p-3" id="collapseDiscos{{ u.id }}">
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <h6 class="fw-bold mb-0 text-light small d-flex align-items-center">
+                                                    <i class="bi bi-collection me-1 text-danger"></i> Discos almacenados en <span class="text-danger ms-1 me-1">{{ u.mueble }}</span> ({{ u.estante }}):
+                                                </h6>
+                                                <!-- ACCESO RÁPIDO A MOVER DESDE EL DESPLEGABLE -->
+                                                <a href="{{ url_for('main.mover_discos_ubicacion', origen_id=u.id) }}" class="btn btn-sm metal-btn-action py-0 px-2" style="font-size: 0.78rem;">
+                                                    <i class="bi bi-arrows-move text-warning me-1"></i> Mover estos discos
+                                                </a>
+                                            </div>
+                                            <div class="list-group list-group-flush rounded border border-dark">
+                                                {% for album in u.albumes %}
+                                                <div class="list-group-item metal-list-group-item d-flex justify-content-between align-items-center py-2 px-3">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <i class="bi bi-disc text-danger fs-5"></i>
+                                                        <div>
+                                                            <strong class="text-light d-block leading-tight">{{ album.titulo }}</strong>
+                                                            <span class="small" style="color: #a0a4ab;">{{ album.banda.nombre if album.banda else 'Varios Artistas' }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        {% if album.formatos and album.formatos[0] %}
+                                                            <span class="badge metal-badge-sub">{{ album.formatos[0].nombre|upper }}</span>
+                                                        {% endif %}
+                                                        <a href="{{ url_for('main.editar_album', id=album.id) }}" class="btn btn-sm metal-btn-action p-1 px-2" title="Editar disco">
+                                                            <i class="bi bi-pencil-fill" style="font-size: 0.75rem;"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endif %}
 
-<!-- MODAL CREAR NUEVA UBICACIÓN -->
-<div class="modal fade metal-modal" id="modalNuevaUbicacion" tabindex="-1" aria-labelledby="modalNuevaUbicacionLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold text-light d-flex align-items-center gap-2" id="modalNuevaUbicacionLabel">
-                    <i class="bi bi-geo-alt text-danger"></i> Nueva Ubicación
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-geo-alt fs-1" style="color: #55585f;"></i>
+                        <p class="mt-2 mb-3" style="color: #8a8d93;">Aún no registraste ninguna ubicación física.</p>
+                        <button type="button" class="metal-btn-red" data-bs-toggle="modal" data-bs-target="#modalNuevaUbicacion">
+                            <i class="bi bi-plus-lg me-1"></i> Crear primera ubicación
+                        </button>
+                    </div>
+                {% endif %}
             </div>
-            <form action="{{ url_for('main.listar_ubicaciones') }}" method="POST">
-                {{ form.hidden_tag() }}
-                <div class="modal-body">
-                    <div class="mb-3">
-                        {{ form.mueble.label(class="form-label metal-form-label fw-bold") }}
-                        {{ form.mueble(class="form-control metal-input" + (" is-invalid" if form.mueble.errors else "")) }}
-                        {% for error in form.mueble.errors %}
-                            <div class="invalid-feedback d-block text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.estante.label(class="form-label metal-form-label fw-bold") }}
-                        {{ form.estante(class="form-control metal-input" + (" is-invalid" if form.estante.errors else "")) }}
-                        {% for error in form.estante.errors %}
-                            <div class="invalid-feedback d-block text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.descripcion.label(class="form-label metal-form-label fw-bold") }}
-                        {{ form.descripcion(class="form-control metal-input" + (" is-invalid" if form.descripcion.errors else "")) }}
-                        {% for error in form.descripcion.errors %}
-                            <div class="invalid-feedback d-block text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    {{ form.submit(class="metal-btn-red border-0") }}
-                </div>
-            </form>
         </div>
     </div>
-</div>
-<script>
-function descargarCSV(url, nombreArchivo) {
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al generar la exportación');
-            }
-            return response.text();
-        })
-        .then(textoCsv => {
-            // Si la app corre en la ventana PyWebView de escritorio
-            if (window.pywebview && window.pywebview.api) {
-                window.pywebview.api.guardar_archivo(textoCsv, nombreArchivo);
-            } else {
-                // Fallback si se abre desde un navegador web común (Chrome/Firefox)
-                const blob = new Blob([textoCsv], { type: 'text/csv;charset=utf-8;' });
-                const blobUrl = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = blobUrl;
-                a.download = nombreArchivo;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(blobUrl);
-                a.remove();
-            }
-        })
-        .catch(err => {
-            alert('No se pudo exportar el archivo: ' + err.message);
-        });
-}
-</script>
-{% endblock %}
+
+    <!-- MODAL CREAR NUEVA UBICACIÓN -->
+    <div class="modal fade metal-modal" id="modalNuevaUbicacion" tabindex="-1" aria-labelledby="modalNuevaUbicacionLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-light d-flex align-items-center gap-2" id="modalNuevaUbicacionLabel">
+                        <i class="bi bi-geo-alt text-danger"></i> Nueva Ubicación
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ url_for('main.listar_ubicaciones') }}" method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            {{ form.mueble.label(class="form-label metal-form-label fw-bold") }}
+                            {{ form.mueble(class="form-control metal-input" + (" is-invalid" if form.mueble.errors else "")) }}
+                            {% for error in form.mueble.errors %}
+                                <div class="invalid-feedback d-block text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.estante.label(class="form-label metal-form-label fw-bold") }}
+                            {{ form.estante(class="form-control metal-input" + (" is-invalid" if form.estante.errors else "")) }}
+                            {% for error in form.estante.errors %}
+                                <div class="invalid-feedback d-block text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.descripcion.label(class="form-label metal-form-label fw-bold") }}
+                            {{ form.descripcion(class="form-control metal-input" + (" is-invalid" if form.descripcion.errors else "")) }}
+                            {% for error in form.descripcion.errors %}
+                                <div class="invalid-feedback d-block text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        {{ form.submit(class="metal-btn-red border-0") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function descargarCSV(url, nombreArchivo) {
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al generar la exportación');
+                }
+                return response.text();
+            })
+            .then(textoCsv => {
+                if (window.pywebview && window.pywebview.api) {
+                    window.pywebview.api.guardar_archivo(textoCsv, nombreArchivo);
+                } else {
+                    const blob = new Blob([textoCsv], { type: 'text/csv;charset=utf-8;' });
+                    const blobUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = nombreArchivo;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(blobUrl);
+                    a.remove();
+                }
+            })
+            .catch(err => {
+                alert('No se pudo exportar el archivo: ' + err.message);
+            });
+    }
+    </script>
+    {% endblock %}

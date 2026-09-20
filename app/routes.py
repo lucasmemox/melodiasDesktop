@@ -847,7 +847,74 @@ def exportar_ubicacion(id):
         }
     )
 
+@main_bp.route('/ubicaciones/mover', methods=['GET', 'POST'])
+@login_required
+def mover_discos_ubicacion():
+    if request.method == 'POST':
+        origen_id = request.form.get('origen_id', type=int)
+        destino_id = request.form.get('destino_id', type=int)
+        album_ids = request.form.getlist('album_ids', type=int)
+
+        if not album_ids:
+            flash('No seleccionaste ningún disco para mover.', 'warning')
+            return redirect(url_for('main.mover_discos_ubicacion', origen_id=origen_id, destino_id=destino_id))
+
+        # Validar si el usuario omitió la ubicación destino
+        if destino_id is None:
+            flash('Debes seleccionar una ubicación destino válida.', 'danger')
+            return redirect(url_for('main.mover_discos_ubicacion', origen_id=origen_id))
+
+        # Definir el nuevo destino: si es 0 pasa a ser None ("Sin Ubicación"), si es mayor a 0 mantiene el ID
+        nuevo_destino = destino_id if destino_id > 0 else None
+
+        # Actualización masiva
+        Album.query.filter(
+            Album.id.in_(album_ids),
+            Album.usuario_id == current_user.id
+        ).update({Album.ubicacion_id: nuevo_destino}, synchronize_session=False)
+
+        db.session.commit()
+        flash(f'Se movieron {len(album_ids)} discos correctamente.', 'success')
+
+        return redirect(url_for('main.mover_discos_ubicacion', origen_id=nuevo_destino))
+
+    # Método GET: Cargar ubicaciones y álbumes según el origen seleccionado
+    origen_id = request.args.get('origen_id', type=int)
+    destino_id = request.args.get('destino_id', type=int)
+
+    ubicaciones = Ubicacion.query.filter_by(usuario_id=current_user.id).order_by(Ubicacion.mueble, Ubicacion.estante).all()
+
+    albumes_origen = []
+    if origen_id is not None:
+        if origen_id == 0:
+            # Opción 0: Discos sin ubicación asignada
+            albumes_origen = Album.query.join(Banda).filter(
+                Album.usuario_id == current_user.id,
+                Album.ubicacion_id.is_(None)
+            ).order_by(Banda.nombre, Album.titulo).all()
+        else:
+            albumes_origen = Album.query.join(Banda).filter(
+                Album.usuario_id == current_user.id,
+                Album.ubicacion_id == origen_id
+            ).order_by(Banda.nombre, Album.titulo).all()
+
+    albumes_destino = []
+    if destino_id:
+        albumes_destino = Album.query.filter_by(usuario_id=current_user.id, ubicacion_id=destino_id).all()
+
+    return render_template(
+        'ubicaciones/mover.html',
+        ubicaciones=ubicaciones,
+        origen_id=origen_id,
+        destino_id=destino_id,
+        albumes_origen=albumes_origen,
+        albumes_destino=albumes_destino
+    )
+
+##################################
 # --- LISTAR Y CREAR SELLOS ---
+################################
+
 @main_bp.route('/sellos', methods=['GET', 'POST'])
 @login_required
 def listar_sellos():
