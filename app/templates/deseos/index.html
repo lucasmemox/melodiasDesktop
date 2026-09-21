@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Encabezado con estética metálica -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-danger">
+        <h2 class="text-uppercase text-danger fw-bold tracking-wide" style="text-shadow: 0 0 10px rgba(220,53,69,0.5);">
+            <i class="bi bi-disc-fill me-2"></i>Lista de Deseos
+        </h2>
+        <div>
+            <a href="{{ url_for('main.deseos_conseguidos') }}" class="btn btn-outline-danger btn-sm me-2 metal-btn">
+                <i class="bi bi-check2-circle me-1"></i>Conseguidos
+            </a>
+            <a href="{{ url_for('main.exportar_deseos', orden=orden) }}" target="_blank" class="btn btn-danger btn-sm metal-btn-primary">
+                <i class="bi bi-phone me-1"></i>Ver / Imprimir Celular
+            </a>
+        </div>
+    </div>
+
+    <!-- Formulario para agregar nuevo deseo -->
+    <div class="card bg-dark text-light border-danger mb-4 shadow-lg metal-card">
+        <div class="card-header bg-black text-danger border-danger fw-bold">
+            <i class="bi bi-plus-circle me-2"></i>Agregar Nuevo Disco Buscado
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('main.agregar_deseo') }}" method="POST" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label text-light">Banda / Artista</label>
+                    <input type="text" name="banda" class="form-control bg-secondary text-light border-dark" placeholder="Ej: Slayer" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-light">Álbum / Disco</label>
+                    <input type="text" name="disco" class="form-control bg-secondary text-light border-dark" placeholder="Ej: Reign in Blood" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-light">Formato</label>
+                    <select name="formato_id" class="form-select bg-secondary text-light border-dark" required>
+                        <option value="">-- Seleccionar --</option>
+                        {% for f in formatos_principales %}
+                            <option value="{{ f.id }}">{{ f.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label text-light">Prioridad</label>
+                    <select name="prioridad" class="form-select bg-secondary text-light border-dark">
+                        <option value="Alta">Alta</option>
+                        <option value="Media" selected>Media</option>
+                        <option value="Baja">Baja</option>
+                    </select>
+                </div>
+                <div class="col-md-1 d-flex align-items-end">
+                    <button type="submit" class="btn btn-danger w-100 metal-btn-primary fw-bold">
+                        <i class="bi bi-save"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Barra de Filtros y Orden -->
+    <div class="row g-2 mb-3 align-items-center bg-black p-3 rounded border border-secondary">
+        <div class="col-md-4">
+            <form method="GET" action="{{ url_for('main.lista_deseos') }}" class="d-flex gap-2">
+                <select name="prioridad" class="form-select form-select-sm bg-dark text-light border-secondary" onchange="this.form.submit()">
+                    <option value="">-- Todas las prioridades --</option>
+                    <option value="Alta" {% if prioridad_filtro == 'Alta' %}selected{% endif %}>Alta</option>
+                    <option value="Media" {% if prioridad_filtro == 'Media' %}selected{% endif %}>Media</option>
+                    <option value="Baja" {% if prioridad_filtro == 'Baja' %}selected{% endif %}>Baja</option>
+                </select>
+                <select name="formato_id" class="form-select form-select-sm bg-dark text-light border-secondary" onchange="this.form.submit()">
+                    <option value="">-- Todos los formatos --</option>
+                    {% for f in formatos_principales %}
+                        <option value="{{ f.id }}" {% if formato_filtro == f.id %}selected{% endif %}>{{ f.nombre }}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" name="orden" value="{{ orden }}">
+            </form>
+        </div>
+        <div class="col-md-8 text-end">
+            <span class="text-muted me-2 small">Generar / Ordenar:</span>
+            <a href="{{ url_for('main.lista_deseos', prioridad=prioridad_filtro, formato_id=formato_filtro, orden='prioridad') }}"
+               class="btn btn-sm {% if orden == 'prioridad' %}btn-danger{% else %}btn-outline-secondary{% endif %} me-1">
+                <i class="bi bi-sort-down"></i> Por Prioridad
+            </a>
+            <a href="{{ url_for('main.lista_deseos', prioridad=prioridad_filtro, formato_id=formato_filtro, orden='aleatorio') }}"
+               class="btn btn-sm {% if orden == 'aleatorio' %}btn-danger{% else %}btn-outline-secondary{% endif %} me-1">
+                <i class="bi bi-shuffle"></i> Aleatorio
+            </a>
+            <a href="{{ url_for('main.lista_deseos', prioridad=prioridad_filtro, formato_id=formato_filtro, orden='fecha') }}"
+               class="btn btn-sm {% if orden == 'fecha' %}btn-danger{% else %}btn-outline-secondary{% endif %}">
+                <i class="bi bi-clock-history"></i> Recientes
+            </a>
+        </div>
+    </div>
+
+    <!-- Grilla de Deseos -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+        {% for d in deseos %}
+        <div class="col">
+            <div class="card bg-dark text-light border-secondary h-100 shadow position-relative card-deseo">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-secondary text-uppercase">{{ d.formato.nombre }}</span>
+                        {% if d.prioridad == 'Alta' %}
+                            <span class="badge bg-danger text-uppercase"><i class="bi bi-fire me-1"></i>Alta</span>
+                        {% elif d.prioridad == 'Media' %}
+                            <span class="badge bg-warning text-dark text-uppercase">Media</span>
+                        {% else %}
+                            <span class="badge bg-info text-dark text-uppercase">Baja</span>
+                        {% endif %}
+                    </div>
+                    <h5 class="card-title text-danger fw-bold mb-1">{{ d.banda }}</h5>
+                    <h6 class="card-subtitle text-light mb-3 italic">"{{ d.disco }}"</h6>
+                    <small class="text-muted d-block mb-3">Agregado: {{ d.fecha_alta.strftime('%d/%m/%Y') }}</small>
+
+                    <div class="d-flex justify-content-between align-items-center pt-2 border-top border-secondary">
+                        <form action="{{ url_for('main.toggle_deseo', id=d.id) }}" method="POST">
+                            <button type="submit" class="btn btn-outline-success btn-sm">
+                                <i class="bi bi-check-lg me-1"></i>¡Ya es mío!
+                            </button>
+                        </form>
+                        <form action="{{ url_for('main.eliminar_deseo', id=d.id) }}" method="POST" onsubmit="return confirm('¿Quitar de la wishlist?');">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-dark text-center border-secondary text-muted">
+                No hay discos en tu lista de deseos actualmente.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

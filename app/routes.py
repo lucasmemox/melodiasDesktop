@@ -1,9 +1,9 @@
 from datetime import datetime
-
+import random
 from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, Response, current_app, send_file
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
-from app.models import Usuario, Banda, Pais, Album, Formato, Genero, SelloDiscografico, Ubicacion, Pais
+from app.models import Usuario, Banda, Pais, Album, Formato, Genero, SelloDiscografico, Ubicacion, Pais, ListaDeseos
 from app import db
 import io, csv, os, time, requests,  uuid
 from sqlalchemy import func
@@ -15,6 +15,7 @@ from app.discogs_service import buscar_banda_discogs as service_buscar_banda_dis
 from urllib.parse import quote
 from PIL import Image
 from app.forms import FormatoForm, UbicacionForm, SelloDiscograficoForm, GeneroForm
+
 
 main_bp = Blueprint('main', __name__)
 
@@ -1133,3 +1134,138 @@ def api_cargar_mas_albumes(username):
         'has_next': pagination.has_next,
         'next_page': pagination.next_num
     })
+
+# -------------------------------------------------------------------
+# GESTIÓN DE LA LISTA DE DESEOS (ACTIVOS)
+# -------------------------------------------------------------------
+@main_bp.route('/deseos', methods=['GET'])
+@login_required
+def lista_deseos():
+    prioridad_filtro = request.args.get('prioridad', '')
+    formato_filtro = request.args.get('formato_id', type=int)
+    orden = request.args.get('orden', 'prioridad')  # 'prioridad', 'aleatorio', 'fecha'
+
+    # Consulta base: solo items que NO son míos
+    query = ListaDeseos.query.filter_by(usuario_id=current_user.id, es_mio=False)
+
+    if prioridad_filtro:
+        query = query.filter_by(prioridad=prioridad_filtro)
+    if formato_filtro:
+        query = query.filter_by(formato_id=formato_filtro)
+
+    deseos = query.all()
+
+    # Ordenamiento en Python
+    if orden == 'aleatorio':
+        random.shuffle(deseos)
+    elif orden == 'prioridad':
+        # Orden personalizado: Alta -> Media -> Baja
+        prioridad_order = {'Alta': 1, 'Media': 2, 'Baja': 3}
+        deseos.sort(key=lambda x: (prioridad_order.get(x.prioridad, 99), x.banda.lower(), x.disco.lower()))
+    elif orden == 'fecha':
+        deseos.sort(key=lambda x: x.fecha_alta, reverse=True)
+
+    # Cargar formatos principales para los filtros/desplegables
+    formatos_principales = Formato.query.filter(Formato.padre_id.is_(None)).order_by(Formato.nombre).all()
+
+    return render_template('deseos/index.html',
+                           deseos=deseos,
+                           formatos_principales=formatos_principales,
+                           prioridad_filtro=prioridad_filtro,
+                           formato_filtro=formato_filtro,
+                           orden=orden)
+
+
+@main_bp.route('/deseos/nuevo', methods=['POST'])
+@login_required
+def agregar_deseo():
+    banda = request.form.get('banda', '').strip()
+    disco = request.form.get('disco', '').strip()
+    formato_id = request.form.get('formato_id', type=int)
+    prioridad = request.form.get('prioridad', 'Media')
+
+    if not banda or not disco or not formato_id:
+        flash('Por favor completá los campos obligatorios.', 'danger')
+        return redirect(url_for('main.lista_deseos'))
+
+    nuevo_deseo = ListaDeseos(
+        usuario_id=current_user.id,
+        banda=banda,
+        disco=disco,
+        formato_id=formato_id,
+        prioridad=prioridad,
+        es_mio=False,
+        fecha_alta=datetime.utcnow()
+    )
+    db.session.add(nuevo_deseo)
+    db.session.commit()
+    flash(f'"{disco}" de {banda} se agregó a tu Lista de Deseos.', 'success')
+    return redirect(url_for('main.lista_deseos'))
+
+
+@main_bp.route('/deseos/toggle/<int:id>', methods=['POST'])
+@login_required
+def toggle_deseo(id):
+    deseo = ListaDeseos.query.filter_by(id=id, usuario_id=current_user.id).first_or_404()
+
+    # Invertir el estado es_mio
+    deseo.es_mio = not deseo.es_mio
+
+    if deseo.es_mio:
+        deseo.fecha_adquisicion = datetime.utcnow()
+        flash(f'¡Felicitaciones! "{deseo.disco}" pasó a la lista de Conseguidos.', 'success')
+        redireccionar_a = 'main.lista_deseos'
+    else:
+        deseo.fecha_adquisicion = None
+        flash(f'"{deseo.disco}" volvió a tu Lista de Deseos.', 'info')
+        redireccionar_a = 'main.deseos_conseguidos'
+
+    db.session.commit()
+
+    # Si viene un parámetro 'next', redirigir allí
+    next_page = request.args.get('next')
+    return redirect(next_page or url_for(redireccionar_a))
+
+
+@main_bp.route('/deseos/eliminar/<int:id>', methods=['POST'])
+@login_required
+def eliminar_deseo(id):
+    deseo = ListaDeseos.query.filter_by(id=id, usuario_id=current_user.id).first_or_404()
+    origen = 'deseos_conseguidos' if deseo.es_mio else 'main.lista_deseos'
+    db.session.delete(deseo)
+    db.session.commit()
+    flash('El registro fue eliminado de la lista.', 'warning')
+    return redirect(url_for(origen))
+
+
+# -------------------------------------------------------------------
+# ADMINISTRACIÓN DE DISCOS CONSEGUIDOS ("YA ES MÍO")
+# -------------------------------------------------------------------
+@main_bp.route('/deseos/conseguidos', methods=['GET'])
+@login_required
+def deseos_conseguidos():
+    conseguidos = ListaDeseos.query.filter_by(
+        usuario_id=current_user.id,
+        es_mio=True
+    ).order_by(ListaDeseos.fecha_adquisicion.desc()).all()
+
+    return render_template('deseos/conseguidos.html', conseguidos=conseguidos)
+
+
+# -------------------------------------------------------------------
+# EXPORTAR / VISTA IMPRIMIBLE PARA MÓVIL
+# -------------------------------------------------------------------
+@main_bp.route('/deseos/exportar', methods=['GET'])
+@login_required
+def exportar_deseos():
+    orden = request.args.get('orden', 'prioridad')
+    query = ListaDeseos.query.filter_by(usuario_id=current_user.id, es_mio=False)
+    deseos = query.all()
+
+    if orden == 'aleatorio':
+        random.shuffle(deseos)
+    elif orden == 'prioridad':
+        prioridad_order = {'Alta': 1, 'Media': 2, 'Baja': 3}
+        deseos.sort(key=lambda x: (prioridad_order.get(x.prioridad, 99), x.banda.lower(), x.disco.lower()))
+
+    return render_template('deseos/exportar_movil.html', deseos=deseos, orden=orden)
