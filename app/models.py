@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import text
 from app import db
 from flask_login import UserMixin
@@ -199,3 +201,32 @@ class Album(db.Model):
 
     def __repr__(self):
         return f'<Album {self.titulo} ({self.lanzamiento})>'
+
+
+class ListaDeseos(db.Model):
+    __tablename__ = 'lista_deseos'
+
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+
+    # Datos básicos del deseo
+    banda = db.Column(db.String(120), nullable=False)
+    disco = db.Column(db.String(150), nullable=False)
+
+    # Clave foránea al Formato Principal (Padre)
+    formato_id = db.Column(db.Integer, db.ForeignKey('formato.id'), nullable=False)
+
+    # Clasificación y Estados
+    prioridad = db.Column(db.String(10), nullable=False, default='Media')  # 'Alta', 'Media', 'Baja'
+    es_mio = db.Column(db.Boolean, default=False, nullable=False)
+
+    # Fechas
+    fecha_alta = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    fecha_adquisicion = db.Column(db.DateTime, nullable=True)
+
+    # Relaciones SQLAlchemy
+    usuario = db.relationship('Usuario', backref=db.backref('deseos', lazy=True))
+    formato = db.relationship('Formato', backref=db.backref('deseos', lazy=True))
+
+    def __repr__(self):
+        return f'<Deseo {self.banda} - {self.disco} ({self.formato.nombre if self.formato else "Sin Formato"})>'
