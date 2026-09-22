@@ -220,20 +220,35 @@
 
             {% if album and album.url_portada %}
                 <div class="mt-2 d-flex align-items-center gap-3">
-                    <img src="{{ album.url_portada if album.url_portada.startswith('http') else url_for('static', filename=album.url_portada) }}"
+                    <img src="{% if album.url_portada.startswith('http') %}{{ album.url_portada }}{% else %}{{ url_for('serve_cover_uploads', filename=album.url_portada) }}{% endif %}"
                         alt="Portada actual" class="img-thumbnail bg-dark border-secondary" style="width: 70px; height: 70px; object-fit: cover;">
                     <span class="small" style="color: #8a8d93 !important;">Portada actual</span>
                 </div>
             {% endif %}
         </div>
 
-        <!-- AÑO Y SELLO -->
-        <div class="row g-3 mb-3">
+        <!-- FILA 1: AÑO Y REEDICIÓN -->
+        <div class="row g-3 mb-3 align-items-end">
             <div class="col-md-6">
                 <label class="metal-label">Año de Lanzamiento</label>
                 <input type="number" id="inputAno" name="lanzamiento" class="metal-input" value="{{ album.lanzamiento if album else '' }}" placeholder="1991">
             </div>
 
+            <div class="col-md-6">
+                <div class="metal-subpanel d-flex align-items-center p-2 px-3" style="height: 42px;">
+                    <div class="form-check form-switch d-flex align-items-center gap-2 ps-0 mb-0 w-100">
+                        <input class="form-check-input ms-0 me-2" type="checkbox" role="switch" id="es_reedicion" name="es_reedicion" value="1"
+                            {% if album and album.es_reedicion %}checked{% endif %} style="width: 2.2em; height: 1.2em; cursor: pointer;">
+                        <label class="form-check-label fw-bold text-light small mb-0" for="es_reedicion" style="cursor: pointer;">
+                            <i class="bi bi-arrow-repeat text-danger me-1"></i> ¿Es una Reedición / Reissue?
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILA 2: SELLO DISCOGRÁFICO Y PRECIO -->
+        <div class="row g-3 mb-4">
             <!-- SELLO DISCOGRÁFICO -->
             <div class="col-md-6">
                 <label class="metal-label">Sello Discográfico</label>
@@ -245,6 +260,18 @@
                         </option>
                     {% endfor %}
                 </select>
+            </div>
+
+            <!-- PRECIO -->
+            <div class="col-md-6">
+                <label class="metal-label" for="inputPrecio">
+                    <i class="bi bi-currency-dollar text-danger me-1"></i> Precio / Valor
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary text-white-50 border-end-0" style="border-radius: 6px 0 0 6px;">$</span>
+                    <input type="number" step="0.01" min="0" id="inputPrecio" name="precio" class="metal-input flex-grow-1"
+                        value="{{ album.precio if album and album.precio is not none else '0.00' }}" placeholder="0.00" style="border-radius: 0 6px 6px 0; width: auto;">
+                </div>
             </div>
         </div>
 
@@ -341,6 +368,21 @@
 
 <!-- SCRIPT DE INTERACCIÓN -->
 <script>
+// LÓGICA MOSTRAR/OCULTAR AÑO ORIGINAL SEGÚN REEDICIÓN
+const switchReedicion = document.getElementById('es_reedicion');
+const contenedorAnioOriginal = document.getElementById('contenedorAnioOriginal');
+
+if (switchReedicion) {
+    switchReedicion.addEventListener('change', function() {
+        if (this.checked) {
+            contenedorAnioOriginal.classList.remove('d-none');
+        } else {
+            contenedorAnioOriginal.classList.add('d-none');
+            document.getElementById('inputAnioOriginal').value = '';
+        }
+    });
+}
+
 // 1. LÓGICA DE MOSTRAR SUBFORMATOS DINÁMICOS
 const radiosPadre = document.querySelectorAll('.radio-formato-padre');
 const contenedorSubformatos = document.getElementById('contenedorSubformatos');
