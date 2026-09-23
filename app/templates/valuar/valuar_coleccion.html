@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+
+{% block title %}Valuar Colección - Melodías{% endblock %}
+
+{% block content %}
+<style>
+    /* Estilos temáticos Metal */
+    .metal-card {
+        background-color: #1a1a1d;
+        border: 1px solid #33333b;
+        color: #e1e1e1;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+    .metal-header {
+        background: linear-gradient(180deg, #2b2b36 0%, #1a1a1d 100%);
+        border-bottom: 1px solid #444452;
+    }
+    .metal-input {
+        background-color: #0f0f12 !important;
+        border: 1px solid #33333b !important;
+        color: #00ff88 !important;
+        font-weight: bold;
+    }
+    .metal-input:focus {
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 5px rgba(220, 53, 69, 0.5) !important;
+    }
+    /* Estilo para el buscador de la cabecera */
+    .metal-search-input {
+        background-color: #0f0f12 !important;
+        border: 1px solid #33333b !important;
+        color: #ffffff !important;
+    }
+    .metal-search-input:focus {
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 5px rgba(220, 53, 69, 0.5) !important;
+    }
+    .table-metal {
+        --bs-table-bg: #1a1a1d;
+        --bs-table-color: #d1d1d1;
+        border-color: #2e2e38;
+    }
+    .table-metal th {
+        background-color: #121215;
+        color: #dc3545;
+        border-bottom: 2px solid #dc3545;
+    }
+</style>
+
+<div class="container-fluid px-0">
+    <!-- TITULO Y ACCIONES -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white fw-bold m-0 d-flex align-items-center gap-2">
+            <i class="bi bi-calculator text-danger"></i> Valuación de la Colección
+        </h2>
+    </div>
+
+    <!-- TARJETAS DE RESUMEN METÁLICAS -->
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-md-4">
+            <div class="card metal-card text-center p-3">
+                <div class="text-white small text-uppercase fw-bold">Total Álbumes</div>
+                <div class="fs-2 fw-bold text-light" id="statTotalAlbumes">{{ stats_valuacion.total_albumes }}</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="card metal-card text-center p-3 border-danger">
+                <div class="text-danger small text-uppercase fw-bold">Valor Total Colección</div>
+                <div class="fs-2 fw-bold text-success" id="statValorTotal">$ {{ "%.2f"|format(stats_valuacion.valor_total) }}</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="card metal-card text-center p-3">
+                <div class="text-warning small text-uppercase fw-bold">Sin Precio Asignado</div>
+                <div class="fs-2 fw-bold text-warning" id="statSinPrecio">{{ stats_valuacion.sin_precio }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORMULARIO TABLA DE VALUACIÓN -->
+    <form method="POST" action="{{ url_for('main.valuar_coleccion') }}">
+        <div class="card metal-card overflow-hidden">
+            <!-- CABECERA DE LA TARJETA CON BUSCADOR -->
+            <div class="card-header metal-header d-flex flex-wrap justify-content-between align-items-center gap-2 py-3">
+                <div class="d-flex align-items-center gap-3 flex-grow-1" style="max-width: 500px;">
+                    <span class="text-white fw-bold text-nowrap">
+                        <i class="bi bi-disc me-2"></i>Listado de Discos
+                    </span>
+                    <!-- CAMPO DE BÚSQUEDA DINÁMICA -->
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-dark border-secondary text-secondary">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" id="inputBuscadorDiscos" class="form-control metal-search-input"
+                               placeholder="Buscar por álbum o banda..." onkeyup="filtrarTablaDiscos()">
+                    </div>
+                </div>
+
+                <!-- BOTÓN GUARDAR CAMBIOS -->
+                <button type="submit" class="btn btn-danger fw-bold px-4">
+                    <i class="bi bi-floppy me-1"></i> Guardar Cambios
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-metal table-hover align-middle mb-0" id="tablaValuacion">
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">Portada</th>
+                            <th>Álbum / Banda</th>
+                            <th>Formato</th>
+                            <th style="width: 140px;">Disponible</th>
+                            <th style="width: 180px;">Precio ($)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for album in albumes %}
+                        <tr class="fila-album">
+                            <!-- Portada -->
+                            <td>
+                                {% if album.url_portada %}
+                                    <img src="{% if album.url_portada.startswith('http') %}{{ album.url_portada }}{% else %}{{ url_for('serve_cover_uploads', filename=album.url_portada) }}{% endif %}"
+                                         alt="{{ album.titulo }}" class="rounded border border-secondary" style="width: 48px; height: 48px; object-fit: cover;">
+                                {% else %}
+                                    <div class="bg-dark rounded border border-secondary d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                        <i class="bi bi-disc text-secondary fs-4"></i>
+                                    </div>
+                                {% endif %}
+                            </td>
+
+                            <!-- Información Álbum / Banda -->
+                            <td class="col-info-album">
+                                <div class="fw-bold text-white">{{ album.titulo }}</div>
+                                <div class="small text-muted">{{ album.banda.nombre }} {% if album.lanzamiento %}({{ album.lanzamiento }}){% endif %}</div>
+                            </td>
+
+                            <!-- Formato -->
+                            <td>
+                                {% if album.formatos %}
+                                    {% for fmt in album.formatos %}
+                                        <span class="badge bg-secondary">{{ fmt.nombre }}</span>
+                                    {% endfor %}
+                                {% else %}
+                                    <span class="text-muted small">N/A</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Estado Disponibilidad (Switch) -->
+                            <td>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input switch-disponible" type="checkbox" role="switch"
+                                           id="disp_{{ album.id }}" name="disponible_{{ album.id }}"
+                                           {% if album.disponible %}checked{% endif %}
+                                           onchange="actualizarEstadisticasEnvivo()">
+                                    <label class="form-check-label small text-muted" for="disp_{{ album.id }}">
+                                        Disponible
+                                    </label>
+                                </div>
+                            </td>
+
+                            <!-- Campo Precio -->
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-dark border-secondary text-secondary">$</span>
+                                    <input type="number" step="0.01" min="0" class="form-control metal-input input-precio"
+                                           name="precio_{{ album.id }}" value="{{ '%.2f'|format(album.precio) if album.precio else '' }}"
+                                           placeholder="0.00" oninput="actualizarEstadisticasEnvivo()">
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">
+                                No se encontraron álbumes en tu colección.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- SCRIPTS: BÚSQUEDA DINÁMICA Y RECÁLCULO -->
+<script>
+function filtrarTablaDiscos() {
+    const input = document.getElementById('inputBuscadorDiscos');
+    const filtro = input.value.toLowerCase().trim();
+    const filas = document.querySelectorAll('#tablaValuacion tbody tr.fila-album');
+
+    filas.forEach(fila => {
+        const colInfo = fila.querySelector('.col-info-album');
+        if (colInfo) {
+            const texto = colInfo.textContent || colInfo.innerText;
+            if (texto.toLowerCase().indexOf(filtro) > -1) {
+                fila.style.display = '';
+            } else {
+                fila.style.display = 'none';
+            }
+        }
+    });
+}
+
+function actualizarEstadisticasEnvivo() {
+    const filas = document.querySelectorAll('#tablaValuacion tbody tr.fila-album');
+    let totalValor = 0;
+    let contadorSinPrecio = 0;
+
+    filas.forEach(fila => {
+        const inputPrecio = fila.querySelector('.input-precio');
+        const switchDisp = fila.querySelector('.switch-disponible');
+
+        if (inputPrecio && switchDisp) {
+            const val = parseFloat(inputPrecio.value);
+            const estaDisponible = switchDisp.checked;
+
+            if (!isNaN(val) && val > 0) {
+                if (estaDisponible) {
+                    totalValor += val;
+                }
+            } else {
+                contadorSinPrecio++;
+            }
+        }
+    });
+
+    document.getElementById('statValorTotal').innerText = '$ ' + totalValor.toFixed(2);
+    document.getElementById('statSinPrecio').innerText = contadorSinPrecio;
+}
+</script>
+{% endblock %}

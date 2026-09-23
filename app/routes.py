@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from app.models import Usuario, Banda, Pais, Album, Formato, Genero, SelloDiscografico, Ubicacion, Pais, ListaDeseos
 from app import db
 import io, csv, os, time, requests,  uuid
-from sqlalchemy import func
+from sqlalchemy import case, func, or_
 from sqlalchemy.orm import joinedload, selectinload
 from app.utils import guardar_logo_banda, guardar_portada_album
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -1269,3 +1269,67 @@ def exportar_deseos():
         deseos.sort(key=lambda x: (prioridad_order.get(x.prioridad, 99), x.banda.lower(), x.disco.lower()))
 
     return render_template('deseos/exportar_movil.html', deseos=deseos, orden=orden)
+
+# ==========================================
+# SECCIÓN: VALUAR COLECCIÓN DEL USUARIO
+# ==========================================
+
+@main_bp.route('/valuar', methods=['GET', 'POST'])
+@login_required
+def valuar_coleccion():
+    if request.method == 'POST':
+        # Recorremos todos los elementos enviados desde el formulario
+        for key, value in request.form.items():
+            if key.startswith('precio_'):
+                album_id = int(key.split('_')[1])
+                album = Album.query.get(album_id)
+                if album and album.banda.usuario_id == current_user.id:
+                    # Actualizar precio (si está vacío guarda 0.0)
+                    try:
+                        album.precio = float(value) if value.strip() != '' else 0.0
+                    except ValueError:
+                        album.precio = 0.0
+
+                    # Actualizar disponibilidad
+                    disp_key = f'disponible_{album_id}'
+                    album.disponible = disp_key in request.form
+
+        db.session.commit()
+        flash('Valuación y estado de la colección actualizados correctamente.', 'success')
+        return redirect(url_for('main.valuar_coleccion'))
+
+    # Criterio para ordenar:
+    # Si precio es None o <= 0 devuelve 0 (primero), de lo contrario 1 (después).
+    sin_precio_primeros = case(
+        (or_(Album.precio == None, Album.precio <= 0), 0),
+        else_=1
+    )
+
+    # Cargar todos los álbumes ordenados:
+    # 1º Sin precio primero
+    # 2º Por Nombre de la Banda (Ascendente)
+    # 3º Por Título del Álbum (Ascendente)
+    albumes = Album.query.join(Banda).filter(
+        Banda.usuario_id == current_user.id
+    ).order_by(
+        sin_precio_primeros,
+        Banda.nombre.asc(),
+        Album.titulo.asc()
+    ).all()
+
+    # Cálculos para las tarjetas de resumen
+    total_albumes = len(albumes)
+    # Solo suma el precio si tiene precio > 0 Y ADEMÁS está disponible
+    valor_total = sum(
+        album.precio for album in albumes
+        if album.precio and album.precio > 0 and album.disponible
+    )
+    sin_precio = sum(1 for album in albumes if not album.precio or album.precio <= 0)
+
+    stats_valuacion = {
+        'total_albumes': total_albumes,
+        'valor_total': valor_total,
+        'sin_precio': sin_precio
+    }
+
+    return render_template('/valuar/valuar_coleccion.html', albumes=albumes, stats_valuacion=stats_valuacion)
