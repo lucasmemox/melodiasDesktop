@@ -34,20 +34,26 @@ def get_bundle_dir():
 def init_default_user():
     """Crea el usuario 'coleccionista' (ID 1) si no existe."""
     from app.models import Usuario
+    from sqlalchemy.exc import OperationalError
 
-    user = db.session.get(Usuario, 1)
-    if not user:
-        usuario_local = Usuario(
-            id=1,
-            username='coleccionista',
-            email='local@melodias.app',
-            nombre='Usuario',
-            apellido='Local',
-            es_admin=True
-        )
-        usuario_local.set_password('metal123')
-        db.session.add(usuario_local)
-        db.session.commit()
+    try:
+        user = db.session.get(Usuario, 1)
+        if not user:
+            usuario_local = Usuario(
+                id=1,
+                username='coleccionista',
+                email='local@melodias.app',
+                nombre='Usuario',
+                apellido='Local',
+                es_admin=True
+            )
+            usuario_local.set_password('metal123')
+            db.session.add(usuario_local)
+            db.session.commit()
+    except OperationalError:
+        # Si la tabla o una columna no existen (como en las migraciones),
+        # hacemos un rollback y dejamos pasar el error.
+        db.session.rollback()
 
 
 def poblar_desde_json():

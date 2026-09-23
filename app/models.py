@@ -100,6 +100,7 @@ class Usuario(UserMixin, db.Model):
     telefono = db.Column(db.String(20), nullable=True)
     descripcion = db.Column(db.String(255), nullable=True)
     direccion = db.Column(db.String(255), nullable=True)
+    discogs_token = db.Column(db.String(255), nullable=True)
 
     password_hash = db.Column(db.String(255), nullable=False)
     url_avatar = db.Column(db.String(255), nullable=True)
