@@ -1,12 +1,11 @@
 import discogs_client, re
 from flask import current_app
 from app.utils import obtener_pais_id, obtener_pais_desde_releases
+from flask_login import current_user
 
 def buscar_disco_discogs(query_texto):
-    user_agent = current_app.config.get('DISCOGS_USER_AGENT', 'MelodiasMetalCatalog/1.0')
-    token = current_app.config.get('DISCOGS_TOKEN')
-
-    d = discogs_client.Client(user_agent, user_token=token)
+    # Reemplazamos la creación manual por el helper que resuelve el token del usuario o el genérico
+    d = get_discogs_client()
 
     digitos = ''.join(filter(str.isdigit, query_texto))
 
@@ -30,7 +29,7 @@ def buscar_disco_discogs(query_texto):
                 sello_nombre = release.labels[0].name
                 catno = getattr(release.labels[0], 'catno', '')
 
-            # Extraer los formatos devueltos por Discogs (ej: 'CD', 'Vinyl', 'Cassette')
+            # Extraer formatos devueltos por Discogs
             formatos_list = []
             if hasattr(release, 'formats') and release.formats:
                 for fmt in release.formats:
@@ -39,6 +38,7 @@ def buscar_disco_discogs(query_texto):
                     elif hasattr(fmt, 'name'):
                         formatos_list.append(fmt.name)
 
+            # Priorizar imagen HD, de lo contrario usar thumb
             portada_hd = ''
             if hasattr(release, 'images') and release.images:
                 portada_hd = release.images[0].get('resource_url', '')
@@ -50,10 +50,9 @@ def buscar_disco_discogs(query_texto):
                 'titulo': release.title,
                 'ano': getattr(release, 'year', None),
                 'sello': sello_nombre,
-                'portada': getattr(release, 'thumb', ''),
                 'portada': portada_hd,
                 'catno': catno,
-                'formatos': formatos_list # Contiene ej: ['CD', 'Album'] o ['Vinyl']
+                'formatos': formatos_list
             })
             contador += 1
 
@@ -66,8 +65,14 @@ def buscar_disco_discogs(query_texto):
 
 def get_discogs_client():
     user_agent = current_app.config.get('DISCOGS_USER_AGENT', 'MelodiasMetalCatalog/1.0')
-    token = current_app.config.get('DISCOGS_TOKEN')
-    return discogs_client.Client(user_agent, user_token=token)
+
+    # 1. Buscar si el usuario local tiene guardado su token personalizado
+    token_usuario = getattr(current_user, 'discogs_token', None) if current_user and current_user.is_authenticated else None
+
+    # 2. Si el usuario guardó un token no vacío, lo usamos. Si no, usamos el tuyo por defecto desde config.
+    token_final = token_usuario.strip() if (token_usuario and token_usuario.strip()) else current_app.config.get('DISCOGS_TOKEN')
+
+    return discogs_client.Client(user_agent, user_token=token_final)
 
 def buscar_banda_discogs(query_texto):
     """Búsqueda inicial limpia de artistas sin sobrecargar la API."""

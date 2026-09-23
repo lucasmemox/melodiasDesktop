@@ -3,113 +3,293 @@
 {% block title %}Perfil de Usuario - Melodías{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-dark text-white py-3">
-                <h4 class="mb-0 fw-bold fs-5">
-                    <i class="bi bi-person-gear me-2"></i>Perfil de Usuario
-                </h4>
-            </div>
-            <div class="card-body p-4">
-                <form method="POST" enctype="multipart/form-data">
+<style>
+    /* Tarjeta Metálica Principal */
+    .metal-card {
+        max-width: 680px;
+        margin: 30px auto;
+        padding: 30px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #2c2d30 0%, #18191b 50%, #101113 100%);
+        border: 1px solid #3d3e42;
+        box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.8),
+            inset 0 1px 1px rgba(255, 255, 255, 0.15),
+            inset 0 -1px 2px rgba(0, 0, 0, 0.8);
+    }
 
-                    <!-- VISTA PREVIA DEL LOGO DE LA MARCA/DISQUERÍA -->
-                    <div class="mb-4">
-                        <label class="form-label fw-bold">Logo de la Disquería / Marca</label>
+    /* Sub-tarjetas internas (Buscador y contenedores) */
+    .metal-subpanel {
+        background-color: #121315;
+        border: 1px solid #2a2c30;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.7);
+    }
 
-                        <!-- Caja de previsualización en fondo oscuro para apreciar transparencias -->
-                        <div class="mb-2 p-3 bg-dark rounded border border-secondary text-center d-flex align-items-center justify-content-center" style="min-height: 100px;">
+    /* Título Metálico */
+    .metal-title {
+        color: #c5beba;
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        font-size: 1.6rem;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        text-shadow:
+            0px 2px 3px rgba(0, 0, 0, 0.9),
+            0px -1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .metal-label {
+        color: #b0b3b8;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    /* Inputs y Selects */
+    .metal-input, .metal-select {
+        width: 100%;
+        padding: 10px 14px;
+        background-color: #121315;
+        border: 1px solid #333539;
+        border-radius: 6px;
+        color: #e0e0e0;
+        font-size: 0.9rem;
+        box-shadow:
+            inset 0 2px 4px rgba(0, 0, 0, 0.8),
+            0 1px 0 rgba(255, 255, 255, 0.05);
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .metal-input::placeholder {
+        color: #55585f !important;
+        opacity: 1 !important;
+    }
+
+    .metal-input:focus, .metal-select:focus {
+        border-color: #7a1d1d;
+        box-shadow:
+            inset 0 2px 4px rgba(0, 0, 0, 0.9),
+            0 0 6px rgba(168, 32, 32, 0.4);
+    }
+
+    .metal-input:disabled {
+        background-color: #0a0b0c !important;
+        color: #55585f !important;
+        border-color: #222326 !important;
+    }
+
+    /* Botón Rojo */
+    .metal-btn-red {
+        padding: 10px 20px;
+        border-radius: 6px;
+        border: 1px solid #5a1212;
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%);
+        color: #e6dad6;
+        font-weight: bold;
+        font-size: 0.95rem;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.8);
+        box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.6),
+            inset 0 1px 1px rgba(255, 255, 255, 0.25),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.4);
+        transition: filter 0.15s, transform 0.1s;
+    }
+
+    .metal-btn-red:hover {
+        filter: brightness(1.15);
+        color: #fff;
+    }
+
+    .metal-btn-red:active {
+        transform: translateY(1px);
+    }
+
+    /* Botón Secundario (Volver / Cancelar) */
+    .metal-btn-secondary {
+        padding: 10px 20px;
+        border-radius: 6px;
+        border: 1px solid #3d3e42;
+        background: linear-gradient(180deg, #252629 0%, #151618 100%);
+        color: #b0b3b8;
+        font-weight: bold;
+        font-size: 0.95rem;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.5),
+            inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .metal-btn-secondary:hover {
+        background: #2e3034;
+        color: #fff;
+    }
+
+    .form-text-metal {
+        color: #71747c !important;
+        font-size: 0.8rem;
+        margin-top: 4px;
+    }
+
+    .metal-hr {
+        border-top: 1px solid #2d2f34;
+        margin: 25px 0;
+        opacity: 1;
+    }
+</style>
+
+<div class="metal-card">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h2 class="metal-title m-0">
+            <i class="bi bi-person-gear text-danger me-2"></i>Perfil de Usuario
+        </h2>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <!-- BRANDING Y MARCA -->
+        <div class="mb-4">
+            <label class="metal-label">Identidad Visual & Marca</label>
+
+            <div class="row g-3">
+                <!-- LOGO DISQUERÍA -->
+                <div class="col-12 col-md-6">
+                    <div class="metal-subpanel text-center">
+                        <label class="metal-label text-start mb-2">Logo Disquería</label>
+                        <div class="d-flex align-items-center justify-content-center mb-3" style="min-height: 90px; background-color: #0b0c0d; border-radius: 6px; border: 1px dashed #2a2c30;">
                             {% if current_user.url_avatar %}
                                 <img src="{{ url_for('static', filename=current_user.url_avatar) }}"
                                      alt="Logo {{ current_user.nickname or current_user.username }}"
-                                     style="max-height: 80px; width: auto; object-fit: contain;">
+                                     style="max-height: 70px; width: auto; object-fit: contain;">
                             {% else %}
-                                <div class="text-white-50 text-center py-2">
-                                    <i class="bi bi-image fs-2 d-block mb-1"></i>
-                                    <span class="small">Sin logo cargado</span>
+                                <div class="text-muted text-center py-2">
+                                    <i class="bi bi-image fs-3 d-block mb-1"></i>
+                                    <span class="small">Sin logo</span>
                                 </div>
                             {% endif %}
                         </div>
-
-                        <input type="file" name="avatar" class="form-control form-control-sm" accept="image/png, image/webp, image/jpeg">
-                        <div class="form-text">Subí una imagen rectangular en formato PNG o WEBP con fondo transparente.</div>
+                        <input type="file" name="avatar" class="metal-input form-control-sm" accept="image/png, image/webp, image/jpeg">
+                        <div class="form-text-metal text-start">PNG o WEBP (Fondo transparente).</div>
                     </div>
+                </div>
 
-                    <!-- VISTA PREVIA E INPUT IMAGEN DEL FOOTER -->
-                    <div class="mb-4">
-                        <label class="form-label fw-bold">Imagen del Banner / Pie de Página (Footer)</label>
-
-                        <!-- Previsualización en formato apaisado (Banner) -->
-                        <div class="mb-2 p-3 bg-dark rounded border border-secondary text-center d-flex align-items-center justify-content-center" style="min-height: 120px;">
+                <!-- BANNER / FOOTER -->
+                <div class="col-12 col-md-6">
+                    <div class="metal-subpanel text-center">
+                        <label class="metal-label text-start mb-2">Banner Pie de Página</label>
+                        <div class="d-flex align-items-center justify-content-center mb-3" style="min-height: 90px; background-color: #0b0c0d; border-radius: 6px; border: 1px dashed #2a2c30;">
                             {% if current_user.url_footer %}
                                 <img src="{{ url_for('static', filename=current_user.url_footer) }}"
-                                     alt="Banner Footer {{ current_user.nickname or current_user.username }}"
-                                     class="img-fluid rounded" style="max-height: 100px; object-fit: contain;">
+                                     alt="Banner {{ current_user.nickname or current_user.username }}"
+                                     class="img-fluid" style="max-height: 70px; object-fit: contain;">
                             {% else %}
-                                <div class="text-white-50 text-center py-2">
-                                    <i class="bi bi-layout-side-by-side fs-2 d-block mb-1"></i>
-                                    <span class="small">Sin imagen de footer cargada</span>
+                                <div class="text-muted text-center py-2">
+                                    <i class="bi bi-layout-side-by-side fs-3 d-block mb-1"></i>
+                                    <span class="small">Sin banner</span>
                                 </div>
                             {% endif %}
                         </div>
-
-                        <input type="file" name="footer_img" class="form-control form-control-sm" accept="image/png, image/webp, image/jpeg">
-                        <div class="form-text">Imagen horizontal panorámica que se desplegará al pie de tu catálogo público.</div>
+                        <input type="file" name="footer_img" class="metal-input form-control-sm" accept="image/png, image/webp, image/jpeg">
+                        <div class="form-text-metal text-start">Imagen panorámica para pie del catálogo.</div>
                     </div>
-
-                    <!-- DATOS PERSONALES -->
-                    <div class="mb-3">
-                        <label class="form-label text-muted small fw-bold">Usuario</label>
-                        <input type="text" class="form-control bg-light" value="{{ current_user.username }}" disabled>
-                        <div class="form-text">El nombre de usuario no se puede cambiar.</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Nickname / Nombre Comercial</label>
-                        <input type="text" name="nickname" class="form-control" value="{{ current_user.nickname or current_user.username }}" required>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label fw-bold">Correo Electrónico</label>
-                        <input type="email" name="email" class="form-control" value="{{ current_user.email }}" required>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <!-- SECCIÓN CAMBIO DE CONTRASEÑA -->
-                    <div class="mb-3">
-                        <h6 class="fw-bold text-danger mb-3">
-                            <i class="bi bi-shield-lock me-1"></i> Cambiar Contraseña (Opcional)
-                        </h6>
-                        <p class="text-muted small">Dejá estos campos en blanco si no querés modificar tu contraseña actual.</p>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Contraseña Actual</label>
-                        <input type="password" name="current_password" class="form-control" placeholder="••••••••">
-                    </div>
-
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Nueva Contraseña</label>
-                            <input type="password" name="new_password" class="form-control" placeholder="••••••••">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Confirmar Nueva Contraseña</label>
-                            <input type="password" name="confirm_password" class="form-control" placeholder="••••••••">
-                        </div>
-                    </div>
-
-                    <!-- BOTONES DE ACCIÓN -->
-                    <div class="d-flex justify-content-between align-items-center pt-2">
-                        <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary">Cancelar</a>
-                        <button type="submit" class="btn btn-primary px-4">Guardar Cambios</button>
-                    </div>
-
-                </form>
+                </div>
             </div>
         </div>
-    </div>
+
+        <div class="metal-hr"></div>
+
+        <!-- DATOS DE LA CUENTA -->
+        <div class="mb-4">
+            <label class="metal-label mb-3" style="color: #c5beba;">Datos Personales</label>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="metal-label">Usuario Local</label>
+                    <input type="text" class="metal-input" value="{{ current_user.username }}" disabled>
+                    <div class="form-text-metal">El usuario no se puede modificar.</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="metal-label">Nickname / Marca</label>
+                    <input type="text" name="nickname" class="metal-input" value="{{ current_user.nickname or current_user.username }}" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="metal-label">Correo Electrónico</label>
+                <input type="email" name="email" class="metal-input" value="{{ current_user.email }}" required>
+            </div>
+        </div>
+
+        <div class="metal-hr"></div>
+
+        <!-- INTEGRACIÓN DISCOGS -->
+        <div class="mb-4">
+            <label class="metal-label mb-2" style="color: #c5beba;">
+                <i class="bi bi-disc text-danger me-1"></i> Configuración de Discogs
+            </label>
+
+            <div class="metal-subpanel">
+                <label class="metal-label">Token Personal de Discogs (Opcional)</label>
+                <input type="password" name="discogs_token" class="metal-input"
+                       value="{{ current_user.discogs_token or '' }}"
+                       placeholder="Ingresá tu Personal Access Token de Discogs">
+                <div class="form-text-metal mt-2">
+                    Si no ingresás ningún token, se usará la clave genérica de la app. Podés generar el tuyo gratis en
+                    <a href="https://www.discogs.com/settings/developers" target="_blank" style="color: #a82020; text-decoration: none; font-weight: bold;">
+                        Discogs Developers <i class="bi bi-box-arrow-up-right small"></i>
+                    </a>.
+                </div>
+            </div>
+        </div>
+
+        <div class="metal-hr"></div>
+
+        <!-- CAMBIO DE CONTRASEÑA -->
+        <div class="mb-4">
+            <label class="metal-label mb-1" style="color: #c5beba;">
+                <i class="bi bi-shield-lock me-1"></i> Segurar y Contraseña
+            </label>
+            <div class="form-text-metal mb-3">Dejá estos campos en blanco si no querés cambiar tu contraseña.</div>
+
+            <div class="mb-3">
+                <label class="metal-label">Contraseña Actual</label>
+                <input type="password" name="current_password" class="metal-input" placeholder="••••••••">
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="metal-label">Nueva Contraseña</label>
+                    <input type="password" name="new_password" class="metal-input" placeholder="••••••••">
+                </div>
+                <div class="col-md-6">
+                    <label class="metal-label">Confirmar Nueva Contraseña</label>
+                    <input type="password" name="confirm_password" class="metal-input" placeholder="••••••••">
+                </div>
+            </div>
+        </div>
+
+        <div class="metal-hr"></div>
+
+        <!-- BOTONES DE ACCIÓN -->
+        <div class="d-flex justify-content-between align-items-center pt-2">
+            <a href="{{ url_for('main.index') }}" class="metal-btn-secondary">
+                Cancelar
+            </a>
+            <button type="submit" class="metal-btn-red">
+                <i class="bi bi-floppy me-1"></i> Guardar Cambios
+            </button>
+        </div>
+
+    </form>
 </div>
 {% endblock %}

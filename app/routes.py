@@ -642,6 +642,10 @@ def perfil():
         current_user.nickname = nickname
         current_user.email = email
 
+        # Guardar Token Personal de Discogs
+        discogs_token = request.form.get('discogs_token')
+        current_user.discogs_token = discogs_token.strip() if discogs_token else None
+        
         # Lógica de cambio de contraseña si el usuario completó algún campo
         if current_password or new_password or confirm_password:
             if not current_password or not new_password or not confirm_password:
