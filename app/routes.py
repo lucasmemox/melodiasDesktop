@@ -85,12 +85,11 @@ def api_buscar_bandas():
 def detalle_banda(id):
     # Carga la banda filtrada por el usuario junto con sus álbumes, sellos y ubicaciones
     banda = Banda.query.options(
-        joinedload(Banda.albumes).joinedload(Album.ubicacion),
-        joinedload(Banda.albumes).joinedload(Album.sello)
+        joinedload(Banda.albumes.and_(Album.disponible.is_(True))).joinedload(Album.ubicacion),
+                joinedload(Banda.albumes.and_(Album.disponible.is_(True))).joinedload(Album.sello)
     ).filter_by(id=id, usuario_id=current_user.id).first_or_404()
 
     return render_template('detalle_banda.html', banda=banda)
-
 
 @main_bp.route('/banda/nueva', methods=['GET', 'POST'])
 @login_required
@@ -517,7 +516,7 @@ def ver_coleccion():
     pais_id = request.args.get('pais_id', type=int)
 
     # Base Query: Álbumes del usuario actual
-    query = Album.query.join(Banda).filter(Album.usuario_id == current_user.id)
+    query = Album.query.join(Banda).filter(Album.usuario_id == current_user.id, Album.disponible.is_(True))
 
     # Búsqueda por Texto (Afecta tanto al nombre de la Banda como al Título del Álbum)
     if q:
@@ -645,7 +644,7 @@ def perfil():
         # Guardar Token Personal de Discogs
         discogs_token = request.form.get('discogs_token')
         current_user.discogs_token = discogs_token.strip() if discogs_token else None
-        
+
         # Lógica de cambio de contraseña si el usuario completó algún campo
         if current_password or new_password or confirm_password:
             if not current_password or not new_password or not confirm_password:
