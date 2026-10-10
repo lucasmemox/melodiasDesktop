@@ -576,6 +576,25 @@ def ver_coleccion():
         }
     )
 
+@main_bp.route('/coleccion/no-disponibles')
+@login_required
+def ver_no_disponibles():
+    # Consulta exclusiva para álbumes no disponibles del usuario actual
+    query = Album.query.join(Banda).filter(
+        Album.usuario_id == current_user.id,
+        Album.disponible.is_(False) # O Album.disponible == 0
+    )
+
+    # Ordenar por nombre de banda y título
+    albumes = query.order_by(Banda.nombre.asc(), Album.titulo.asc()).all()
+
+    # Opciones para mantener la misma estructura visual si quieres reusar o adaptar filtros
+    return render_template(
+        'no_disponibles.html',
+        albumes=albumes,
+        filtros_acti={}
+    )
+
 # ==========================================
 # SECCIÓN: API DISCOS / BANDAS
 # ========================================

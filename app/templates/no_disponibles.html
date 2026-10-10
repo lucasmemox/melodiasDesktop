@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block title %} Discos No Disponibles / Fuera de Stock {% endblock %}
+
+{% block content %}
+<style>
+    /* Titular Principal */
+    .metal-header-title {
+        color: #e0e0e0;
+        font-family: 'Impact', 'Arial Black', sans-serif;
+        font-size: 2.2rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Tarjetas Metálicas de No Disponibles (tono más apagado/alerta) */
+    .metal-card-inactive {
+        background: linear-gradient(135deg, #1f2023 0%, #111214 50%, #08090a 100%);
+        border: 1px solid #5a1212;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        opacity: 0.85;
+        transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .metal-card-inactive:hover {
+        opacity: 1;
+        transform: translateY(-3px);
+    }
+
+    .metal-media-box {
+        background-color: #0c0c0e;
+        border-bottom: 1px solid #2a2c30;
+    }
+
+    .metal-badge {
+        background: linear-gradient(180deg, #1f2023 0%, #111214 100%);
+        color: #b0b3b8;
+        border: 1px solid #3d3e42;
+        font-size: 0.75rem;
+        padding: 3px 8px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+    .metal-badge-red {
+        background: linear-gradient(180deg, #8b1d1d 0%, #580e0e 100%);
+        color: #f0e6e6;
+        border: 1px solid #6b1818;
+        font-size: 0.75rem;
+        padding: 3px 8px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+    .metal-btn-secondary {
+        padding: 6px 16px;
+        border-radius: 6px;
+        border: 1px solid #3d3e42;
+        background: linear-gradient(180deg, #252629 0%, #151618 100%);
+        color: #b0b3b8;
+        font-weight: bold;
+        font-size: 0.85rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .metal-btn-secondary:hover {
+        background: #2e3034;
+        color: #fff;
+    }
+</style>
+
+<div class="container-fluid mt-2">
+
+    <!-- Encabezado de Sección -->
+    <div class="d-flex align-items-center justify-content-between w-100 mb-4">
+        <div>
+            <h2 class="metal-header-title mb-0 d-flex align-items-center gap-2">
+                <i class="bi bi-eye-slash-fill text-danger fs-2"></i> Discos No Disponibles / Fuera de Stock
+            </h2>
+            <p class="text-muted small mt-1 mb-0">Gestión de álbumes vendidos, perdidos o pausados de tu colección activa.</p>
+        </div>
+        <!-- Botón para volver a la Colección principal -->
+        <a href="{{ url_for('main.ver_coleccion') }}" class="btn metal-btn-secondary text-nowrap">
+            <i class="bi bi-arrow-left me-1"></i> Volver a Mi Colección
+        </a>
+    </div>
+
+    <!-- Lista/Grilla de Álbumes No Disponibles -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        {% for album in albumes %}
+            <div class="col">
+                <div class="card h-100 metal-card-inactive overflow-hidden">
+
+                    <!-- PORTADA / FALLBACK CON ETIQUETA FLOTANTE -->
+                    <div class="ratio ratio-1x1 metal-media-box p-2 position-relative overflow-hidden">
+
+                        <!-- Etiqueta superior de alerta -->
+                        <div class="position-absolute top-0 start-0 m-2" style="z-index: 5;">
+                            <span class="badge bg-danger text-uppercase shadow px-2 py-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                                <i class="bi bi-exclamation-triangle-fill me-1"></i> Fuera de stock
+                            </span>
+                        </div>
+
+                        <a href="{{ url_for('main.editar_album', id=album.id) }}" class="d-block w-100 h-100 text-decoration-none" title="Editar / Reactivar disco">
+                            {% if album.url_portada %}
+                                {% if album.url_portada.startswith('http://') or album.url_portada.startswith('https://') %}
+                                    <img src="{{ album.url_portada }}" class="card-img-top w-100 h-100 opacity-75" style="object-fit: contain;" alt="{{ album.titulo }}">
+                                {% elif album.url_portada.startswith('uploads/') or album.url_portada.startswith('static/') %}
+                                    <img src="{{ url_for('static', filename=album.url_portada.replace('static/', '')) }}" class="card-img-top w-100 h-100 opacity-75" style="object-fit: contain;" alt="{{ album.titulo }}">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='uploads/covers/' + album.url_portada) }}" class="card-img-top w-100 h-100 opacity-75" style="object-fit: contain;" alt="{{ album.titulo }}">
+                                {% endif %}
+                            {% else %}
+                                <div class="d-flex align-items-center justify-content-center h-100 text-secondary opacity-50">
+                                    <i class="bi bi-vinyl fs-1"></i>
+                                </div>
+                            {% endif %}
+                        </a>
+                    </div>
+
+                    <!-- CUERPO DE LA TARJETA -->
+                    <div class="card-body d-flex flex-column p-3">
+                        <h5 class="card-title text-light fw-bold mb-1 text-truncate" style="font-size: 1.1rem;">{{ album.titulo }}</h5>
+                        <p class="card-text small mb-3 text-truncate" style="color: #a0a4ab;">
+                            {{ album.banda.nombre }} <span style="color: #6c7078;">({{ album.lanzamiento or 'S/A' }})</span>
+                        </p>
+
+                        <!-- UBICACIÓN ANTERIOR O NOTAS -->
+                        <div class="mb-2">
+                            <small class="d-block mb-1 fw-semibold" style="font-size: 0.72rem; color: #6c7078; letter-spacing: 0.5px;">
+                                NOTAS / ESTADO:
+                            </small>
+                            <span class="text-muted small text-truncate d-block">
+                                {{ album.notas or 'Sin notas adicionales sobre la baja.' }}
+                            </span>
+                        </div>
+
+                        <!-- ACCIÓN RÁPIDA DE EDICIÓN -->
+                        <div class="mt-auto pt-2 border-top border-secondary text-end">
+                            <a href="{{ url_for('main.editar_album', id=album.id) }}" class="btn btn-sm metal-btn-secondary w-100 text-center justify-content-center">
+                                <i class="bi bi-pencil-square me-1"></i> Editar / Volver a Disponibilizar
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12 py-5 text-center" style="background: linear-gradient(135deg, #242528 0%, #151618 100%); border: 1px solid #3d3e42; border-radius: 10px;">
+                <i class="bi bi-check-circle fs-1 text-success"></i>
+                <h4 class="mt-3 text-light">No hay discos marcados como no disponibles.</h4>
+                <p class="text-muted mb-0">Todos los álbumes de tu catálogo se encuentran activos en este momento.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
