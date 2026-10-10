@@ -1332,7 +1332,8 @@ def valuar_coleccion():
     # 2º Por Nombre de la Banda (Ascendente)
     # 3º Por Título del Álbum (Ascendente)
     albumes = Album.query.join(Banda).filter(
-        Banda.usuario_id == current_user.id
+        Banda.usuario_id == current_user.id,
+        Album.disponible.is_(True)  # Filtramos solo los disponibles
     ).order_by(
         sin_precio_primeros,
         Banda.nombre.asc(),
